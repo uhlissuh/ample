@@ -36,6 +36,13 @@ app.get('/allcategories', async function(req, res) {
   console.log(JSON.stringify(data));
 })
 
+app.get('/:categoryName/allsubcategories', async function(req, res) {
+  const data = await database.getSubcategoriesForCategory(req.params.categoryName);
+  res.end(JSON.stringify(data));
+  console.log(JSON.stringify(data));
+})
+
+
 
 
 

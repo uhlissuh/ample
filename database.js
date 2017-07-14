@@ -16,3 +16,9 @@ exports.getAllCategories = async function(){
   const data = await db.query('select * from categories');
   return data;
 }
+
+exports.getSubcategoriesForCategory = async function(categoryName){
+  const categoryRow = await db.query('select id from categories where name = $1', categoryName);
+  const subcategories = await db.query('select name from subcategories where category_id = $1', categoryRow[0].id)
+  return subcategories;
+}
