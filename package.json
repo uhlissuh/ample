@@ -9,7 +9,8 @@
     "db-migrate-pg": "^0.1.11",
     "express": "^4.15.3",
     "pg-promise": "^5.9.5",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   },
   "devDependencies": {},
   "scripts": {

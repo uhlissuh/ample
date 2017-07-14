@@ -1,10 +1,12 @@
 
 const express = require('express');
-const request = require('request');
 const bodyParser = require('body-parser');
 const pgp = require('pg-promise');
 const port = 8000;
 const database = require("./database");
+const request = require('request-promise');
+const FACEBOOK_APP_ID = '156289218248813';
+const APP_SECRET = 'c322f877c00b73fc9607399d619952b7';
 
 process.on('unhandledRejection', (error) => {
   console.error(error)
@@ -23,10 +25,16 @@ app.get('/categories/:categoryId', async function(req, res) {
 })
 
 
+app.get('/servicers/reviewsfor/:id', async function (req, res) {
+  const data = await database.getServicerReviewsById(req.params.id);
+  res.end(JSON.stringify(data));
+})
 
-
-
-
+app.get('/allcategories', async function(req, res) {
+  const data = await database.getAllCategories();
+  res.end(JSON.stringify(data));
+  console.log(JSON.stringify(data));
+})
 
 
 
