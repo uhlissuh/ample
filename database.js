@@ -12,9 +12,12 @@ exports.getServicerReviewsById = async function(servicer_id) {
   const data = await db.query('select * from reviews where servicer_id =' + servicer_id)
   return data;
 }
-exports.getAllCategories = async function(){
-  const data = await db.query('select * from categories');
-  return data;
+exports.getAllCategoryTitles = async function(){
+  const data = await db.query('select title from categories');
+  categoryNames = data.map(function(category) {
+    return category.title
+  })
+  return categoryNames;
 }
 
 exports.getSubcategoriesForCategory = async function(categoryName){

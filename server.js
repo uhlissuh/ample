@@ -30,16 +30,14 @@ app.get('/servicers/reviewsfor/:id', async function (req, res) {
   res.end(JSON.stringify(data));
 })
 
-app.get('/allcategories', async function(req, res) {
-  const data = await database.getAllCategories();
+app.get('/allCategoryTitles', async function(req, res) {
+  const data = await database.getAllCategoryTitles();
   res.end(JSON.stringify(data));
-  console.log(JSON.stringify(data));
 })
 
 app.get('/:categoryName/allsubcategories', async function(req, res) {
   const data = await database.getSubcategoriesForCategory(req.params.categoryName);
   res.end(JSON.stringify(data));
-  console.log(JSON.stringify(data));
 })
 
 
