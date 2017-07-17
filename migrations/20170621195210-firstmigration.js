@@ -15,45 +15,39 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = async function(db) {
-  await db.createTable('categories', {
-    id: { type: 'serial', primaryKey: true },
-    name: 'string'
-  });
   await db.createTable('users', {
     id: { type: 'serial', primaryKey: true },
     name: 'string',
     email: 'string',
     location: 'geometry'
   });
-  await db.createTable('servicers', {
+  await db.createTable('workers', {
     id: { type: 'serial', primaryKey: true },
     name: 'string',
-    location: 'geometry',
-    business_id: 'int',
-    category_id: 'int',
-    specialty: 'string'
+    business_id: 'int'
   });
   await db.createTable('reviews', {
     id: { type: 'serial', primaryKey: true },
     user_id: 'int',
-    servicer_id: 'int',
+    worker_id: 'int',
     content: 'text',
-    timestamp: 'datetime'
+    timestamp: 'timestamp'
   });
   await db.createTable('businesses', {
     id: { type: 'serial', primaryKey: true },
     name: 'string',
     location: 'geometry',
-    phone_number: 'string'
+    phone_number: 'string',
+    category_id: 'int'
   });
 
 };
 
 exports.down = async function(db) {
-  await db.dropTable('categories');
   await db.dropTable('users');
-  await db.dropTable('servicers');
+  await db.dropTable('workers');
   await db.dropTable('reviews');
+  await db.dropTable('businesses');
 };
 
 exports._meta = {

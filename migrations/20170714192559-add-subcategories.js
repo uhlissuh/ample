@@ -15,15 +15,16 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = async function(db) {
-  await db.createTable('subcategories', {
+  await db.createTable('categories', {
     id: { type: 'serial', primaryKey: true },
-    category_id: 'int',
-    name: 'string'
+    parent_id: 'int',
+    title: 'string',
+    alias: 'string'
   })
 };
 
 exports.down = async function(db) {
-  await db.dropTable('subcategories');
+  await db.dropTable('categories');
 };
 
 exports._meta = {

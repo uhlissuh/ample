@@ -5,7 +5,7 @@ const databaseConfig = require('../database.json')
 const db = pgp(databaseConfig.dev);
 
 const subcategoriesByCategory = {
-  medical: [
+  Doctors: [
     'Allergy/Immunology',
     'Anesthesiology',
     'Cardiology',
@@ -43,10 +43,40 @@ const subcategoriesByCategory = {
     'Infectious Disease',
     'Endocrinology',
   ],
-  shopping: [
-    'online',
-    'retail',
+  Fashion: [
+    'Online',
+    'Retail',
+  ],
+  Fitness: [
+  'Gym',
+  'Dance Classes',
+  'Personal Trainer',
+  'Physical Therapy',
+  ],
+  Wellness: [
+    'Massage',
+    'Yoga',
+    'Acupuncture',
+    'Reiki',
+    'Chiropractic',
+  ],
+  Beauty: [
+    'Hair Dresser',
+    'Barber',
+    'Makeup Artist',
+    'Waxing',
+    'Manicurist/Nail Technician',
+  ],
+  'Mental Health': [
+    'Psychiatrist',
+    'Clinical Social Worker',
+    'Psychologist'
+  ],
+  'Professional Services': [
+    'Attorney',
   ]
+
+
 }
 
 async function main() {
