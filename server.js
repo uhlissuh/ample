@@ -1,6 +1,5 @@
 
 const express = require('express');
-const bodyParser = require('body-parser');
 const pgp = require('pg-promise');
 const port = 8000;
 const database = require("./database");
@@ -8,12 +7,15 @@ const request = require('request-promise');
 const FACEBOOK_APP_ID = '156289218248813';
 const APP_SECRET = 'c322f877c00b73fc9607399d619952b7';
 const YELP_ACCESS_TOKEN = "ZUJ4B1pZo7rpbp0R5ZYbHR6MJ5oca-rZRtjX6RzQVMeiOo3gt3hYh4ZHWPR019D5tOX2sqmNwKM1FnbdI77lVS_fIY871Jcpi-Xj3nC57peQVamHmFch7gtXk_ZvWXYx";
+const bodyParser = require('body-parser');
 
 process.on('unhandledRejection', (error) => {
   console.error(error)
 })
 
 const app = express();
+// app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
   res.send("HIII");
@@ -70,7 +72,6 @@ app.get('/businesses/search?', async function(req, res) {
   let term = req.query.term
   let latitude= req.query.latitude
   let longitude = req.query.longitude
-  console.log(term, latitude, longitude);
   addOnUrl ="term=" + term + "&latitude=" + latitude + "&longitude=" + longitude + "&radius=4000"
   let options = {
     uri: 'https://api.yelp.com/v3/businesses/search?' + addOnUrl,
@@ -79,7 +80,6 @@ app.get('/businesses/search?', async function(req, res) {
     },
     json: true
   };
-  console.log(options.uri);
   try {
     var businessesJSON = await request(options);
   } catch(error) {
@@ -88,6 +88,46 @@ app.get('/businesses/search?', async function(req, res) {
   res.end(JSON.stringify(businessesJSON));
 })
 
+app.post('/businesses/postreview', async function(req, res) {
+  let businessReviewed = {
+    "businessName": req.body.businessName,
+    "businessAddress": req.body.businessAddress,
+    "businessAddress2": req.body.businessAddress2,
+    "businessCity": req.body.businessCity,
+    "businessState": req.body.businessState,
+    "latitude": req.body.latitude,
+    "longitude": req.body.longitude,
+    "fatFriendlyRating" : req.body.fatFriendlyRating,
+    "skillRating": req.body.skillRating,
+    "skillRating" : req.body.skillRating,
+    "reviewContent" : req.body.reviewContent,
+    "accountKitId": req.body.accountKitId,
+    "accountEmail": req.body.accountEmail ,
+    "accountPhone": req.body.accounNumber,
+    "reviewTimestamp": req.body.reviewTimestamp
+  }
+
+  let statusReturn = {
+    "success": false,
+  }
+
+  const existingBusiness = await database.getBusinessbyName(businessReviewed.businessName)
+  console.log(existingBusiness.length);
+  if (existingBusiness.length == 0) {
+    const createdBusinessId = await database.createBusiness(businessReviewed)
+    const reviewId = await database.insertReview(businessReviewed, createdBusinessId)
+    statusReturn.success = true
+    statusReturn["reviewId"] = reviewId
+  } else {
+    const reviewId = await database.insertReview(businessReviewed, existingBusiness[0].id)
+    statusReturn.success = true
+    statusReturn["reviewId"] = reviewId
+  }
+
+  console.log(statusReturn);
+
+  res.end(JSON.stringify(statusReturn))
+})
 
 
 
