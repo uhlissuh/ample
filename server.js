@@ -3,10 +3,11 @@ const express = require('express');
 const pgp = require('pg-promise');
 const port = 8000;
 const database = require("./database");
+const yelp = require("./yelp");
+const {YELP_ACCESS_TOKEN} = yelp;
 const request = require('request-promise');
 const FACEBOOK_APP_ID = '156289218248813';
 const APP_SECRET = 'c322f877c00b73fc9607399d619952b7';
-const YELP_ACCESS_TOKEN = "ZUJ4B1pZo7rpbp0R5ZYbHR6MJ5oca-rZRtjX6RzQVMeiOo3gt3hYh4ZHWPR019D5tOX2sqmNwKM1FnbdI77lVS_fIY871Jcpi-Xj3nC57peQVamHmFch7gtXk_ZvWXYx";
 const bodyParser = require('body-parser');
 
 process.on('unhandledRejection', (error) => {
@@ -41,6 +42,22 @@ app.get('/allcategorytitles', async function(req, res) {
 app.get('/:categoryName/allsubcategories', async function(req, res) {
   const data = await database.getSubcategoriesForCategory(req.params.categoryName);
   res.end(JSON.stringify(data));
+})
+
+app.get('/reviews/:yelpId', async function(req, res) {
+  const reviews = await database.getBusinessReviewsByYelpId(req.params.yelpId)
+  const reviewsJSON = reviews.map(function(review) {
+    return {
+      timestamp: review.timestamp.getTime(),
+      id: review.id,
+      content: review.content,
+      accountKitId: review.account_kit_id,
+      workerOrBizId: review.worker_or_biz_id,
+      fatSlider: review.fat_slider,
+      skillSlider: review.skill_slider
+    }
+  })
+  res.end(JSON.stringify(reviewsJSON));
 })
 
 app.get('/getyelptoken', async function(req, res) {
@@ -89,44 +106,27 @@ app.get('/businesses/search?', async function(req, res) {
 })
 
 app.post('/businesses/postreview', async function(req, res) {
-  let businessReviewed = {
-    "businessName": req.body.businessName,
-    "businessAddress": req.body.businessAddress,
-    "businessAddress2": req.body.businessAddress2,
-    "businessCity": req.body.businessCity,
-    "businessState": req.body.businessState,
-    "latitude": req.body.latitude,
-    "longitude": req.body.longitude,
-    "fatFriendlyRating" : req.body.fatFriendlyRating,
-    "skillRating": req.body.skillRating,
-    "skillRating" : req.body.skillRating,
-    "reviewContent" : req.body.reviewContent,
-    "accountKitId": req.body.accountKitId,
-    "accountEmail": req.body.accountEmail ,
-    "accountPhone": req.body.accounNumber,
-    "reviewTimestamp": req.body.reviewTimestamp
+  let business = await database.getBusinessByYelpId(req.body.businessYelpId);
+  if (!business) {
+    const yelpBusiness = await yelp.getBusinessById(req.body.businessYelpId);
+
+    business = {
+      yelpId: yelpBusiness.id,
+      name: yelpBusiness.name,
+      address1: yelpBusiness.location.address1,
+      address2: yelpBusiness.location.address2,
+      state: yelpBusiness.location.state,
+      city: yelpBusiness.location.city,
+      phoneNumber: yelpBusiness.phone,
+      latitude: yelpBusiness.coordinates.latitude,
+      longitude: yelpBusiness.coordinates.longitude,
+    };
+
+    business.id = await database.createBusiness(business);
   }
 
-  let statusReturn = {
-    "success": false,
-  }
-
-  const existingBusiness = await database.getBusinessbyName(businessReviewed.businessName)
-  console.log(existingBusiness.length);
-  if (existingBusiness.length == 0) {
-    const createdBusinessId = await database.createBusiness(businessReviewed)
-    const reviewId = await database.insertReview(businessReviewed, createdBusinessId)
-    statusReturn.success = true
-    statusReturn["reviewId"] = reviewId
-  } else {
-    const reviewId = await database.insertReview(businessReviewed, existingBusiness[0].id)
-    statusReturn.success = true
-    statusReturn["reviewId"] = reviewId
-  }
-
-  console.log(statusReturn);
-
-  res.end(JSON.stringify(statusReturn))
+  const reviewId = await database.createReview(business.id, req.body);
+  res.end(JSON.stringify({reviewId: reviewId}));
 })
 
 

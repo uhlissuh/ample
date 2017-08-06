@@ -26,6 +26,7 @@ exports.up = async function(db) {
   await db.addColumn('businesses', 'state', 'string');
   await db.addColumn('businesses', 'address1', 'string');
   await db.addColumn('businesses', 'address2', 'string');
+  await db.addColumn('businesses', 'yelp_id', 'string');
   await db.addColumn('users', 'account_kit_id', 'bigint');
   await db.addColumn('users', 'phone_number', 'string');
 };
@@ -42,6 +43,7 @@ exports.down = async function(db) {
   await db.removeColumn('businesses', 'state');
   await db.removeColumn('businesses', 'address1');
   await db.removeColumn('businesses', 'address2');
+  await db.removeColumn('businesses', 'yelp_id', 'string');
   await db.removeColumn('users', 'account_kit_id');
   await db.removeColumn('users', 'phone_number');
 };

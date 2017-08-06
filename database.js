@@ -23,18 +23,51 @@ exports.getBusinessbyName = async function(businessName) {
   return business;
 }
 
-exports.createBusiness = async function(business) {
-  console.log("INSIDE createBusiness");
-  const businessId = await db.query('insert into businesses (name, location) values ($1, ST_MakePoint($2, $3)) RETURNING id',
-    [business.businessName, parseFloat(business.latitude), parseFloat(business.longitude)]
-  );
-  return businessId[0].id;
+exports.getBusinessByYelpId = async function(yelpId) {
+  return (await db.query('select * from businesses where yelp_id = $1', yelpId))[0];
 }
 
-exports.insertReview = async function(business, businessId) {
-  const date = new Date(business.reviewTimestamp * 1000)
-  console.log(date)
-  const reviewId = await db.query('insert into reviews (account_kit_id, worker_or_biz_id, content, timestamp, fat_slider, skill_slider) values ($1, $2, $3, $4, $5, $6) returning id',
-    [business.accountKitId, businessId, business.reviewContent, date, business.fatFriendlyRating, business.skillRating])
-  return reviewId[0].id
+exports.createBusiness = async function(business) {
+  const rows = await db.query(
+    'insert into businesses ' +
+    '(name, yelp_id, address1, address2, state, city, phone_number, location) values ' +
+    '($1, $2, $3, $4, $5, $6, $7, ST_MakePoint($8, $9)) returning id',
+    [
+      business.businessName,
+      business.yelpId,
+      business.address1,
+      business.address2,
+      business.state,
+      business.city,
+      business.phoneNumber,
+      parseFloat(business.latitude),
+      parseFloat(business.longitude)
+    ]
+  );
+  return rows[0].id;
+}
+
+exports.createReview = async function(businessId, review) {
+  const rows = await db.query(
+    'insert into reviews ' +
+    '(worker_or_biz_id, account_kit_id, content, timestamp, fat_slider, skill_slider) values ' +
+    '($1, $2, $3, $4, $5, $6) returning id',
+    [
+      businessId,
+      review.accountKitId,
+      review.reviewContent,
+      new Date(review.reviewTimestamp * 1000),
+      review.fatFriendlyRating,
+      review.skillRating
+    ]
+  )
+  return rows[0].id
+}
+
+exports.getBusinessReviewsByYelpId = async function(yelpId) {
+  const business = await this.getBusinessByYelpId(yelpId);
+  if (business) {
+    return await db.query('select * from reviews where worker_or_biz_id = $1', business.id);
+  }
+  return [];
 }
