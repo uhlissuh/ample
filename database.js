@@ -67,7 +67,21 @@ exports.createReview = async function(businessId, review) {
 exports.getBusinessReviewsByYelpId = async function(yelpId) {
   const business = await this.getBusinessByYelpId(yelpId);
   if (business) {
-    return await db.query('select * from reviews where worker_or_biz_id = $1', business.id);
+    const rows = await db.query('select * from reviews, users where worker_or_biz_id = $1 and reviews.account_kit_id = users.account_kit_id', business.id);
+    return rows.map(row => {
+      return {
+        content: row.content,
+        id: row.id,
+        workerOrBizId: row.worker_or_biz_id,
+        fatSlider: row.fat_slider,
+        skillSlider: row.skill_slider,
+        timestamp: row.timestamp.getTime(),
+        user: {
+          accountKitId: row.account_kit_id,
+          name: row.name
+        }
+      }
+    })
   }
-  return [];
+  return []
 }

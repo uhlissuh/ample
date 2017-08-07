@@ -23,16 +23,6 @@ app.get('/', function(req, res) {
   res.end();
 });
 
-app.get('/categories/:categoryId', async function(req, res) {
-  const data = await database.getServicersByCategory(req.params.categoryId);
-  res.end(JSON.stringify(data));
-})
-
-
-app.get('/servicers/reviewsfor/:id', async function (req, res) {
-  const data = await database.getServicerReviewsById(req.params.id);
-  res.end(JSON.stringify(data));
-})
 
 app.get('/allcategorytitles', async function(req, res) {
   const data = await database.getAllCategoryTitles();
@@ -45,19 +35,9 @@ app.get('/:categoryName/allsubcategories', async function(req, res) {
 })
 
 app.get('/reviews/:yelpId', async function(req, res) {
-  const reviews = await database.getBusinessReviewsByYelpId(req.params.yelpId)
-  const reviewsJSON = reviews.map(function(review) {
-    return {
-      timestamp: review.timestamp.getTime(),
-      id: review.id,
-      content: review.content,
-      accountKitId: review.account_kit_id,
-      workerOrBizId: review.worker_or_biz_id,
-      fatSlider: review.fat_slider,
-      skillSlider: review.skill_slider
-    }
-  })
-  res.end(JSON.stringify(reviewsJSON));
+  const reviews = await database.getBusinessReviewsByYelpId(req.params.yelpId);
+  console.log(reviews);
+  res.end(JSON.stringify(reviews));
 })
 
 app.get('/getyelptoken', async function(req, res) {
