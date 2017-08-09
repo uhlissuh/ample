@@ -19,33 +19,50 @@ exports.getSubcategoriesForCategory = async function(categoryName){
 
 exports.getBusinessbyName = async function(businessName) {
   const business = await db.query('select * from businesses where name = $1', businessName);
-  console.log("INSIDE GET BUS BY NAME", business);
   return business;
 }
 
 exports.getBusinessByYelpId = async function(yelpId) {
   return (await db.query('select * from businesses where yelp_id = $1', yelpId))[0];
-}
+};
 
 exports.createBusiness = async function(business) {
-  const rows = await db.query(
-    'insert into businesses ' +
-    '(name, yelp_id, address1, address2, state, city, phone_number, location) values ' +
-    '($1, $2, $3, $4, $5, $6, $7, ST_MakePoint($8, $9)) returning id',
-    [
-      business.businessName,
-      business.yelpId,
-      business.address1,
-      business.address2,
-      business.state,
-      business.city,
-      business.phoneNumber,
-      parseFloat(business.latitude),
-      parseFloat(business.longitude)
-    ]
-  );
-  return rows[0].id;
-}
+  const categoryAliases = business.categories.map(category => {
+    return category.alias;
+  })
+  const categoryIds = await db.query('select id from categories where alias = ANY ($1)', [categoryAliases]);
+  try {
+    await db.query('BEGIN');
+    const rows = await db.query(
+      'insert into businesses ' +
+      '(name, yelp_id, address1, address2, state, city, phone_number, location) values ' +
+      '($1, $2, $3, $4, $5, $6, $7, ST_MakePoint($8, $9)) returning id',
+      [
+        business.name,
+        business.yelpId,
+        business.address1,
+        business.address2,
+        business.state,
+        business.city,
+        business.phoneNumber,
+        parseFloat(business.latitude),
+        parseFloat(business.longitude)
+      ]
+    );
+
+    for (i = 0; i < categoryIds.length; i++ ) {
+      await db.query(
+        'insert into business_categories (worker_or_biz_id, category_id) values ($1, $2)',
+        [rows[0].id, categoryIds[i].id]
+      );
+    }
+    await db.query('COMMIT');
+    return rows[0].id;
+  } catch (e) {
+    await db.query('ROLLBACK')
+    throw e
+  }
+};
 
 exports.createReview = async function(businessId, review) {
   const rows = await db.query(
@@ -84,4 +101,23 @@ exports.getBusinessReviewsByYelpId = async function(yelpId) {
     })
   }
   return []
+}
+
+exports.getRecentReviews = async function() {
+  const rows = await db.query('select users.name as username, * from reviews, users, businesses where reviews.account_kit_id = users.account_kit_id and reviews.worker_or_biz_id = businesses.id order by timestamp desc limit 5;')
+  return rows.map(row => {
+    return {
+      content: row.content,
+      id: row.id,
+      workerOrBizId: row.worker_or_biz_id,
+      businessName: row.name,
+      fatSlider: row.fat_slider,
+      skillSlider: row.skill_slider,
+      timestamp: row.timestamp.getTime(),
+      user: {
+        accountKitId: row.account_kit_id,
+        name: row.username
+      }
+    }
+  })
 }

@@ -36,8 +36,12 @@ app.get('/:categoryName/allsubcategories', async function(req, res) {
 
 app.get('/reviews/:yelpId', async function(req, res) {
   const reviews = await database.getBusinessReviewsByYelpId(req.params.yelpId);
-  console.log(reviews);
   res.end(JSON.stringify(reviews));
+})
+
+app.get('/recentreviews', async function(req, res) {
+  let recentReviews = await database.getRecentReviews();
+  res.end(JSON.stringify(recentReviews));
 })
 
 app.get('/getyelptoken', async function(req, res) {
@@ -100,7 +104,10 @@ app.post('/businesses/postreview', async function(req, res) {
       phoneNumber: yelpBusiness.phone,
       latitude: yelpBusiness.coordinates.latitude,
       longitude: yelpBusiness.coordinates.longitude,
+      categories: yelpBusiness.categories
     };
+
+    console.log("here are all the categories", yelpBusiness.categories);
 
     business.id = await database.createBusiness(business);
   }
@@ -108,6 +115,7 @@ app.post('/businesses/postreview', async function(req, res) {
   const reviewId = await database.createReview(business.id, req.body);
   res.end(JSON.stringify({reviewId: reviewId}));
 })
+
 
 
 
