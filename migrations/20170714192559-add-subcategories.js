@@ -19,7 +19,8 @@ exports.up = async function(db) {
     id: { type: 'serial', primaryKey: true },
     parent_id: 'int',
     title: 'string',
-    alias: 'string'
+    alias: 'string',
+    descendent_ids: 'integer[]'
   })
 };
 

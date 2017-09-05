@@ -10,6 +10,8 @@ const FACEBOOK_APP_ID = '156289218248813';
 const APP_SECRET = 'c322f877c00b73fc9607399d619952b7';
 const bodyParser = require('body-parser');
 
+database.connect("dev"); 
+
 process.on('unhandledRejection', (error) => {
   console.error(error)
 })
@@ -70,9 +72,9 @@ app.get('/getyelptoken', async function(req, res) {
 })
 
 app.get('/businesses/search?', async function(req, res) {
-  let term = req.query.term
-  let latitude= req.query.latitude
-  let longitude = req.query.longitude
+  let term = req.query.term;
+  let latitude= req.query.latitude;
+  let longitude = req.query.longitude;
   addOnUrl ="term=" + term + "&latitude=" + latitude + "&longitude=" + longitude + "&radius=4000"
   let options = {
     uri: 'https://api.yelp.com/v3/businesses/search?' + addOnUrl,
@@ -86,8 +88,19 @@ app.get('/businesses/search?', async function(req, res) {
   } catch(error) {
     console.log(error);
   }
+  console.log(businessesJSON);
   res.end(JSON.stringify(businessesJSON));
-})
+});
+
+app.get('/businesses/searchexisting?', async function(req, res) {
+  let category = req.query.category;
+  let latitude= req.query.latitude;
+  let longitude = req.query.longitude;
+  console.log(category, latitude, longitude);
+  const existingNearbyBusinesses = await database.getExistingBusinessesByCategoryandLocation(category, latitude, longitude);
+  console.log(existingNearbyBusinesses);
+  res.end(existingNearbyBusinesses);
+});
 
 app.post('/businesses/postreview', async function(req, res) {
   let business = await database.getBusinessByYelpId(req.body.businessYelpId);

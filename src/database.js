@@ -1,7 +1,59 @@
-const pgp = require('pg-promise')();
-const databaseConfig = require('./database.json')
-const db = pgp(databaseConfig.dev);
+        const pgp = require('pg-promise')();
+const databaseConfig = require('../database.json')
+let db = null;
 
+exports.connect = function(env) {
+  db = pgp(databaseConfig[env]);
+}
+
+exports.clear = async function() {
+  await db.query('delete from categories');
+}
+
+exports.addYelpCategories = async function(yelpCategories) {
+  const idsByAlias = {};
+  const descendentIdsById = {};
+  const parentIdsById = {};
+
+  for (const entry of yelpCategories) {
+    const categoryId = await db.query(
+      'insert into categories (parent_id, title, alias) select $1, $2, $3 where not exists (select title from categories where title = $2) returning id',
+      [null, entry.title, entry.alias]
+    );
+    idsByAlias[entry.alias] = categoryId[0].id;
+  }
+
+  for (const entry of yelpCategories) {
+    if (entry.parents[0]) {
+      let parentId = idsByAlias[entry.parents[0]];
+      parentIdsById[idsByAlias[entry.alias]] = parentId;
+    }
+  }
+
+  for (let id in parentIdsById) {
+    const descendentId = id
+    while (parentIdsById[id]) {
+      const parentId = parentIdsById[id];
+      if (descendentIdsById[parentId]) {
+        descendentIdsById[parentId].push(parseInt(descendentId));
+      } else {
+        descendentIdsById[parentId] = [parseInt(descendentId)];
+      }
+      id = parentId;
+    }
+  }
+
+
+  for (const alias in idsByAlias) {
+    const id = idsByAlias[alias];
+    await db.query(
+      'update categories set parent_id = $1, descendent_ids = $2 where id = $3',
+      [parentIdsById[id], descendentIdsById[id], id]
+    )
+  }
+
+  pgp.end();
+}
 
 exports.getAllCategoryTitles = async function(){
   const data = await db.query('select title from categories');
@@ -120,4 +172,28 @@ exports.getRecentReviews = async function() {
       }
     }
   })
+}
+
+exports.getIdsDescendingFromTitle = async function(category) {
+  const mainIdAndDescendentIds = [];
+  const categoryRow = await db.query('select * from categories where title = $1', category);
+  mainIdAndDescendentIds.push(categoryRow[0].id);
+  for (const id of categoryRow[0].descendent_ids) {
+    mainIdAndDescendentIds.push(id)
+  }
+  return mainIdAndDescendentIds;
+}
+
+exports.getExistingBusinessesByCategoryandLocation = async function(category, latitude, longitude) {
+  const categoryIds = this.getIdsDescendingFromTitle(category);
+  const businesses = await db.query(
+    'select * from businesses, business_categories where ST_Distance_Sphere(location, ST_MakePoint($1, $2))<=  80000 and business_categories.category_id = ANY ($3)',
+    [latitude, longitude, categoryIds]
+  );
+  return businesses;
+}
+
+exports.getCategoryById = async function(id) {
+  const category = (await db.query('select * from categories where id = $1', id))[0];
+  return category;
 }
