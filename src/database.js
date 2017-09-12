@@ -1,4 +1,4 @@
-        const pgp = require('pg-promise')();
+const pgp = require('pg-promise')();
 const databaseConfig = require('../database.json')
 let db = null;
 
@@ -6,8 +6,13 @@ exports.connect = function(env) {
   db = pgp(databaseConfig[env]);
 }
 
-exports.clear = async function() {
+exports.clearCategories = async function() {
   await db.query('delete from categories');
+}
+
+exports.clearBusinessesAndBusinessCategories = async function() {
+  await db.query('delete from businesses');
+  await db.query('delete from business_categories');
 }
 
 exports.addYelpCategories = async function(yelpCategories) {
@@ -63,12 +68,6 @@ exports.getAllCategoryTitles = async function(){
   return categoryNames;
 }
 
-exports.getSubcategoriesForCategory = async function(categoryName){
-  const categoryRow = await db.query('select id from categories where name = $1', categoryName);
-  const subcategories = await db.query('select name from subcategories where category_id = $1', categoryRow[0].id)
-  return subcategories;
-}
-
 exports.getBusinessbyName = async function(businessName) {
   const business = await db.query('select * from businesses where name = $1', businessName);
   return business;
@@ -85,6 +84,7 @@ exports.createBusiness = async function(business) {
   const categoryIds = await db.query('select id from categories where alias = ANY ($1)', [categoryAliases]);
   try {
     await db.query('BEGIN');
+    //im not currently inserting the categoryids into the
     const rows = await db.query(
       'insert into businesses ' +
       '(name, yelp_id, address1, address2, state, city, phone_number, location) values ' +
@@ -98,7 +98,7 @@ exports.createBusiness = async function(business) {
         business.city,
         business.phoneNumber,
         parseFloat(business.latitude),
-        parseFloat(business.longitude)
+        parseFloat(business.longitude),
       ]
     );
 
@@ -174,20 +174,22 @@ exports.getRecentReviews = async function() {
   })
 }
 
-exports.getIdsDescendingFromTitle = async function(category) {
+exports.getIdsDescendingFromAlias = async function(category) {
   const mainIdAndDescendentIds = [];
-  const categoryRow = await db.query('select * from categories where title = $1', category);
+  const categoryRow = await db.query('select * from categories where alias = $1', category);
   mainIdAndDescendentIds.push(categoryRow[0].id);
   for (const id of categoryRow[0].descendent_ids) {
     mainIdAndDescendentIds.push(id)
   }
   return mainIdAndDescendentIds;
+  console.log("this is the main id and descencent ids ", mainIdAndDescendentIds);
 }
 
 exports.getExistingBusinessesByCategoryandLocation = async function(category, latitude, longitude) {
-  const categoryIds = this.getIdsDescendingFromTitle(category);
+  const categoryIds =  await this.getIdsDescendingFromAlias(category);
+  console.log("descendingIDsfromAlias", categoryIds);
   const businesses = await db.query(
-    'select * from businesses, business_categories where ST_Distance_Sphere(location, ST_MakePoint($1, $2))<=  80000 and business_categories.category_id = ANY ($3)',
+  'select * from businesses inner join business_categories on businesses.id = business_categories.worker_or_biz_id where ST_DistanceSphere(businesses.location, ST_MakePoint($1, $2))<=  30000 and business_categories.category_id = ANY ($3)',
     [latitude, longitude, categoryIds]
   );
   return businesses;
@@ -196,4 +198,12 @@ exports.getExistingBusinessesByCategoryandLocation = async function(category, la
 exports.getCategoryById = async function(id) {
   const category = (await db.query('select * from categories where id = $1', id))[0];
   return category;
+}
+
+exports.getCategoriesforBusinessId = async function(businessId) {
+  const categories = await db.query('select * from business_categories where worker_or_biz_id = $1', businessId)
+  const categoryIds = categories.map(function(entry) {
+    return entry.category_id;
+  })
+  return categoryIds;
 }

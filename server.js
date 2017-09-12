@@ -2,15 +2,15 @@
 const express = require('express');
 const pgp = require('pg-promise');
 const port = 8000;
-const database = require("./database");
-const yelp = require("./yelp");
+const database = require("./src/database");
+const yelp = require("./src/yelp");
 const {YELP_ACCESS_TOKEN} = yelp;
 const request = require('request-promise');
 const FACEBOOK_APP_ID = '156289218248813';
 const APP_SECRET = 'c322f877c00b73fc9607399d619952b7';
 const bodyParser = require('body-parser');
 
-database.connect("dev"); 
+database.connect("dev");
 
 process.on('unhandledRejection', (error) => {
   console.error(error)
@@ -88,7 +88,6 @@ app.get('/businesses/search?', async function(req, res) {
   } catch(error) {
     console.log(error);
   }
-  console.log(businessesJSON);
   res.end(JSON.stringify(businessesJSON));
 });
 
@@ -98,7 +97,7 @@ app.get('/businesses/searchexisting?', async function(req, res) {
   let longitude = req.query.longitude;
   console.log(category, latitude, longitude);
   const existingNearbyBusinesses = await database.getExistingBusinessesByCategoryandLocation(category, latitude, longitude);
-  console.log(existingNearbyBusinesses);
+  console.log("existing businesses near location ", existingNearbyBusinesses);
   res.end(existingNearbyBusinesses);
 });
 

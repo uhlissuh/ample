@@ -6,7 +6,7 @@ database.connect("test");
 
 describe("add yelp categories", () => {
   beforeEach(async () => {
-    await database.clear()
+    await database.clearCategories()
   });
 
   it("inserts a row for each category", async () => {
@@ -62,7 +62,7 @@ describe("add yelp categories", () => {
         "parents": []
       }
     ]);
-    const ids = await database.getIdsDescendingFromTitle("Restaurants");
+    const ids = await database.getIdsDescendingFromAlias("restaurants");
     let aliases = []
     for (const id of ids) {
       const alias = (await database.getCategoryById(id)).alias
