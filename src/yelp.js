@@ -13,3 +13,21 @@ exports.getBusinessById = async function(yelpId) {
   };
   return await request(options);
 }
+
+exports.getBusinessesByCategoryAndLocation = async function(category, latitude, longitude) {
+  let queryString = "term=" + category + "&latitude=" +
+    latitude + "&longitude=" + longitude + "&radius=4000"
+
+  let options = {
+    uri: 'https://api.yelp.com/v3/businesses/search?' + queryString,
+    headers: {
+      'Authorization': 'Bearer ' + YELP_ACCESS_TOKEN
+    },
+    json: true
+  };
+  try {
+    return await request(options);
+  } catch (error) {
+    console.log(error);
+  }
+}

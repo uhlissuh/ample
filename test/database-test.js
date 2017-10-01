@@ -6,8 +6,6 @@ database.connect("test");
 
 describe("database", () => {
   beforeEach(async () => {
-    await database.clearCategories()
-    await database.clearBusinessesAndBusinessCategories();
     await database.addYelpCategories([
       {
         "alias": "endocrinologists",
@@ -90,6 +88,11 @@ describe("database", () => {
     })
   })
 
+  afterEach(async () => {
+    await database.clearCategories();
+    await database.clearBusinessesAndBusinessCategories();
+  })
+  
   it("creates three businesses", async () => {
 
     const entry = await database.getBusinessByYelpId("dr-brain");

@@ -51,10 +51,17 @@ exports.addYelpCategories = async function(yelpCategories) {
 
   for (const alias in idsByAlias) {
     const id = idsByAlias[alias];
-    await db.query(
-      'update categories set parent_id = $1, descendent_ids = $2 where id = $3',
-      [parentIdsById[id], descendentIdsById[id], id]
-    )
+    if (descendentIdsById[id]) {
+      await db.query(
+        'update categories set parent_id = $1, descendent_ids = $2 where id = $3',
+        [parentIdsById[id], descendentIdsById[id], id]
+      );
+    } else {
+      await db.query(
+        'update categories set parent_id = $1, descendent_ids = \'{}\' where id = $2',
+        [parentIdsById[id], id]
+      );
+    }
   }
 
   pgp.end();
@@ -177,12 +184,17 @@ exports.getRecentReviews = async function() {
 exports.getIdsDescendingFromAlias = async function(category) {
   const mainIdAndDescendentIds = [];
   const categoryRow = await db.query('select * from categories where alias = $1', category);
-  mainIdAndDescendentIds.push(categoryRow[0].id);
-  for (const id of categoryRow[0].descendent_ids) {
-    mainIdAndDescendentIds.push(id)
+  if (categoryRow) {
+    mainIdAndDescendentIds.push(categoryRow[0].id);
+    for (const id of categoryRow[0].descendent_ids) {
+      mainIdAndDescendentIds.push(id)
+    }
+    return mainIdAndDescendentIds;
+    console.log("this is the main id and descencent ids ", mainIdAndDescendentIds);
+  } else {
+    console.log(category + " is not a category!");
+    return [];
   }
-  return mainIdAndDescendentIds;
-  console.log("this is the main id and descencent ids ", mainIdAndDescendentIds);
 }
 
 exports.getExistingBusinessesByCategoryandLocation = async function(category, latitude, longitude) {
@@ -206,4 +218,9 @@ exports.getCategoriesforBusinessId = async function(businessId) {
     return entry.category_id;
   })
   return categoryIds;
+}
+
+exports.getReviewsbyBusinessId = async function(id) {
+  const reviews = await db.query('select * from reviews where worker_or_biz_id = $1', id);
+  return reviews;
 }
