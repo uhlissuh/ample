@@ -92,7 +92,7 @@ describe("database", () => {
     await database.clearCategories();
     await database.clearBusinessesAndBusinessCategories();
   })
-  
+
   it("creates three businesses", async () => {
 
     const entry = await database.getBusinessByYelpId("dr-brain");
@@ -103,7 +103,6 @@ describe("database", () => {
 
   it("finds businesses for a given category near a given location", async () => {
     const businesses = await database.getExistingBusinessesByCategoryandLocation("physicians", 37.767412344, -122.428245678);
-    console.log("businesses nearby are ", businesses);
     const businessNames = businesses.map(function(entry) {
       return entry.name;
     })

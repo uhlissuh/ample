@@ -78,7 +78,8 @@ app.get('/businesses/searchexisting?', async function(req, res) {
   let longitude = req.query.longitude;
 
 
-  const results = await search.getExistingBusinessesByCategoryandLocation(term, latitude, longitude);
+  let results = await search.searchForBusinesses(term, latitude, longitude);
+
   res.end(JSON.stringify(results));
 });
 

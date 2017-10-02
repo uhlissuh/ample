@@ -199,7 +199,6 @@ exports.getIdsDescendingFromAlias = async function(category) {
 
 exports.getExistingBusinessesByCategoryandLocation = async function(category, latitude, longitude) {
   const categoryIds =  await this.getIdsDescendingFromAlias(category);
-  console.log("descendingIDsfromAlias", categoryIds);
   const businesses = await db.query(
   'select * from businesses inner join business_categories on businesses.id = business_categories.worker_or_biz_id where ST_DistanceSphere(businesses.location, ST_MakePoint($1, $2))<=  30000 and business_categories.category_id = ANY ($3)',
     [latitude, longitude, categoryIds]
