@@ -85,12 +85,13 @@ describe("database", () => {
           "title": "Gastroenterologist"
         }
       ]
-    })
+    });
   })
 
   afterEach(async () => {
     await database.clearCategories();
     await database.clearBusinessesAndBusinessCategories();
+    await database.clearReviews();
   })
 
   it("creates three businesses", async () => {
@@ -108,5 +109,34 @@ describe("database", () => {
     })
     businessNames.sort()
     assert.deepEqual(businessNames, ["Dr. Brain", "Dr. Seagull"])
+  });
+
+  it("creates a review", async () => {
+    await database.createReview(2, {
+      accountKitId: '23432',
+      reviewContent: "I love this person deeply.",
+      reviewTimestamp: 2344959595,
+      fatFriendlyRating: 90,
+      skillRating: 60
+    });
+    await database.createReview(2, {
+      accountKitId: '23555',
+      reviewContent: "I hate.",
+      reviewTimestamp: 2344959594,
+      fatFriendlyRating: 30,
+      skillRating: 50
+    });
+
+    const reviews = await database.getReviewsByBusinessId(2);
+
+    const reviewerIds = reviews.map(function(review) {
+      return review.account_kit_id;
+    })
+
+    reviewerIds.sort();
+
+    assert.deepEqual(reviewerIds, ['23432', '23555']);
+
+
   });
 });

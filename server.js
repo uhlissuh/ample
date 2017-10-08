@@ -85,28 +85,32 @@ app.get('/businesses/searchexisting?', async function(req, res) {
 
 app.post('/businesses/postreview', async function(req, res) {
   let business = await database.getBusinessByYelpId(req.body.businessYelpId);
-  if (!business) {
-    const yelpBusiness = await yelp.getBusinessById(req.body.businessYelpId);
 
-    business = {
-      yelpId: yelpBusiness.id,
-      name: yelpBusiness.name,
-      address1: yelpBusiness.location.address1,
-      address2: yelpBusiness.location.address2,
-      state: yelpBusiness.location.state,
-      city: yelpBusiness.location.city,
-      phoneNumber: yelpBusiness.phone,
-      latitude: yelpBusiness.coordinates.latitude,
-      longitude: yelpBusiness.coordinates.longitude,
-      categories: yelpBusiness.categories
-    };
+  await database.transact(async () => {
+    if (!business) {
+      const yelpBusiness = await yelp.getBusinessById(req.body.businessYelpId);
 
-    console.log("here are all the categories", yelpBusiness.categories);
+      business = {
+        yelpId: yelpBusiness.id,
+        name: yelpBusiness.name,
+        address1: yelpBusiness.location.address1,
+        address2: yelpBusiness.location.address2,
+        state: yelpBusiness.location.state,
+        city: yelpBusiness.location.city,
+        phoneNumber: yelpBusiness.phone,
+        latitude: yelpBusiness.coordinates.latitude,
+        longitude: yelpBusiness.coordinates.longitude,
+        categories: yelpBusiness.categories
+      };
 
-    business.id = await database.createBusiness(business);
-  }
+      console.log("here are all the categories", yelpBusiness.categories);
 
-  const reviewId = await database.createReview(business.id, req.body);
+      business.id = await database.createBusiness(business);
+    }
+
+    const reviewId = await database.createReview(business.id, req.body);
+  })
+
   res.end(JSON.stringify({reviewId: reviewId}));
 })
 

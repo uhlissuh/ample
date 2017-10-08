@@ -15,6 +15,11 @@ exports.clearBusinessesAndBusinessCategories = async function() {
   await db.query('delete from business_categories');
 }
 
+exports.clearReviews = async function() {
+  await db.query('delete from reviews');
+
+}
+
 exports.addYelpCategories = async function(yelpCategories) {
   const idsByAlias = {};
   const descendentIdsById = {};
@@ -84,14 +89,25 @@ exports.getBusinessByYelpId = async function(yelpId) {
   return (await db.query('select * from businesses where yelp_id = $1', yelpId))[0];
 };
 
+exports.transact = async function(callback) {
+  try {
+    await db.query('BEGIN');
+    const result = await callback();
+    await db.query('COMMIT');
+    return result;
+  } catch (err) {
+    await db.query('ROLLBACK');
+    throw err;
+  }
+}
+
+
 exports.createBusiness = async function(business) {
   const categoryAliases = business.categories.map(category => {
     return category.alias;
   })
   const categoryIds = await db.query('select id from categories where alias = ANY ($1)', [categoryAliases]);
-  try {
-    await db.query('BEGIN');
-    //im not currently inserting the categoryids into the
+  return this.transact(async () => {
     const rows = await db.query(
       'insert into businesses ' +
       '(name, yelp_id, address1, address2, state, city, phone_number, location) values ' +
@@ -115,13 +131,9 @@ exports.createBusiness = async function(business) {
         [rows[0].id, categoryIds[i].id]
       );
     }
-    await db.query('COMMIT');
     return rows[0].id;
-  } catch (e) {
-    await db.query('ROLLBACK')
-    throw e
-  }
-};
+  });
+}
 
 exports.createReview = async function(businessId, review) {
   const rows = await db.query(
@@ -139,6 +151,12 @@ exports.createReview = async function(businessId, review) {
   )
   return rows[0].id
 }
+
+exports.updateBusinessScore = async function(id) {
+  const scores = await db.query('select fat_slider from reviews where id = $1', id);
+
+}
+
 
 exports.getBusinessReviewsByYelpId = async function(yelpId) {
   const business = await this.getBusinessByYelpId(yelpId);
@@ -160,6 +178,10 @@ exports.getBusinessReviewsByYelpId = async function(yelpId) {
     })
   }
   return []
+}
+
+exports.getReviewsByBusinessId = async function(id) {
+  return await db.query('select * from reviews where worker_or_biz_id = $1', id);
 }
 
 exports.getRecentReviews = async function() {
