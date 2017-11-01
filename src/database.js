@@ -152,9 +152,14 @@ exports.createReview = async function(businessId, review) {
   return rows[0].id
 }
 
-exports.updateBusinessScore = async function(id) {
-  const scores = await db.query('select fat_slider from reviews where id = $1', id);
-
+exports.updateBusinessScore = async function(businessId, score) {
+  const oldScore = (await db.query('select score from businesses where id = $1', businessId))[0].score;
+  if (oldScore) {
+    const newAverage = (oldScore + score) / 2
+    await db.query('update businesses set score = $1 where id = $2', [newAverage, businessId]);
+  } else {
+    await db.query('update businesses set score = $1 where id = $2', [score, businessId]);
+  }
 }
 
 
@@ -244,4 +249,9 @@ exports.getCategoriesforBusinessId = async function(businessId) {
 exports.getReviewsbyBusinessId = async function(id) {
   const reviews = await db.query('select * from reviews where worker_or_biz_id = $1', id);
   return reviews;
+}
+
+exports.getBusinessScoreById = async function(id) {
+  const score = (await db.query('select score from businesses where id = $1', id))[0].score;
+  return score;
 }

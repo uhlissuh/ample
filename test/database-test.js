@@ -136,6 +136,55 @@ describe("database", () => {
     reviewerIds.sort();
 
     assert.deepEqual(reviewerIds, ['23432', '23555']);
+  });
+
+  it("updates the business' fat friendly rating when a new review is added", async () => {
+    const newBusinessId = await database.createBusiness({
+      yelpId: "dr-seagull",
+      name: "Dr. Seagull",
+      address1: "432 Mission St",
+      state: "CA",
+      city: "San Francisco",
+      phoneNumber: "444-342-4532",
+      latitude: 37.767423217936834,
+      longitude: -122.42821739746094,
+      categories: [
+        {
+          "alias": "surgeons",
+          "title": "Surgeons"
+        }
+      ]
+    });
+
+
+    await database.createReview(newBusinessId, {
+      accountKitId: '23482',
+      reviewContent: "super meh.",
+      reviewTimestamp: 2344959596,
+      fatFriendlyRating: 10,
+      skillRating: 60
+    });
+
+    await database.updateBusinessScore(newBusinessId, 10);
+
+    const score = await database.getBusinessScoreById(newBusinessId);
+
+    assert.equal(score, 10);
+
+    await database.createReview(newBusinessId, {
+      accountKitId: '23482',
+      reviewContent: "super raddddd.",
+      reviewTimestamp: 2344959597,
+      fatFriendlyRating: 30,
+      skillRating: 60
+    });
+
+    await database.updateBusinessScore(newBusinessId, 30);
+
+    const newScore = await database.getBusinessScoreById(newBusinessId);
+
+
+    assert.equal(newScore, 20);
 
 
   });

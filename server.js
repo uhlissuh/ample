@@ -84,6 +84,7 @@ app.get('/businesses/searchexisting?', async function(req, res) {
 });
 
 app.post('/businesses/postreview', async function(req, res) {
+  console.log(req.body);
   let business = await database.getBusinessByYelpId(req.body.businessYelpId);
 
   await database.transact(async () => {
@@ -109,6 +110,8 @@ app.post('/businesses/postreview', async function(req, res) {
     }
 
     const reviewId = await database.createReview(business.id, req.body);
+
+    await database.updateBusinessScore(business.id, req.body.fatFriendlyRating);
   })
 
   res.end(JSON.stringify({reviewId: reviewId}));
