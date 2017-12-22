@@ -255,3 +255,8 @@ exports.getBusinessScoreById = async function(id) {
   const score = (await db.query('select score from businesses where id = $1', id))[0].score;
   return score;
 }
+
+exports.getAliasForCategoryTitle = async function(title) {
+  const alias = (await db.query('select alias from categories where title = $1', title))[0].alias;
+  return alias;
+}

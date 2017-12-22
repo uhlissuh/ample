@@ -12,59 +12,14 @@ describe("searchForBusinesses", () => {
     originalYelpGetBusinessesFunction = yelp.getBusinessesByCategoryAndLocation
 
     yelp.getBusinessesByCategoryAndLocation = async function() {
-      return [
-        {
-          yelpId: "dr-sunhat",
-          name: "Dr. Sunhat",
-          address1: "375 Valencia St",
-          address2: "Suite 3",
-          state: "CA",
-          city: "San Francisco",
-          phoneNumber: "444-342-4532",
-          latitude: 37.767413217936834,
-          longitude: -122.42821739746094,
-          categories: [
-            {
-              "alias": "physicians",
-              "title": "Doctors"
-            }
-          ]
-        },
-        {
-          yelpId: "dr-brain",
-          name: "Dr. Brain",
-          address1: "375 Valencia St",
-          address2: "Suite 3",
-          state: "CA",
-          city: "San Francisco",
-          phoneNumber: "444-342-4532",
-          latitude: 37.767413217936834,
-          longitude: -122.42820739746094,
-          categories: [
-            {
-              "alias": "physicians",
-              "title": "Doctors"
-            }
-          ]
-        },
-        {
-          yelpId: "dr-Chips",
-          name: "Dr. Chips",
-          address1: "375 Valencia St",
-          address2: "Suite 3",
-          state: "CA",
-          city: "San Francisco",
-          phoneNumber: "444-342-4532",
-          latitude: 37.767413217936834,
-          longitude: -122.42822739746094,
-          categories: [
-            {
-              "alias": "physicians",
-              "title": "Doctors"
-            }
-          ]
-        }
-      ]
+      return {
+        businesses: [
+          buildYelpBusiness('dr-sunhat', 'Dr. Sunhat'),
+          buildYelpBusiness('dr-brain', 'Dr. Brain'),
+          buildYelpBusiness('dr-chips', 'Dr. Chips'),
+          buildYelpBusiness('dr-pringles', 'Dr. Pringles')
+        ]
+      }
     }
 
     await database.addYelpCategories([
@@ -78,11 +33,19 @@ describe("searchForBusinesses", () => {
     await database.createBusiness({
       yelpId: "dr-brain",
       name: "Dr. Brain",
-      address1: "375 Valencia St",
-      address2: "Suite 3",
-      state: "CA",
-      city: "San Francisco",
-      phoneNumber: "444-342-4532",
+      latitude: 37.767413217936834,
+      longitude: -122.42820739746094,
+      categories: [
+        {
+          "alias": "physicians",
+          "title": "Doctors"
+        }
+      ]
+    })
+
+    await database.createBusiness({
+      yelpId: "dr-pringles",
+      name: "Dr. Pringles",
       latitude: 37.767413217936834,
       longitude: -122.42820739746094,
       categories: [
@@ -96,11 +59,6 @@ describe("searchForBusinesses", () => {
     await database.createBusiness({
       yelpId: "dr-coffee",
       name: "Dr. Coffee",
-      address1: "375 Valencia St",
-      address2: "Suite 3",
-      state: "XX",
-      city: "Ocean",
-      phoneNumber: "444-342-4532",
       latitude: 37.767413217936834,
       longitude: -152.42820739746094,
       categories: [
@@ -119,11 +77,30 @@ describe("searchForBusinesses", () => {
   })
 
   it("merges the existing and yelp businesses with no repeats", async () => {
-
-    const businesses = await search.searchForBusinesses('physicians', 37.767413217936834, -122.42820739746094);
+    const businesses = await search.searchForBusinesses('Doctors', 37.767413217936834, -122.42820739746094);
     const businessesNames = businesses.map(business => {
       return business.name;
     })
-    assert.deepEqual(businessesNames, ["Dr. Brain", "Dr. Chips", "Dr. Sunhat"]);
+    assert.deepEqual(businessesNames, ["Dr. Brain", "Dr. Pringles", "Dr. Chips", "Dr. Sunhat"]);
   });
 })
+
+function buildYelpBusiness (yelpId, name) {
+  return {
+    yelpId: yelpId,
+    name: name,
+    address1: "375 Valencia St",
+    address2: "Suite 3",
+    state: "CA",
+    city: "San Francisco",
+    phoneNumber: "444-342-4532",
+    latitude: 37.767413217936834,
+    longitude: -122.42821739746094,
+    categories: [
+      {
+        "alias": "physicians",
+        "title": "Doctors"
+      }
+    ]
+  }
+}

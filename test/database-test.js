@@ -185,7 +185,10 @@ describe("database", () => {
 
 
     assert.equal(newScore, 20);
-
-
   });
+
+  it("returns the correct alias for a category title", async () => {
+    alias = await database.getAliasForCategoryTitle("Doctors");
+    assert.equal(alias, "physicians");
+  })
 });
