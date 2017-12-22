@@ -109,8 +109,8 @@ describe("database", () => {
       const businessNames = businesses.map(entry => entry.name);
       assert.deepEqual(businessNames, ["Dr. Brain", "Dr. Seagull"])
 
-      // const businessLocations =
-      // assert.deepEqual(businessNames, ["Dr. Brain", "Dr. Seagull"])
+      const businessLocations = businesses.map(entry => Math.round(entry.location.latitude));
+      assert.deepEqual(businessLocations, [38, 38])
     });
   });
 
