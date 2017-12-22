@@ -3,7 +3,6 @@ const assert = require('assert');
 
 database.connect("test");
 
-
 describe("database", () => {
   beforeEach(async () => {
     await database.addYelpCategories([
@@ -102,93 +101,100 @@ describe("database", () => {
     assert.equal(drBrainName, "Dr. Brain");
   });
 
-  it("finds businesses for a given category near a given location", async () => {
-    const businesses = await database.getExistingBusinessesByCategoryandLocation("physicians", 37.767412344, -122.428245678);
-    const businessNames = businesses.map(function(entry) {
-      return entry.name;
-    })
-    businessNames.sort()
-    assert.deepEqual(businessNames, ["Dr. Brain", "Dr. Seagull"])
+  describe.only(".getExistingBusinessesByCategoryandLocation", () => {
+    it("finds businesses for a given category near a given location", async () => {
+      const businesses = await database.getExistingBusinessesByCategoryandLocation("physicians", 37.767412344, -122.428245678);
+      businesses.sort((a, b) => a.name - b.name)
+
+      const businessNames = businesses.map(entry => entry.name);
+      assert.deepEqual(businessNames, ["Dr. Brain", "Dr. Seagull"])
+
+      // const businessLocations =
+      // assert.deepEqual(businessNames, ["Dr. Brain", "Dr. Seagull"])
+    });
   });
 
-  it("creates a review", async () => {
-    await database.createReview(2, {
-      accountKitId: '23432',
-      reviewContent: "I love this person deeply.",
-      reviewTimestamp: 2344959595,
-      fatFriendlyRating: 90,
-      skillRating: 60
-    });
-    await database.createReview(2, {
-      accountKitId: '23555',
-      reviewContent: "I hate.",
-      reviewTimestamp: 2344959594,
-      fatFriendlyRating: 30,
-      skillRating: 50
-    });
+  describe(".createReview", () => {
+    it("creates a review", async () => {
+      await database.createReview(2, {
+        accountKitId: '23432',
+        reviewContent: "I love this person deeply.",
+        reviewTimestamp: 2344959595,
+        fatFriendlyRating: 90,
+        skillRating: 60
+      });
+      await database.createReview(2, {
+        accountKitId: '23555',
+        reviewContent: "I hate.",
+        reviewTimestamp: 2344959594,
+        fatFriendlyRating: 30,
+        skillRating: 50
+      });
 
-    const reviews = await database.getReviewsByBusinessId(2);
+      const reviews = await database.getReviewsByBusinessId(2);
 
-    const reviewerIds = reviews.map(function(review) {
-      return review.account_kit_id;
-    })
+      const reviewerIds = reviews.map(function(review) {
+        return review.account_kit_id;
+      })
 
-    reviewerIds.sort();
+      reviewerIds.sort();
 
-    assert.deepEqual(reviewerIds, ['23432', '23555']);
-  });
-
-  it("updates the business' fat friendly rating when a new review is added", async () => {
-    const newBusinessId = await database.createBusiness({
-      yelpId: "dr-seagull",
-      name: "Dr. Seagull",
-      address1: "432 Mission St",
-      state: "CA",
-      city: "San Francisco",
-      phoneNumber: "444-342-4532",
-      latitude: 37.767423217936834,
-      longitude: -122.42821739746094,
-      categories: [
-        {
-          "alias": "surgeons",
-          "title": "Surgeons"
-        }
-      ]
+      assert.deepEqual(reviewerIds, ['23432', '23555']);
     });
 
+    it("updates the business' fat friendly rating when a new review is added", async () => {
+      const newBusinessId = await database.createBusiness({
+        yelpId: "dr-seagull",
+        name: "Dr. Seagull",
+        address1: "432 Mission St",
+        state: "CA",
+        city: "San Francisco",
+        phoneNumber: "444-342-4532",
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094,
+        categories: [
+          {
+            "alias": "surgeons",
+            "title": "Surgeons"
+          }
+        ]
+      });
 
-    await database.createReview(newBusinessId, {
-      accountKitId: '23482',
-      reviewContent: "super meh.",
-      reviewTimestamp: 2344959596,
-      fatFriendlyRating: 10,
-      skillRating: 60
+      await database.createReview(newBusinessId, {
+        accountKitId: '23482',
+        reviewContent: "super meh.",
+        reviewTimestamp: 2344959596,
+        fatFriendlyRating: 10,
+        skillRating: 60
+      });
+
+      await database.updateBusinessScore(newBusinessId, 10);
+
+      const score = await database.getBusinessScoreById(newBusinessId);
+
+      assert.equal(score, 10);
+
+      await database.createReview(newBusinessId, {
+        accountKitId: '23482',
+        reviewContent: "super raddddd.",
+        reviewTimestamp: 2344959597,
+        fatFriendlyRating: 30,
+        skillRating: 60
+      });
+
+      await database.updateBusinessScore(newBusinessId, 30);
+
+      const newScore = await database.getBusinessScoreById(newBusinessId);
+
+
+      assert.equal(newScore, 20);
     });
-
-    await database.updateBusinessScore(newBusinessId, 10);
-
-    const score = await database.getBusinessScoreById(newBusinessId);
-
-    assert.equal(score, 10);
-
-    await database.createReview(newBusinessId, {
-      accountKitId: '23482',
-      reviewContent: "super raddddd.",
-      reviewTimestamp: 2344959597,
-      fatFriendlyRating: 30,
-      skillRating: 60
-    });
-
-    await database.updateBusinessScore(newBusinessId, 30);
-
-    const newScore = await database.getBusinessScoreById(newBusinessId);
-
-
-    assert.equal(newScore, 20);
-  });
-
-  it("returns the correct alias for a category title", async () => {
-    alias = await database.getAliasForCategoryTitle("Doctors");
-    assert.equal(alias, "physicians");
   })
+
+  describe(".getAliasForCategoryTitle", () => {
+    it("returns the correct alias for a category title", async () => {
+      alias = await database.getAliasForCategoryTitle("Doctors");
+      assert.equal(alias, "physicians");
+    });
+  });
 });

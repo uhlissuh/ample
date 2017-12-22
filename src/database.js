@@ -226,10 +226,52 @@ exports.getIdsDescendingFromAlias = async function(category) {
 
 exports.getExistingBusinessesByCategoryandLocation = async function(category, latitude, longitude) {
   const categoryIds =  await this.getIdsDescendingFromAlias(category);
-  const businesses = await db.query(
-  'select * from businesses inner join business_categories on businesses.id = business_categories.worker_or_biz_id where ST_DistanceSphere(businesses.location, ST_MakePoint($1, $2))<=  30000 and business_categories.category_id = ANY ($3)',
+  const businessRows = await db.query(
+    `
+      select *, ST_x(businesses.location) as latitude, ST_y(businesses.location) as longitude
+      from businesses inner join business_categories
+      on businesses.id = business_categories.worker_or_biz_id
+      where
+        ST_DistanceSphere(businesses.location, ST_MakePoint($1, $2))<=  30000
+        and business_categories.category_id = ANY ($3)
+    `,
     [latitude, longitude, categoryIds]
   );
+  const categoryIdsForBusinesses = businessRows.map((business) => {
+    return business.category_id;
+  });
+
+  const categoryRows = await db.query('select id, title from categories where id = ANY ($1)', [categoryIdsForBusinesses]);
+  const categoryTitlesById = {};
+  for (const category in categoryRows) {
+    categoryTitlesById[category.id] = category.title
+  }
+
+  const businessesById = {};
+  const businesses = [];
+  for (const business of businessRows) {
+    if (businessesById[business.id]) {
+      businessesById[business.id].categories.push(categoryTitlesById[business.category_id]);
+    } else {
+      businessesById[business.id] = {
+        id: business.id,
+        name: business.name,
+        location: {
+          longitude: business.longitude,
+          latitude: business.latitude
+        },
+        phone_number: business.phone_number,
+        city: business.city,
+        state: business.state,
+        address1: business.address1,
+        address2: business.address2,
+        yelp_id: business.yelp_id,
+        score: business.score,
+        categories: [categoryTitlesById[business.category_id]]
+      }
+      businesses.push(businessesById[business.id]);
+    }
+  }
   return businesses;
 }
 
