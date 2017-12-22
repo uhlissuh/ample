@@ -9,7 +9,7 @@ const request = require('request-promise');
 const FACEBOOK_APP_ID = '156289218248813';
 const APP_SECRET = 'c322f877c00b73fc9607399d619952b7';
 const bodyParser = require('body-parser');
-const search = require('./search');
+const search = require('./src/search');
 
 database.connect("dev");
 
@@ -79,7 +79,6 @@ app.get('/businesses/searchexisting?', async function(req, res) {
 
 
   let results = await search.searchForBusinesses(term, latitude, longitude);
-
   res.end(JSON.stringify(results));
 });
 
