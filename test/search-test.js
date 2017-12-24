@@ -52,6 +52,10 @@ describe("searchForBusinesses", () => {
         {
           "alias": "physicians",
           "title": "Doctors"
+        },
+        {
+          "alias": "weirdos",
+          "title": "Creeps"
         }
       ]
     })
@@ -82,6 +86,11 @@ describe("searchForBusinesses", () => {
       return business.name;
     })
     assert.deepEqual(businessesNames, ["Dr. Brain", "Dr. Pringles", "Dr. Chips", "Dr. Sunhat"]);
+
+    const categories = businesses.map(business => {
+      return business.category_titles;
+    })
+    assert.deepEqual(categories, [["Doctors"], ["Doctors", "Creeps"], ["Doctors"], ["Doctors"]]);
   });
 })
 
@@ -89,13 +98,17 @@ function buildYelpBusiness (yelpId, name) {
   return {
     yelpId: yelpId,
     name: name,
-    address1: "375 Valencia St",
-    address2: "Suite 3",
-    state: "CA",
-    city: "San Francisco",
-    phoneNumber: "444-342-4532",
-    latitude: 37.767413217936834,
-    longitude: -122.42821739746094,
+    location: {
+      address1: "375 Valencia St",
+      address2: "Suite 3",
+      state: "CA",
+      city: "San Francisco"
+    },
+    phone: "444-342-4532",
+    coordinates: {
+      latitude: 37.767413217936834,
+      longitude: -122.42821739746094
+    },
     categories: [
       {
         "alias": "physicians",

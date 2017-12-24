@@ -33,6 +33,13 @@ describe("database", () => {
         "parents": [
           "physicians"
         ]
+      },
+      {
+        "alias": "podiatrists",
+        "title": "Podiatrists",
+        "parents": [
+          "physicians"
+        ]
       }
     ])
 
@@ -50,6 +57,10 @@ describe("database", () => {
         {
           "alias": "endocrinologists",
           "title": "Endocrinologists"
+        },
+        {
+          "alias": "podiatrists",
+          "title": "Podiatrists"
         }
       ]
     });
@@ -66,6 +77,10 @@ describe("database", () => {
         {
           "alias": "surgeons",
           "title": "Surgeons"
+        },
+        {
+          "alias": "podiatrists",
+          "title": "Podiatrists"
         }
       ]
     });
@@ -98,7 +113,15 @@ describe("database", () => {
     const entry = await database.getBusinessByYelpId("dr-brain");
     const drBrainName = entry.name;
 
-    assert.equal(drBrainName, "Dr. Brain");
+    assert.deepEqual(drBrainName, "Dr. Brain");
+
+    const categoryIds = await database.getCategoriesforBusinessId(entry.id);
+    const categoryRows = await database.getCategoriesById(categoryIds);
+    const categoryTitles = categoryRows.map(row => row.title);
+    categoryTitles.sort();
+
+    assert.deepEqual(categoryTitles, ["Endocrinologists", "Podiatrists"])
+
   });
 
   describe.only(".getExistingBusinessesByCategoryandLocation", () => {
@@ -111,6 +134,11 @@ describe("database", () => {
 
       const businessLocations = businesses.map(entry => Math.round(entry.location.latitude));
       assert.deepEqual(businessLocations, [38, 38])
+
+      const businessCategories = businesses.map(entry => {
+        return entry.category_titles;
+      });
+      assert.deepEqual(businessCategories, [["Endocrinologists", "Podiatrists"], ["Surgeons", "Podiatrists"]])
     });
   });
 

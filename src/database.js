@@ -242,23 +242,24 @@ exports.getExistingBusinessesByCategoryandLocation = async function(category, la
   });
 
   const categoryRows = await db.query('select id, title from categories where id = ANY ($1)', [categoryIdsForBusinesses]);
+
   const categoryTitlesById = {};
-  for (const category in categoryRows) {
-    categoryTitlesById[category.id] = category.title
+  for (let i = 0; i < categoryRows.length; i++) {
+    categoryTitlesById[categoryRows[i].id] = categoryRows[i].title
   }
 
   const businessesById = {};
   const businesses = [];
   for (const business of businessRows) {
     if (businessesById[business.id]) {
-      businessesById[business.id].categories.push(categoryTitlesById[business.category_id]);
+      businessesById[business.id].category_titles.push(categoryTitlesById[business.category_id]);
     } else {
       businessesById[business.id] = {
         id: business.id,
         name: business.name,
         location: {
+          latitude: business.latitude,
           longitude: business.longitude,
-          latitude: business.latitude
         },
         phone_number: business.phone_number,
         city: business.city,
@@ -267,7 +268,7 @@ exports.getExistingBusinessesByCategoryandLocation = async function(category, la
         address2: business.address2,
         yelp_id: business.yelp_id,
         score: business.score,
-        categories: [categoryTitlesById[business.category_id]]
+        category_titles: [categoryTitlesById[business.category_id]]
       }
       businesses.push(businessesById[business.id]);
     }
@@ -277,6 +278,10 @@ exports.getExistingBusinessesByCategoryandLocation = async function(category, la
 
 exports.getCategoryById = async function(id) {
   const category = (await db.query('select * from categories where id = $1', id))[0];
+  return category;
+}
+exports.getCategoriesById = async function(ids) {
+  const category = await db.query('select * from categories where id = ANY ($1)', [ids]);
   return category;
 }
 
