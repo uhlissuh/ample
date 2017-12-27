@@ -16,7 +16,7 @@ exports.searchForBusinesses = async function(category, latitude, longitude) {
       state: business.location.state,
       address1: business.location.address1,
       address2: business.location.address2,
-      yelp_id: business.id,
+      yelpId: business.id,
       score: null,
       imageUrl: business.image_url,
       categoryTitles: business.categories.map(category => {
@@ -39,7 +39,7 @@ exports.searchForBusinesses = async function(category, latitude, longitude) {
 
   let yelpBusinessesExcludingExisting = reformattedYelpBusinesses.filter(function(business) {
     return !existingNearbyBusinesses.some(function(existingBusiness){
-      return business.yelp_id == existingBusiness.yelp_id
+      return business.yelpId == existingBusiness.yelpId
     });
   });
 
