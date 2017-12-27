@@ -127,6 +127,7 @@ describe("database", () => {
   describe.only(".getExistingBusinessesByCategoryandLocation", () => {
     it("finds businesses for a given category near a given location", async () => {
       const businesses = await database.getExistingBusinessesByCategoryandLocation("physicians", 37.767412344, -122.428245678);
+
       businesses.sort((a, b) => a.name - b.name)
 
       const businessNames = businesses.map(entry => entry.name);

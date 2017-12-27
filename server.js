@@ -76,11 +76,10 @@ app.get('/businesses/searchexisting?', async function(req, res) {
   const {term, latitude, longitude} = req.query
 
   let results = await search.searchForBusinesses(term, latitude, longitude);
-  res.end(JSON.stringify(results));
+  res.end(JSON.stringify({businesses: results}));
 });
 
 app.post('/businesses/postreview', async function(req, res) {
-  console.log(req.body);
   let business = await database.getBusinessByYelpId(req.body.businessYelpId);
 
   await database.transact(async () => {
