@@ -257,7 +257,7 @@ exports.getExistingBusinessesByCategoryandLocation = async function(category, la
     const businesses = [];
     for (const business of businessRows) {
       if (businessesById[business.id]) {
-        businessesById[business.id].category_titles.push(categoryTitlesById[business.category_id]);
+        businessesById[business.id].categoryTitles.push(categoryTitlesById[business.category_id]);
       } else {
         businessesById[business.id] = {
           id: business.id,
@@ -266,14 +266,14 @@ exports.getExistingBusinessesByCategoryandLocation = async function(category, la
             latitude: business.latitude,
             longitude: business.longitude,
           },
-          phone_number: business.phone_number,
+          phone: business.phone_number,
           city: business.city,
           state: business.state,
           address1: business.address1,
           address2: business.address2,
-          yelp_id: business.yelp_id,
+          yelpId: business.yelp_id,
           score: business.score,
-          category_titles: [categoryTitlesById[business.category_id]]
+          categoryTitles: [categoryTitlesById[business.category_id]]
         }
         businesses.push(businessesById[business.id]);
       }

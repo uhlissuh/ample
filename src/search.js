@@ -11,15 +11,15 @@ exports.searchForBusinesses = async function(category, latitude, longitude) {
       id: null,
       name: business.name,
       coordinates: business.coordinates,
-      phone_number: business.phone,
+      phone: business.phone,
       city: business.location.city,
       state: business.location.state,
       address1: business.location.address1,
       address2: business.location.address2,
-      yelp_id: business.yelpId,
+      yelp_id: business.id,
       score: null,
-      image_url: business.image_url,
-      category_titles: business.categories.map(category => {
+      imageUrl: business.image_url,
+      categoryTitles: business.categories.map(category => {
         return category.title;
       })
       }

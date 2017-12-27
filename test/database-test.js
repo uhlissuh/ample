@@ -132,11 +132,11 @@ describe("database", () => {
       const businessNames = businesses.map(entry => entry.name);
       assert.deepEqual(businessNames, ["Dr. Brain", "Dr. Seagull"])
 
-      const businessLocations = businesses.map(entry => Math.round(entry.location.latitude));
+      const businessLocations = businesses.map(entry => Math.round(entry.coordinates.latitude));
       assert.deepEqual(businessLocations, [38, 38])
 
       const businessCategories = businesses.map(entry => {
-        return entry.category_titles;
+        return entry.categoryTitles;
       });
       assert.deepEqual(businessCategories, [["Endocrinologists", "Podiatrists"], ["Surgeons", "Podiatrists"]])
     });
