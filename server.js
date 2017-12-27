@@ -73,10 +73,7 @@ app.get('/getyelptoken', async function(req, res) {
 })
 
 app.get('/businesses/searchexisting?', async function(req, res) {
-  let term = req.query.term;
-  let latitude= req.query.latitude;
-  let longitude = req.query.longitude;
-
+  const {term, latitude, longitude} = req.query
 
   let results = await search.searchForBusinesses(term, latitude, longitude);
   res.end(JSON.stringify(results));

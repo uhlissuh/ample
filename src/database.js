@@ -226,6 +226,7 @@ exports.getIdsDescendingFromAlias = async function(category) {
 
 exports.getExistingBusinessesByCategoryandLocation = async function(category, latitude, longitude) {
   const categoryIds =  await this.getIdsDescendingFromAlias(category);
+
   const businessRows = await db.query(
     `
       select *, ST_x(businesses.location) as latitude, ST_y(businesses.location) as longitude
@@ -237,43 +238,48 @@ exports.getExistingBusinessesByCategoryandLocation = async function(category, la
     `,
     [latitude, longitude, categoryIds]
   );
-  const categoryIdsForBusinesses = businessRows.map((business) => {
-    return business.category_id;
-  });
 
-  const categoryRows = await db.query('select id, title from categories where id = ANY ($1)', [categoryIdsForBusinesses]);
+  if (businessRows.length == 0) {
+    return [];
+  } else {
+    const categoryIdsForBusinesses = businessRows.map((business) => {
+      return business.category_id;
+    });
 
-  const categoryTitlesById = {};
-  for (let i = 0; i < categoryRows.length; i++) {
-    categoryTitlesById[categoryRows[i].id] = categoryRows[i].title
-  }
+    const categoryRows = await db.query('select id, title from categories where id = ANY ($1)', [categoryIdsForBusinesses]);
 
-  const businessesById = {};
-  const businesses = [];
-  for (const business of businessRows) {
-    if (businessesById[business.id]) {
-      businessesById[business.id].category_titles.push(categoryTitlesById[business.category_id]);
-    } else {
-      businessesById[business.id] = {
-        id: business.id,
-        name: business.name,
-        location: {
-          latitude: business.latitude,
-          longitude: business.longitude,
-        },
-        phone_number: business.phone_number,
-        city: business.city,
-        state: business.state,
-        address1: business.address1,
-        address2: business.address2,
-        yelp_id: business.yelp_id,
-        score: business.score,
-        category_titles: [categoryTitlesById[business.category_id]]
-      }
-      businesses.push(businessesById[business.id]);
+    const categoryTitlesById = {};
+    for (let i = 0; i < categoryRows.length; i++) {
+      categoryTitlesById[categoryRows[i].id] = categoryRows[i].title
     }
+
+    const businessesById = {};
+    const businesses = [];
+    for (const business of businessRows) {
+      if (businessesById[business.id]) {
+        businessesById[business.id].category_titles.push(categoryTitlesById[business.category_id]);
+      } else {
+        businessesById[business.id] = {
+          id: business.id,
+          name: business.name,
+          coordinates: {
+            latitude: business.latitude,
+            longitude: business.longitude,
+          },
+          phone_number: business.phone_number,
+          city: business.city,
+          state: business.state,
+          address1: business.address1,
+          address2: business.address2,
+          yelp_id: business.yelp_id,
+          score: business.score,
+          category_titles: [categoryTitlesById[business.category_id]]
+        }
+        businesses.push(businessesById[business.id]);
+      }
+    }
+    return businesses;
   }
-  return businesses;
 }
 
 exports.getCategoryById = async function(id) {
