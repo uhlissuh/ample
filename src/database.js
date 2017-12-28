@@ -213,8 +213,10 @@ exports.getIdsDescendingFromAlias = async function(category) {
   const categoryRow = await db.query('select * from categories where alias = $1', category);
   if (categoryRow) {
     mainIdAndDescendentIds.push(categoryRow[0].id);
-    for (const id of categoryRow[0].descendent_ids) {
-      mainIdAndDescendentIds.push(id)
+    if (categoryRow[0].descendent_ids) {
+      for (const id of categoryRow[0].descendent_ids) {
+        mainIdAndDescendentIds.push(id)
+      }
     }
     return mainIdAndDescendentIds;
     console.log("this is the main id and descencent ids ", mainIdAndDescendentIds);
