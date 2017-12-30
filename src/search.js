@@ -1,10 +1,18 @@
-const yelp = require('./yelp');
-const database = require('./database');
+const yelp = require("./yelp");
+const database = require("./database");
 
 exports.searchForBusinesses = async function(category, latitude, longitude) {
   const alias = await database.getAliasForCategoryTitle(category);
-  const existingNearbyBusinesses = await database.getExistingBusinessesByCategoryandLocation(alias, latitude, longitude);
-  const yelpResponse = await yelp.getBusinessesByCategoryAndLocation(category, latitude, longitude);
+  const existingNearbyBusinesses = await database.getExistingBusinessesByCategoryandLocation(
+    alias,
+    latitude,
+    longitude
+  );
+  const yelpResponse = await yelp.getBusinessesByCategoryAndLocation(
+    category,
+    latitude,
+    longitude
+  );
   const yelpBusinesses = yelpResponse.businesses;
   const reformattedYelpBusinesses = yelpBusinesses.map(business => {
     return {
@@ -22,7 +30,7 @@ exports.searchForBusinesses = async function(category, latitude, longitude) {
       categoryTitles: business.categories.map(category => {
         return category.title;
       })
-      }
+    };
   });
 
   reformattedYelpBusinesses.sort(function(a, b) {
@@ -32,17 +40,18 @@ exports.searchForBusinesses = async function(category, latitude, longitude) {
       return -1;
     }
     if (nameA > nameB) {
-    return 1;
+      return 1;
     }
     return 0;
-  })
-
-  let yelpBusinessesExcludingExisting = reformattedYelpBusinesses.filter(function(business) {
-    return !existingNearbyBusinesses.some(function(existingBusiness){
-      return business.yelpId == existingBusiness.yelpId
-    });
   });
 
+  let yelpBusinessesExcludingExisting = reformattedYelpBusinesses.filter(
+    function(business) {
+      return !existingNearbyBusinesses.some(function(existingBusiness) {
+        return business.yelpId == existingBusiness.yelpId;
+      });
+    }
+  );
 
   return existingNearbyBusinesses.concat(yelpBusinessesExcludingExisting);
-}
+};
