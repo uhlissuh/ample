@@ -3,12 +3,19 @@ node_js:
   - "8"
 
 before_script:
-  - psql -c 'create role app with LOGIN;' -U postgres
-  - psql -c 'create database everybody_test;' -U postgres
+  - psql -U postgres -c 'create role app with LOGIN;'
+  - psql -U postgres -c 'create database everybody_test;'
+  - psql -U postgres -d everybody_test -c 'create extension postgis;'
   - ./node_modules/.bin/db-migrate up --env test
 
 services:
   - postgresql
+
+addons:
+  postgresql: "9.6"
+  apt:
+    packages:
+    - postgresql-9.6-postgis-2.3
 
 notifications:
   email:
