@@ -3,6 +3,7 @@ node_js:
   - "8"
 
 before_script:
+  - psql -c 'create role app with LOGIN;' -U postgres
   - psql -c 'create database everybody_test;' -U postgres
   - ./node_modules/.bin/db-migrate up --env test
 
