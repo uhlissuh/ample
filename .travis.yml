@@ -1,0 +1,8 @@
+language: nodejs
+
+before_script:
+  - psql -c 'create database everybody_test;' -U postgres
+  - ./node_modules/.bin/db-migrate --env test
+
+services:
+  - postgresql
