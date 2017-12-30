@@ -107,9 +107,11 @@ app.post('/businesses/postreview', async function(req, res) {
     const reviewId = await database.createReview(business.id, req.body);
 
     await database.updateBusinessScore(business.id, req.body.fatFriendlyRating);
+
+    res.end(JSON.stringify({reviewId: reviewId}));
   })
 
-  res.end(JSON.stringify({reviewId: reviewId}));
+
 })
 
 
