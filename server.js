@@ -1,6 +1,7 @@
 const apiServer = require('./api-server');
 const express = require('express');
 const database = require("./src/database");
+const expressLayout = require('express-ejs-layouts');
 
 const port = 8000;
 
@@ -12,14 +13,14 @@ database.connect("dev");
 
 const app = express();
 
+app.set('view engine', 'ejs')
+app.set('views', 'src/views')
+
+app.use(expressLayout);
 app.use('/api', apiServer);
 
 app.get('/', (req, res) => {
-  res.end(`
-    <div>
-      Welcome to <b>Ample</b>
-    </div>
-  `)
+  res.render('index', {currentTime: Date.now()})
 })
 
 app.listen(port, function onStart(err) {

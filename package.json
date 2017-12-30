@@ -7,7 +7,9 @@
     "body-parser": "^1.17.2",
     "db-migrate": "^0.10.0-beta.20",
     "db-migrate-pg": "^0.1.11",
+    "ejs": "^2.5.7",
     "express": "^4.15.3",
+    "express-ejs-layouts": "^2.3.1",
     "pg-promise": "^5.9.5",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"
