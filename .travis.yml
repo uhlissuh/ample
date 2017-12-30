@@ -4,7 +4,12 @@ node_js:
 
 before_script:
   - psql -c 'create database everybody_test;' -U postgres
-  - ./node_modules/.bin/db-migrate --env test
+  - ./node_modules/.bin/db-migrate up --env test
 
 services:
   - postgresql
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
