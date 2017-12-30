@@ -27,6 +27,11 @@ describe("searchForBusinesses", () => {
         "alias": "physicians",
         "title": "Doctors",
         "parents": []
+      },
+      {
+        "alias": "weirdos",
+        "title": "Creeps",
+        "parents": []
       }
     ])
 
@@ -88,7 +93,7 @@ describe("searchForBusinesses", () => {
     assert.deepEqual(businessesNames, ["Dr. Brain", "Dr. Pringles", "Dr. Chips", "Dr. Sunhat"]);
 
     const categories = businesses.map(business => {
-      return business.category_titles;
+      return business.categoryTitles;
     })
     assert.deepEqual(categories, [["Doctors"], ["Doctors", "Creeps"], ["Doctors"], ["Doctors"]]);
   });
@@ -96,7 +101,7 @@ describe("searchForBusinesses", () => {
 
 function buildYelpBusiness (yelpId, name) {
   return {
-    yelpId: yelpId,
+    id: yelpId,
     name: name,
     location: {
       address1: "375 Valencia St",

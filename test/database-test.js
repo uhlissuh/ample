@@ -124,7 +124,7 @@ describe("database", () => {
 
   });
 
-  describe.only(".getExistingBusinessesByCategoryandLocation", () => {
+  describe(".getExistingBusinessesByCategoryandLocation", () => {
     it("finds businesses for a given category near a given location", async () => {
       const businesses = await database.getExistingBusinessesByCategoryandLocation("physicians", 37.767412344, -122.428245678);
 
