@@ -1,13 +1,39 @@
-<div>
-  Hi! The current time is <%= currentTime.toLocaleString() %>
+<nav class="navbar sticky-top navbar-light bg-light">
+  <a class="navbar-brand" href="#">Ample</a>
+</nav>
+
+<div class="container">
+  <form>
+    <div class="form-row">
+      <div class="col-6">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Find</div>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            id="business-search-term"
+            placeholder="doctors, Sally's Hair, massage" />
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Near</div>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            id="business-location"
+            placeholder="address, city, zip code" />
+        </div>
+      </div>
+    </div>
+  </form>
+
 </div>
 
 <%- contentFor('title') -%>
 Ample | Welcome
-
-<%- contentFor('styleSheets') -%>
-<style>
-body {
-  color: red;
-}
-</style>

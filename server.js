@@ -17,6 +17,7 @@ app.set('view engine', 'ejs')
 app.set('views', 'src/views')
 
 app.use(expressLayout);
+app.use('/static', express.static('static'));
 app.use('/api', apiServer);
 
 app.get('/', (req, res) => {
