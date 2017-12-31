@@ -1,0 +1,36 @@
+.main-background {
+  /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(linear, left top, right top, from(#ffd7ea), to(#fecc72));
+
+    /* Safari 5.1, Chrome 10+ */
+    background: -webkit-linear-gradient(left, #ffd7ea, #fecc72);
+
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(left, #ffd7ea, #fecc72);
+
+    /* IE 10 */
+    background: -ms-linear-gradient(left, #ffd7ea, #fecc72);
+
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(left, #ffd7ea, #fecc72);
+}
+
+
+
+.navigation {
+  background-color: #FFA586
+}
+
+.search-row {
+}
+
+.ample-logo {
+  font-family: 'Lilita One', cursive;
+  color: #EB6E79;
+  font-size: 100px;
+
+}
+
+.logo-row {
+  padding-top: 120px;
+}
