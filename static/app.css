@@ -27,10 +27,23 @@
 .ample-logo {
   font-family: 'Lilita One', cursive;
   color: #EB6E79;
-  font-size: 100px;
+  font-size: 80px;
 
 }
 
 .logo-row {
   padding-top: 120px;
+}
+
+.tag-line {
+  padding-top: 20px;
+  font-family: 'Josefin Sans', sans-serif;
+  color: #EB6E79;
+  font-size: 20px;
+
+}
+
+.go-button {
+  background-color: #EB6E79;
+  color: white;
 }
