@@ -8,6 +8,7 @@
     "bootstrap": "^4.0.0-beta.3",
     "db-migrate": "^0.10.0-beta.20",
     "db-migrate-pg": "^0.1.11",
+    "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
     "express": "^4.15.3",
     "express-ejs-layouts": "^2.3.1",
