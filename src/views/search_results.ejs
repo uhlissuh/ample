@@ -1,0 +1,18 @@
+<div class="container">
+  <p>
+    Search Results for <%-category-%> in <%-location-%>
+  </p>
+
+  <ol class="list-group">
+    <% for (const business of businesses) { %>
+      <li class="row list-group-item">
+        <img width="80" height="80" src="<%= business.imageUrl %>"/>
+        <span><%= business.name %></span>
+      </li>
+    <% } %>
+  </ol>
+
+</div>
+
+<%- contentFor('title') -%>
+Ample | Search Results
