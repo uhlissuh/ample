@@ -1,15 +1,15 @@
 
 
 <div class="container">
-  <form>
-    <div class="row logo-row">
-      <div class="col-12">
-        <p class="ample-logo">
-          ample
-        </p>
+  <div class="row logo-row">
+    <div class="col-12">
+      <p class="ample-logo">
+        ample
+      </p>
 
-      </div>
     </div>
+  </div>
+  <form action="/searchforbusinesses" method="GET">
     <div class="form-row search-row">
       <div class="col-6">
         <div class="input-group mb-2">
@@ -20,6 +20,7 @@
             type="text"
             class="form-control"
             id="business-search-term"
+            name="category"
             placeholder="doctors, Sally's Hair Salon, massage" />
         </div>
       </div>
@@ -32,6 +33,7 @@
           <input
             type="text"
             class="form-control"
+            name="location"
             id="business-location"
             placeholder="address, city, zip code" />
         </div>
