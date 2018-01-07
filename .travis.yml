@@ -4,8 +4,8 @@ node_js:
 
 before_script:
   - psql -U postgres -c 'create role app with LOGIN;'
-  - psql -U postgres -c 'create database everybody_test;'
-  - psql -U postgres -d everybody_test -c 'create extension postgis;'
+  - psql -U postgres -c 'create database ample_test;'
+  - psql -U postgres -d ample_test -c 'create extension postgis;'
   - ./node_modules/.bin/db-migrate up --env test
 
 services:
