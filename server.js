@@ -1,11 +1,12 @@
 require('dotenv').config();
-
-const apiServer = require('./api-server');
 const express = require('express');
-const database = require("./src/database");
 const bodyParser = require('body-parser');
 const expressLayout = require('express-ejs-layouts');
-const search = require("./src/search")
+
+const database = require("./src/database");
+const apiServer = require('./api-server');
+const BusinessSearch = require("./src/business-search");
+const GooglePlacesClient = require('./src/google-places');
 
 const port = 8000;
 
@@ -31,17 +32,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/searchforbusinesses', async function(req, res) {
-  const category = req.query.category;
+  const term = req.query.term;
   const location = req.query.location;
-  const latitude = 45.5231;
-  const longitude = -122.6765;
-
-  const searchResults = await search.searchForBusinesses(category, latitude, longitude);
-
+  const googlePlacesClient = new GooglePlacesClient();
+  const businessSearch = new BusinessSearch(googlePlacesClient);
+  const searchResults = await businessSearch.findBusinesses(term, location);
 
   res.render('search_results',
     {
-      category: category,
+      term: term,
       location: location,
       businesses: searchResults
     }

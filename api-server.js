@@ -6,7 +6,7 @@ const request = require('request-promise');
 const FACEBOOK_APP_ID = '156289218248813';
 const APP_SECRET = 'c322f877c00b73fc9607399d619952b7';
 const bodyParser = require('body-parser');
-const search = require('./src/search');
+const BusinessSearch = require('./src/business-search');
 
 const app = express();
 
