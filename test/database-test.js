@@ -1,7 +1,6 @@
 const database = require('../src/database');
 const assert = require('assert');
-
-database.connect("test");
+require('./test-helper');
 
 describe("database", () => {
   beforeEach(async () => {
