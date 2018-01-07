@@ -1,0 +1,946 @@
+{
+  "html_attributions": [],
+  "next_page_token":
+    "CqQCHQEAAKAUWv7v6GykBpeGHQQCBxn5obZJiJBZHb-vfx9KfYEfrDvmXml8IIojEDh79y---8dAUiRyMEjiqotLnjKLLoKk42vUaE_gxbdmRLG3kOHxQcimL8rVM_sD-8RSMv2AJfjPXr3yetqXOAh5cY-YP0Iloc7qQGNp05M6WcnL81gQBo_mA8-0438W6SkPWPhpT8xdTxBGb6mp0LW4muKEuoxI35OPTHCUUertSlbsMA2yovZOhEfYpXTk1uVtMf8H7QJJWwfUBEexN75DcXBoUpZyCIhcdydva9A_s-W7Fw2mENcgA_OCE8o478KqXiyKg9KhSmfjul6g8179rtbp2XYleZYMzpQ1Cdn2BevlJ7L_qGI4P0KmaAmZXAyBSraN0BIQk-pPfiD3Cnka141VY-tN0BoU3wcb5SoSOvFNEJSDSqW_fUToABk",
+  "results": [
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.49974739999999,
+          "lng": -122.4294706
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.50109718029149,
+            "lng": -122.4282058197085
+          },
+          "southwest": {
+            "lat": 45.4983992197085,
+            "lng": -122.4309037802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "1961bfbcdf031bea31e9fab6e47fc7fcbb5f824c",
+      "name": "Iris Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 3264,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/116329525323735930570/photos\"\u003eLinda Farris\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAAWmhqXJlwEfrpOP1JT4IuWEziNAzhNAmnTpwu_nQ3aamTJfhVOBaiwrFqR73NGVqTVVcRZAleEOQXy87lxKx-gxE8l3H_UlWr8aggzEav4Z5FpbSnumrC5UU8cozB33WGEhAzwuMGSZAQPCygCuRDN2IoGhQxdms-bIROr7AXgTo29OZqt1aXXA",
+          "width": 2448
+        }
+      ],
+      "place_id": "ChIJeQclk_SYlVQR5l4E-sUrMGg",
+      "rating": 4.9,
+      "reference":
+        "CmRRAAAAO5vzpVHp81Gjsc2THAHd6Br0hHA5cOgfghA5_3JpQljndaY_0rkUsAtKk0irNLskF9_ampgM3Ex2JxHbEwxtfqneE81WZqn8zcPXT-uV0zguRxbSrXtI3aXp0zSjHRe5EhBHwHALHYt_Oimj74q-qD70GhSi-GYXcau4Z_pZMns4x8UJPZumXg",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "302 Northeast Roberts Avenue, Gresham"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.6361426,
+          "lng": -122.6712548
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.6374919302915,
+            "lng": -122.6700218197085
+          },
+          "southwest": {
+            "lat": 45.6347939697085,
+            "lng": -122.6727197802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "7c892e4e76ea7107fc40330df9394e2586968894",
+      "name": "D Side Studio Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 1333,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/115240337873206758927/photos\"\u003eD Side Studio Hair Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAAvvTNhYqmjcWWWTlWZdyZr7K3asP9XDrZRHGMBMHOM6XrUypzlffJAljI2505jamOe2zcZ6ehe2blAtcBNx4qPgCAjcFiiogSY_KlWxl2yfZoRyBsd2Ny7JfGe7TFMuTtEhCSfUXk926TTBfOYnjshHMEGhTTjozN7TCMq35d8K1RVbfgSjr07w",
+          "width": 2000
+        }
+      ],
+      "place_id": "ChIJeYB8wMqolVQRP2rxoJlzYnc",
+      "rating": 4,
+      "reference":
+        "CmRRAAAAoOkuGfMkDVqWRmlzoJXGYPGunTJkSlddAPTLCUzURJII7gHCQFkoilQJPjr4pBnjEhSpmV87vP3FBX7DeoQXiRx2FQ_mTG5pARZPAyGuYC9tQjDi0nUOP5oOjasivHzZEhDyuR4PZFDe3OtpA8ENLv_XGhT-jOdTBlAcDfX2d45ik5OfQxNiAw",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "1915 Main Street, Vancouver"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.42170730000001,
+          "lng": -122.7849304
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.4229617802915,
+            "lng": -122.7833822697085
+          },
+          "southwest": {
+            "lat": 45.4202638197085,
+            "lng": -122.7860802302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "a8d8f5cf9ff247021b95488fed304a4dad67c2ca",
+      "name": "House of Color Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 2988,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/117892325694982228920/photos\"\u003edianna lawrence\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAABhtOsb-egOQ_H0dOKJJAVeFq2csG7YRUQISY8IqKmyzlDK6xKLHxBdVVc7KaGzKrqA73rDCzTqABnQCDH5WbuAqCp4BveSw5l_RWUf4MNLV5i5GNrmf0BY2g-7fwY0fCEhCLx3FLgmnI-d5fxeCSD5opGhRpx7FyXnKvJ_NdU0ieOjgsA_482A",
+          "width": 5312
+        }
+      ],
+      "place_id": "ChIJp8i9gDkNlVQRpgrE5LE0jSQ",
+      "rating": 4.7,
+      "reference":
+        "CmRRAAAAoX6AhcPcoUOYunsAmztJeoh4MLUgzg8LSvAIOS7qsx5_-DooucF2BTncIZMM0S2gPDQJeBjGS77mQRKdtSYkK4CKUMcv0aQwQ5VSMPFEnKvY53XviqjKPstyUodKQFQqEhCPLpL1F4yPRGx1QDFkLNuVGhS6t2-3n8qppw0eejjZq6xqB54uUw",
+      "scope": "GOOGLE",
+      "types": ["hair_care", "point_of_interest", "establishment"],
+      "vicinity": "13599 Southwest Pacific Highway, Tigard"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.6297529,
+          "lng": -122.6718372
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.63109908029149,
+            "lng": -122.6703521697085
+          },
+          "southwest": {
+            "lat": 45.62840111970849,
+            "lng": -122.6730501302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "1b99a1efa5f303104c4d6ae2308e767e819770c2",
+      "name": "The Locksmythe Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 800,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/110272115122339441635/photos\"\u003eThe Locksmythe Hair Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAA6Ckf9MyY6DFSFIQ-fCE9sGUqLppGo4g4siauBHW7bkpMlkSVrEkVT7JUHu7aarlRQ9z65U-QLSwpj1REz42D2E0LGQ-fppkQ2r3QWOGl1Sl8qhxpKW4lPgsz1FIo8FT7EhDBoLtsYxl7sGqvp38jOm_jGhRo3GbEKtMY6Pwetd0afdenQcCF6A",
+          "width": 800
+        }
+      ],
+      "place_id": "ChIJ3QlAsbaolVQR7SL_fBHZmGA",
+      "rating": 5,
+      "reference":
+        "CmRRAAAAhfr0oTtkWQQfgnyTjT0Km1IoYkbTNJbEjM_ntgBqVRTuqq-5VtVMIvxDVJMvlBbhh2tJW63lHM-duMWwxryzza55LGWkFCbgz_LDqEP_eJ303mSQe1lU6QyvY0Qc6DtxEhBBAU-VbuVL9SbIG-isPUcnGhRhq2pXB1GGcUXlcL844U3wwpitYg",
+      "scope": "GOOGLE",
+      "types": ["hair_care", "point_of_interest", "establishment"],
+      "vicinity": "1104 Main Street #110, Vancouver"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.6218872,
+          "lng": -122.556711
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.62344353029149,
+            "lng": -122.5552511697085
+          },
+          "southwest": {
+            "lat": 45.62074556970849,
+            "lng": -122.5579491302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "6ca65d12ba2047670455f1029f9e28b662caa1ee",
+      "name": "European Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "place_id": "ChIJxax8rxGllVQRTqjRCPcd1Xk",
+      "rating": 3.9,
+      "reference":
+        "CmRRAAAA7fCNERvvKMGUDHgpzTpaYFeH5O0qzUnoMebVOBeEKrkMSZ5x1tPLUfK8Euq6mkJ4CEIypu1qCxXjrVwZ00m6XJpgWpX7S50NRA7szMwPMC2CK30tagATAZN2q5tqThUhEhBgI0LPdAiMGqqTDLSKOvBtGhSRFNtDZK4VYDXDwUOYlUMmhGM15A",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "330 Northeast Chkalov Drive, Vancouver"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.632278,
+          "lng": -122.668511
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.6337724802915,
+            "lng": -122.6671617197085
+          },
+          "southwest": {
+            "lat": 45.6310745197085,
+            "lng": -122.6698596802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "664a2132b093f898b4f11ecf81e606af3bde5a16",
+      "name": "Firefly Atelier Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 3024,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/117345982862807907238/photos\"\u003eFirefly Atelier Hair Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAAXoUXkDucCVWDsGD8fHr9HUW_6x4RaZ8PSaDwIftSIlcvWqNTMBrSqzMzmAlsIg_Vv2-sG6TkKqgwo_uxKCcq7vswkzrpO4zOW2HuCT3QFtYjaKtdargXzletJiwu8q1UEhD6f-bipP44YbnbSYJry9MYGhTPnx97DRvt1MVGpaDSmycymSEcZg",
+          "width": 4032
+        }
+      ],
+      "place_id": "ChIJ5f1j97SolVQR6iV1rHlJBRI",
+      "rating": 4.8,
+      "reference":
+        "CmRRAAAA0Bfo-N2wCHfPCGcbpu2lqWb0WAZ-z4sVklMnmIKuQTaDbt3JaOFJWN12n3m1pUyFNuS0-6YKtANEbyprGQQcID0ZXa3BKUFTcyXcFelvNQliKyn3YnECTclBrAvRoNEwEhAvG9Vcc2Ouidlm22jI8uJ7GhRozmvWhd4gjiroDCDT9KJXHaMbtg",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "309 East 15th Street #C, Vancouver"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.5305461,
+          "lng": -122.6890436
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.5319577302915,
+            "lng": -122.6876972697085
+          },
+          "southwest": {
+            "lat": 45.5292597697085,
+            "lng": -122.6903952302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "d00d98e8120700cf996edf665bdd79685004f85f",
+      "name": "Chachi Hair",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 3779,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/116311635019274934675/photos\"\u003eTyler Hull\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAA4lyjIyZwxMt6VKzi_0e-3gDiWob0Q_WjnYoPVxAAK51JI3j7CYbpNm-Ap56S18RY6WrGETBZkRnvrpAgDOB9RYfU5sam3CykVG6ua17S_fPM1oQVAGe6zVl024jijBnFEhC8ttVypoBXHgTRZ3QKnTC9GhSy0gNzRk7GvGIX_8LBRgxlAfZSiA",
+          "width": 3024
+        }
+      ],
+      "place_id": "ChIJU9ZQifsJlVQR0nBEIx6ivtc",
+      "rating": 5,
+      "reference":
+        "CmRSAAAAiLqwXrCzSxfM3lV_7PINyL6rJihNkKEUbXCu5jMFzg-0GheZgdsq8KLxyIrou18R2RDwzphm7ws1xtqDBuE63NzxwTs2IbMkyMfEtNQdsq3qYzyW_XxhvZkYOASKXDEyEhBHWH6cwn_Ffsxm5KpW6-_9GhTA0rH9hmHKpfXXHNs74ENzi30twA",
+      "scope": "GOOGLE",
+      "types": ["hair_care", "point_of_interest", "establishment"],
+      "vicinity": "1740 Northwest Marshall Street, Portland"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.486977,
+          "lng": -122.8066641
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.4884151302915,
+            "lng": -122.8052963197085
+          },
+          "southwest": {
+            "lat": 45.4857171697085,
+            "lng": -122.8079942802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "001faab73f7c784aa8c6e19be7d4eafe8e7bb0a0",
+      "name": "Farmington Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "place_id": "ChIJgd_97J8OlVQRZ5bLkw-y_zQ",
+      "rating": 3.6,
+      "reference":
+        "CmRRAAAATsxsCKpXYEfJnp1V-Fa2YdmMbp3kzMhXYWyhiCkLx-5RxlMQRcw1-K42BgPvHQGj9251Yjh52CYqtbB8HHzULlFE1YdcLUDcMkbLlg5-RLrF2-p5Uu7Gd4DBqK1NyqhIEhDth5HYUCo5DPuVgHVWTH6kGhTMM8gwUTq6-wxEvfHbHiwnYwpcIw",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "12670 Southwest Farmington Road, Beaverton"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.416332,
+          "lng": -122.741713
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.4176859302915,
+            "lng": -122.7408904197085
+          },
+          "southwest": {
+            "lat": 45.4149879697085,
+            "lng": -122.7435883802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "8d42e97f500975f1c4662d04c1a6f8dc0249ef7c",
+      "name": "Mascola's Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 457,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/111632352514759852722/photos\"\u003eMascola&#39;s Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAA4VEZmuVG-c0ULcaLR8y9SaztAbK50JWFX895QRj5B8LFoZNspzwgNukvKW8x3V0Asy5a9MdCxiCAnbz4cq7_f6Lju1tBEnO9927IJ6tHjEAKs367NvH8aqkf53rfegUQEhBF1L-KTUFf1ZAdOFeVa-Y9GhQgfLVlvp-rKmBG79XvG5VwuvcelQ",
+          "width": 1016
+        }
+      ],
+      "place_id": "ChIJhUdiy_wMlVQR5cJ4UbtDkVg",
+      "rating": 4.5,
+      "reference":
+        "CmRRAAAAdkAKLAxb9m_YcbXXbPl1gFRJJ2HvigXSCqVB_0wvMGvI9JYkLjZiLPOy7LPxARcVyiKOX5XWOTsHCjBjfCXW00J_ydTq7lPizdDRdBbE4JaouBGd4ZptmQcrTuu7kxJkEhBJQY9DtapUasV8aAzhMRmFGhQKbR4j9fBovpWzZLoFsU-o5EfXMQ",
+      "scope": "GOOGLE",
+      "types": [
+        "beauty_salon",
+        "hair_care",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "15154 Bangy Road, Lake Oswego"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.6289367,
+          "lng": -122.6720591
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.6301980302915,
+            "lng": -122.6707097197085
+          },
+          "southwest": {
+            "lat": 45.6275000697085,
+            "lng": -122.6734076802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "f595e61a32b020e728359ff9e64a819c3855c34c",
+      "name": "SIREN SALON LLC",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 3024,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/106274819900606289294/photos\"\u003eWillis Anderson\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAA91vJK26KYY1uMcdveuj7R5XoW7JoDX2Fg4W-uupy1EK4pyDTmf071-vgnQhFvWoIFGzl1JcyJhb0xLW5OjRVLw8eWOrPjOd4PIy9cJvlSWRt_eLWWoU6Hakz9Xv82QwaEhAurQq3ZmncXGFnkbWcLLOvGhRHWhfBnCvChzugUKCVB6g5SPaX1w",
+          "width": 4032
+        }
+      ],
+      "place_id": "ChIJIT1lN7GolVQRWroAczw3dXk",
+      "rating": 4.9,
+      "reference":
+        "CmRRAAAAFIqOtSG7bUDighx_kI58UkFnJj4-1VhVmwsJuq40-Xx7ZTpTmU7m09jMDKONRExud-2C7Bp92j6Bb6--9Xg6i-V8oBxwBQikr0cbTkPUe6Omjj_ILuHKNjxtbE4QLMhsEhC0I3ZTXg9vUwqYigE3x2WKGhSy4A7NrmYlFeOKfph281BYLsafzQ",
+      "scope": "GOOGLE",
+      "types": ["hair_care", "point_of_interest", "establishment"],
+      "vicinity": "104 West Evergreen Boulevard, Vancouver"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.5047366,
+          "lng": -122.6549946
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.50608528029149,
+            "lng": -122.6535204697085
+          },
+          "southwest": {
+            "lat": 45.50338731970849,
+            "lng": -122.6562184302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "66227ccddb0e664bedf220268147fb50537eef8d",
+      "name": "WINDOWWALL Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 1367,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/110083710104168033720/photos\"\u003eWINDOWWALL Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAAaOVY1q3cJI05_lsKXVR2fqoKg1rhqycG32I7Gdkr1eLd_VaMAc_t-AkJlpWjXusz5wsBHIyNT_raFIZBeK6Fc_N6gR5jrpjY9f55VJBPzAseYi59dLIXL-p3AWUcwifFEhAk53lSZ0colvyF1xUFcSYtGhSUqt_lFgULWiup0nwcxzZgBJJ-AQ",
+          "width": 2048
+        }
+      ],
+      "place_id": "ChIJS4lHNHcKlVQRyAbw0uXW1qY",
+      "rating": 5,
+      "reference":
+        "CmRSAAAAJbUkAQk8zp0Pwq6-djDFRN8TEiu7eWQHGK6L77Fx9XZq0VwpHMh13hjEgLQCp1Ij9WdLf94auFTGyBcC9qIHRqZCp1LvyxZrAkuC-JEhGWEbkUF0CYOyr0wim0r8OtJFEhBdxRF-E7ZO-iLlTn73RQlIGhQphxPr7RfLg1O3_ygTuEDtgmGeIg",
+      "scope": "GOOGLE",
+      "types": [
+        "beauty_salon",
+        "hair_care",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "2505 Southeast 11th Avenue #323, Portland"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.6406882,
+          "lng": -122.6168752
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.6420371802915,
+            "lng": -122.6155262197085
+          },
+          "southwest": {
+            "lat": 45.6393392197085,
+            "lng": -122.6182241802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "80f635b5396cc45b384b7df16627856dca1916a8",
+      "name": "Final Cut Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 3024,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/106274819900606289294/photos\"\u003eWillis Anderson\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAA96eFNxIu9HcZXEL_wIDxd5dVWGcFI7nLlmvZ4z-Tx5mpyGjsTXqZbAoS7AufphFjyTzSrckF1Z8W2GMk7A6_iSQaZ398Iqe1ByJIEkcwsGgrcK8Yt2vzwIlaxZFjbSItEhDN2vHjxjSNXemJ2A2p6yJ5GhR8yziLcAQshc2uCisRm83A3nmXXw",
+          "width": 4032
+        }
+      ],
+      "place_id": "ChIJozk5jnqvlVQRKSHekokGf4s",
+      "rating": 4.5,
+      "reference":
+        "CmRSAAAAXykPtJlfLArd05ff3XVoy6ljER7sCHFHN7d3PE0paVLgtzpmxLUdqtL6DYV6Ba5aqwouGDO8nYfhyVUlV7ajgo7sVH07VXNKlLT1wHCxVGJkAOiYJ7p0fO9yeJZN7BeUEhDE07Ilxsk6lSJuBB863ar-GhTSaai1s0PjUrZqt-q3J4FD3xxFjw",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "5201 East 4th Plain Boulevard # 107, Vancouver"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.516672,
+          "lng": -122.657482
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.5180209802915,
+            "lng": -122.6561330197085
+          },
+          "southwest": {
+            "lat": 45.5153230197085,
+            "lng": -122.6588309802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "aa1c6b6fb91b4146cfa483e6a1b6b0a084481732",
+      "name": "Venus Allure Salon and Spa",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 588,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/116028469247956007290/photos\"\u003eVenus Allure Salon and Spa\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAApYKh5VY2goQdEGE-0ckQI4nRB5xHO36QqmXgpqqOaYt6wr2UAPvypFCno7D0hdd-5xWhdDIdXCSAz9ihgGtQHCFk7YiGWzDNW9f1VRf9msh_lJb16e1LG81krPYmsZgEEhAKkY76eVcZ_xz-wReiBGnWGhQZ6aNW8zjH3WHwQMX28XVPuwNWCg",
+          "width": 784
+        }
+      ],
+      "place_id": "ChIJE6bl5qCglVQR1wsRLqOZYF0",
+      "rating": 4.7,
+      "reference":
+        "CmRRAAAACj_Dgl0n8G1tRoJRud-3DqIpJtteCPSK7GtUYlQxNe6h5Ycng8p8IXPfdg11ndkCAW71sQi-DVAL_F_ocguEBupVROSrnTyew2SiH6vJn_J2gdnvH8M6j0FwYS59sOL4EhDbBNMoHDalfoaRFZXfUp72GhS5ESxE4T_KFrM_xIUTc3jVmeBGAw",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "spa",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "811 SE Belmont St., - 8th and Belmont, Portland"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.6182,
+          "lng": -122.4800001
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.6195489802915,
+            "lng": -122.4786511197085
+          },
+          "southwest": {
+            "lat": 45.6168510197085,
+            "lng": -122.4813490802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "4deb68dc79ecda7d1d9bcf1a8be6db3f14c7c3b7",
+      "name": "SmartStyle Hair Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 576,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/105044009660928429351/photos\"\u003eSmartStyle Hair Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAAHv-Reodjee_uv-iopSag9waib93i3KjtXLeAhTSj_z9u6D--A4mxNkTxBojWn1i--aYTC8H5Zq36ABVM1FynEqfp5AIMyMnO8L6MpQCnStPgp76M0T4uIOQ_RDOYvYUREhBYYAKUJlNhY56fWAp0kY3qGhT4RlDjV2V-P7RuW-anixIBWbTfjw",
+          "width": 1024
+        }
+      ],
+      "place_id": "ChIJ28-xsju7lVQRVIHHOEQ61hw",
+      "rating": 2.6,
+      "reference":
+        "CmRRAAAAPPzT1U5LUNrxY21sctagqFpVCpNSe4rbbgnRuaYoKx4rxZig-TW-RxbWgZGNH61EO7icFHkD0Ldk7BklPX5PqnciHTrtT67n9JCMrNYZ_Jl8oJ1W7JZyAlfVL3hy2TxdEhCsuzGGGKW8TJCAHEUXWg7gGhQQjVLxLzmjmgNr62lSfkTEpGeAxg",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "430 SE 192nd Ave, Located Inside Walmart #5462, Vancouver"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.4017621,
+          "lng": -122.7327685
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.4030868302915,
+            "lng": -122.7317577697085
+          },
+          "southwest": {
+            "lat": 45.4003888697085,
+            "lng": -122.7344557302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "348d1b5652b05a6b18a9132b755baef1a331a2cd",
+      "name": "Victor Hugo Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 485,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/109895678707164931892/photos\"\u003eVictor Hugo Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAATdU76JZk8jhn3J1qXQ9upaescTbCJ0JVL_SHttca3mVjbovc0SIGHZqT84Ii3hOolXOfDnqqZMZeRf_4Dk1lSAHXy-zBV_0HjPlONmr8vY850xVi_EajgTcrrRbBgL1cEhCLITGSqfZLAmyzJMxlKrAyGhQv6XLms5RKYZOOFjh257r_bvNL5Q",
+          "width": 902
+        }
+      ],
+      "place_id": "ChIJW3FZM-BylVQRdswl2JTj-JY",
+      "rating": 5,
+      "reference":
+        "CmRSAAAAFMO3rjHup8a_9y7_yKzcT8CfMPBUd7Oeq9x1kElDCiXMKiasNPK87XWXDqxFOzFhchZNZSs_-tb-8NXj9GdzYpM8b9125GB1kLAXn553LB7ut3KzV5aKU_LCKLh4KF5mEhCArJvZ88mD2I6FE4-jvdrNGhSb4el-o_B-LvEB6KhbrmhFeUS_8Q",
+      "scope": "GOOGLE",
+      "types": ["hair_care", "point_of_interest", "establishment"],
+      "vicinity": "17050 Pilkington Road #110, Lake Oswego"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.42761549999999,
+          "lng": -122.8449177
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.42868813029149,
+            "lng": -122.8436746697085
+          },
+          "southwest": {
+            "lat": 45.42599016970849,
+            "lng": -122.8463726302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "ddf5691b8777e1fe5a55f194c79da2bfc5596d2e",
+      "name": "Twyst Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 315,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/107812915427611624657/photos\"\u003eTwyst Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAAD2OWbWMKN2O6NRz7m8drMWLsnQgby03zDzcNs4_jSKBVQuN6o41tE-li0WiFRhjjB3ygwGwSqWtcaWW0dsU9IF2U4p5DU3sAvzMcXKzolDnPImJ996ZJZJKE9PgfigpTEhBQg1g4FsdHHRa_xFrfI87sGhSzhekPor-_nZscEIzHB3D4DAJiKA",
+          "width": 851
+        }
+      ],
+      "place_id": "ChIJ_wVQP4ESlVQRqA89XrMNPq0",
+      "rating": 4.7,
+      "reference":
+        "CmRSAAAAXaxYo4wMpf9MqGJHbjVQUFxCsXqHD8HZYzktzSD08iUiXD63oR-H5ta-Q75kpLgeXijfjloE4HL8z9ZU3Z0obfoCs7O8UHEtSbmFxskbbnEZt63ywBzsAteVK58ok93JEhA-gwd-5wYsGPWfbJfQB8LTGhQRtxpSATPUD_Tmp7Cs-Zq7pkNhAA",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "16315 Southwest Barrows Road #208, Beaverton"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.3033619,
+          "lng": -122.7647045
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.30470243029151,
+            "lng": -122.7638729197085
+          },
+          "southwest": {
+            "lat": 45.30200446970851,
+            "lng": -122.7665708802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "11acb8b7871c2cd36ab5475964f68246d2eb289d",
+      "name": "Synergy Artistic Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 540,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/106121598483162146606/photos\"\u003eSynergy Artistic Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAAhrGeAAtpGC-HMOHigInafHEr0oLUXflAIFtVbMjiwnbjQaeTb7HBMsIlz4Ser5q9KITSkl1ZFQH27ahHUII3X57-Zt9qmVAsAEUMgd3SGuHOSxNG8VaviwGc7T8-cEXlEhAZkziQ2F2XIFyyedBTfKsXGhSmrIhmxaajlad7e9W_fcmO8Zzvcw",
+          "width": 720
+        }
+      ],
+      "place_id": "ChIJ7e_DlfFulVQRLxGLOdch9cU",
+      "rating": 3.7,
+      "reference":
+        "CmRSAAAAtAZ7XfmHeqGXLgczysGjYMJKIFfKrrr-Qav-2CQ1KoFA7FYZhWWHp7bG3gqV2D8npoF_u56rUL2wcV2kDVID9ydvmtpxRezOxolG5ec6IZfu3H-QGXIHpicqG510onfKEhAI092OFCtndk1nw2bGCWCYGhTOmmzauzLXHVtqPy5zzPPhUImFlw",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "29970 Town Center Loop West, Wilsonville"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.46862600000001,
+          "lng": -122.71136
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.46989363029151,
+            "lng": -122.7099854197085
+          },
+          "southwest": {
+            "lat": 45.46719566970851,
+            "lng": -122.7126833802915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "7d0be7dbc00df3c9809a5df6ce336bf0004e3ce2",
+      "name": "Annastasia Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 1367,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/108166198938882681554/photos\"\u003eAnnastasia Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAAUYBEXu8TuCqSaasqan81oLWNKL9nhWLGOLoFrGugJC9Qx2VCCzyT_9LVZvU-EkvBRLjcKmacm50KvqGCbymSu7-dfu1hBKNU4V1W2Xt_ckBrw146k7CXuXkXuLEwfbVDEhBDLiYNmdXsudz_VtSmNMucGhSvIE5eQybeCcOmBQ6X00JIbguuhQ",
+          "width": 2048
+        }
+      ],
+      "place_id": "ChIJmwKOaHMLlVQRrP-BKyM6tas",
+      "rating": 4.6,
+      "reference":
+        "CmRSAAAA8hrvEcw5aFFH-3Okh4h7aTdMYNSIutRadGV51ifN5lRgQA7_c-VYAmWFzhOE2f_ByR2IDsCAv7pJFTIIz1gv8rnWgu5S4zJOvCB0jYbhq_mjN7mogBpRdVFrcmjZKh6VEhAjeUyrvr3DUliZwxkenSvUGhS7t69g0CFjnX6TmFgFWSjUdpZv_w",
+      "scope": "GOOGLE",
+      "types": [
+        "beauty_salon",
+        "hair_care",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "7741 Southwest Capitol Highway, Portland"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.5353382,
+          "lng": -122.6287556
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.5365977302915,
+            "lng": -122.6274062697085
+          },
+          "southwest": {
+            "lat": 45.5338997697085,
+            "lng": -122.6301042302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "ec711f1ac4cf05113d66c7e499deaad443a1fd68",
+      "name": "The Burrow Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 3024,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/102944019030380959021/photos\"\u003eThe Burrow Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAArytQ-AAqN8zDRUABoydcgUsw4cxIzkJA1RO14HdZ-m88lWsWJi4CN5x0JnuqQ4-B09l_w6P-5jxtXloSBxkb0SEULKndE65e97DK9qU0WXavdcwFDqP0tQ92HqTtEzvfEhDyJ4lTzm0kBydph5rKZuvrGhQeRR8MV4SjHEF5FyjbDPS3YrPyhg",
+          "width": 4032
+        }
+      ],
+      "place_id": "ChIJV4F_tdGglVQRzPCfqLJkXtA",
+      "rating": 4.6,
+      "reference":
+        "CmRSAAAAB0cRxJ4vKuyylcI1CtAZsShmgfGqemg2mDRqoOWZ8PwJ_V2FM5IIf2eEP8l70QawkHB7NwXygBh2dbAOhCHWt1nhiidqrzHgitYfDDxsTXWMEAGyLGlgvFtrDCSVuNAMEhBwozMRuJTwFK0CUUUtNlGnGhQb4QSEwMjdqaeX8MggYfL-FXrMwA",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "store",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "3433 Northeast Broadway Street, Portland"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 45.5230507,
+          "lng": -122.6543141
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 45.5243258302915,
+            "lng": -122.6529669697085
+          },
+          "southwest": {
+            "lat": 45.5216278697085,
+            "lng": -122.6556649302915
+          }
+        }
+      },
+      "icon":
+        "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png",
+      "id": "681d9a1a224cb112da8c37537d1108a9768bf7a9",
+      "name": "Ceremony Salon",
+      "opening_hours": {
+        "open_now": false,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 1080,
+          "html_attributions": [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/103824014524220788887/photos\"\u003eCeremony Salon\u003c/a\u003e"
+          ],
+          "photo_reference":
+            "CmRaAAAA6P_1SAfIpvVCw81ichj0x44ecUH9ogQJjjgOs7D4PcgZdVqpmql3XK_QMCjkAYRjSnW6OTxKbHiV0erholzAm-fRGF6fP2k3OM1EM8yGhgKEf6qBgHLDUzXvFworRJbgEhBAh4Cs2QFOfaEiOcgk411mGhRGoaWUhSUdTifmC_7-mDzdcoJM4w",
+          "width": 1920
+        }
+      ],
+      "place_id": "ChIJAxZLa6WglVQRjAMUwXn_9so",
+      "rating": 5,
+      "reference":
+        "CmRSAAAAdbzfz1jdyuvKpKW1U7VvwbHgrgL5iVEnRdA1F0foASthTm8cXh4mQK5xV1be5PUFw5xehPWVFAgfBzmgozTDlsJiEvZ8P0_Meh2bhkgdIMBFX0elfQ_1XPSrZpxXCy7sEhBEIQlx3nNX6_4Cp50P_qEHGhQFB1WNImCibxu_fGHX6YfAryNudw",
+      "scope": "GOOGLE",
+      "types": [
+        "hair_care",
+        "beauty_salon",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "1101 East Burnside Street, Portland"
+    }
+  ],
+  "status": "OK"
+}
