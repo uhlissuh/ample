@@ -1,5 +1,6 @@
 const yelp = require("./yelp");
 const database = require("./database");
+const google = require("./google-places")
 
 exports.searchForBusinesses = async function(category, latitude, longitude) {
   const alias = await database.getAliasForCategoryTitle(category);
@@ -55,3 +56,42 @@ exports.searchForBusinesses = async function(category, latitude, longitude) {
 
   return existingNearbyBusinesses.concat(yelpBusinessesExcludingExisting);
 };
+
+exports.searchForExistingAndGoogleBusinesses = async function(category, location) {
+  const alias = await database.getAliasForCategoryTitle(category);
+
+  let coordinates
+  if (typeof location === 'string') {
+    coordinates = await google.getCoordinatesForLocationName(location);
+  } else {
+    coordinates = location
+  }
+
+  const existingNearbyBusinesses = await database.getExistingBusinessesByCategoryandLocation(
+    alias,
+    coordinates.lat,
+    coordinates.lng
+  );
+
+  const googleBusinesses = await google.getBusinessesNearCoordinates(
+    category,
+    coordinates.lat,
+    coordinates.lng
+  );
+
+  const reformattedGoogleBusinesses = googleBusinesses.map(business => {
+    return {
+      id: null,
+      name: business.name,
+      coordinates: business.geometry.location,
+      phone: business.phone,
+      city: business.location.city,
+      state: business.location.state,
+      phone: null,
+      address1: business.vicinity,
+      score: null,
+      imageUrl: business.photos,
+      googleId: business.id
+    }
+  });
+}

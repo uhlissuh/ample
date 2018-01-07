@@ -22,39 +22,14 @@ app.get('/:categoryName/allsubcategories', async function(req, res) {
   res.end(JSON.stringify(data));
 })
 
-app.get('/reviews/:yelpId', async function(req, res) {
-  const reviews = await database.getBusinessReviewsByYelpId(req.params.yelpId);
+app.get('/reviews/:id', async function(req, res) {
+  const reviews = await database.getBusinessReviewsById(req.params.id);
   res.end(JSON.stringify(reviews));
 })
 
 app.get('/recentreviews', async function(req, res) {
   let recentReviews = await database.getRecentReviews();
   res.end(JSON.stringify(recentReviews));
-})
-
-app.get('/getyelptoken', async function(req, res) {
-  var options = {
-    method: 'POST',
-    uri: 'https://api.yelp.com/oauth2/token',
-    form: {
-    "grant_type": "client_credentials",
-    "client_id": "xg9ywx63H-Aadm7XULtnCA",
-    "client_secret": "RmZF07zH90vQTGumefuYgAPleYKKio3us7CjuuGXICXBltSq9XpJHmEuRbFpVFXU"
-    },
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded'
-    }
-  };
-
-  request(options)
-    .then(function(body) {
-      console.log(body);
-    })
-    .catch( function (error) {
-      console.log(error);
-    })
-
-  res.end();
 })
 
 app.get('/businesses/searchexisting?', async function(req, res) {
@@ -65,26 +40,24 @@ app.get('/businesses/searchexisting?', async function(req, res) {
 });
 
 app.post('/businesses/postreview', async function(req, res) {
-  let business = await database.getBusinessByYelpId(req.body.businessYelpId);
+  let business = await database.getBusinessByGoogleId(req.body.businessGoogleId);
 
   await database.transact(async () => {
     if (!business) {
-      const yelpBusiness = await yelp.getBusinessById(req.body.businessYelpId);
+      const googleBusiness = await google.getBusinessById(req.body.businessGoogleId);
 
       business = {
-        yelpId: yelpBusiness.id,
-        name: yelpBusiness.name,
-        address1: yelpBusiness.location.address1,
-        address2: yelpBusiness.location.address2,
-        state: yelpBusiness.location.state,
-        city: yelpBusiness.location.city,
-        phoneNumber: yelpBusiness.phone,
-        latitude: yelpBusiness.coordinates.latitude,
-        longitude: yelpBusiness.coordinates.longitude,
-        categories: yelpBusiness.categories
+        googleId: googleBusiness.place_id,
+        name: googleBusiness.name,
+        address1: googleBusiness.location.address1,
+        address2: googleBusiness.location.address2,
+        state: googleBusiness.location.state,
+        city: googleBusiness.location.city,
+        phoneNumber: googleBusiness.phone,
+        latitude: googleBusiness.coordinates.latitude,
+        longitude: googleBusiness.coordinates.longitude,
+        categories: googleBusiness.categories
       };
-
-      console.log("here are all the categories", yelpBusiness.categories);
 
       business.id = await database.createBusiness(business);
     }
@@ -95,8 +68,6 @@ app.post('/businesses/postreview', async function(req, res) {
 
     res.end(JSON.stringify({reviewId: reviewId}));
   })
-
-
 })
 
 module.exports = app

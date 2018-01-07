@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const apiServer = require('./api-server');
 const express = require('express');
 const database = require("./src/database");

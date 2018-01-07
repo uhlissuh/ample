@@ -6,76 +6,10 @@ exports.connect = function(env) {
   db = pgp(databaseConfig[env]);
 };
 
-exports.clearCategories = async function() {
-  await db.query("delete from categories");
-};
-
-exports.clearBusinessesAndBusinessCategories = async function() {
-  await db.query("delete from businesses");
-  await db.query("delete from business_categories");
-};
-
-exports.clearReviews = async function() {
+exports.clear = async function() {
   await db.query("delete from reviews");
-};
-
-exports.addYelpCategories = async function(yelpCategories) {
-  const idsByAlias = {};
-  const descendentIdsById = {};
-  const parentIdsById = {};
-
-  for (const entry of yelpCategories) {
-    const categoryId = await db.query(
-      "insert into categories (parent_id, title, alias) select $1, $2, $3 where not exists (select title from categories where title = $2) returning id",
-      [null, entry.title, entry.alias]
-    );
-    idsByAlias[entry.alias] = categoryId[0].id;
-  }
-
-  for (const entry of yelpCategories) {
-    if (entry.parents[0]) {
-      let parentId = idsByAlias[entry.parents[0]];
-      parentIdsById[idsByAlias[entry.alias]] = parentId;
-    }
-  }
-
-  for (let id in parentIdsById) {
-    const descendentId = id;
-    while (parentIdsById[id]) {
-      const parentId = parentIdsById[id];
-      if (descendentIdsById[parentId]) {
-        descendentIdsById[parentId].push(parseInt(descendentId));
-      } else {
-        descendentIdsById[parentId] = [parseInt(descendentId)];
-      }
-      id = parentId;
-    }
-  }
-
-  for (const alias in idsByAlias) {
-    const id = idsByAlias[alias];
-    if (descendentIdsById[id]) {
-      await db.query(
-        "update categories set parent_id = $1, descendent_ids = $2 where id = $3",
-        [parentIdsById[id], descendentIdsById[id], id]
-      );
-    } else {
-      await db.query(
-        "update categories set parent_id = $1, descendent_ids = '{}' where id = $2",
-        [parentIdsById[id], id]
-      );
-    }
-  }
-
-  pgp.end();
-};
-
-exports.getAllCategoryTitles = async function() {
-  const data = await db.query("select title from categories");
-  categoryNames = data.map(function(category) {
-    return category.title;
-  });
-  return categoryNames;
+  await db.query("delete from businesses");
+  await db.query("delete from users");
 };
 
 exports.getBusinessbyName = async function(businessName) {
@@ -86,12 +20,51 @@ exports.getBusinessbyName = async function(businessName) {
   return business;
 };
 
-exports.getBusinessByYelpId = async function(yelpId) {
+exports.getBusinessByGoogleId = async function(googleId) {
   return (await db.query(
-    "select * from businesses where yelp_id = $1",
-    yelpId
+    "select * from businesses where google_id = $1 limit 1",
+    googleId
   ))[0];
 };
+
+exports.getBusinessesByGoogleIds = async function(googleIds) {
+  const rows = await db.query(
+    `
+      select *, ST_x(coordinates) as latitude, ST_y(coordinates) as longitude
+      from businesses
+      where google_id = ANY($1)
+    `,
+    [googleIds]
+  );
+  return rows.map(businessFromRow);
+}
+
+exports.getBusinessById = async function(id) {
+  const [row] = await db.query(
+    `
+      select *, ST_x(coordinates) as latitude, ST_y(coordinates) as longitude
+      from businesses
+      where id = $1 limit 1
+    `,
+    id
+  );
+  return businessFromRow(row);
+};
+
+function businessFromRow(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    address: row.address,
+    googleId: row.google_id,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    phone: row.phone,
+    rating: row.review_count > 0
+      ? row.total_rating / row.review_count
+      : null
+  };
+}
 
 exports.transact = async function(callback) {
   try {
@@ -106,58 +79,56 @@ exports.transact = async function(callback) {
 };
 
 exports.createBusiness = async function(business) {
-  const categoryAliases = business.categories.map(category => {
-    return category.alias;
-  });
-
-  const categoryIds = await db.query(
-    "select id from categories where alias = ANY ($1)",
-    [categoryAliases]
-  );
-
-  return this.transact(async () => {
-    const rows = await db.query(
-      "insert into businesses " +
-        "(name, yelp_id, address1, address2, state, city, phone_number, location) values " +
-        "($1, $2, $3, $4, $5, $6, $7, ST_MakePoint($8, $9)) returning id",
-      [
-        business.name,
-        business.yelpId,
-        business.address1,
-        business.address2,
-        business.state,
-        business.city,
-        business.phoneNumber,
-        parseFloat(business.latitude),
-        parseFloat(business.longitude)
-      ]
-    );
-
-    for (i = 0; i < categoryIds.length; i++) {
-      await db.query(
-        "insert into business_categories (worker_or_biz_id, category_id) values ($1, $2)",
-        [rows[0].id, categoryIds[i].id]
-      );
-    }
-    return rows[0].id;
-  });
-};
-
-exports.createReview = async function(businessId, review) {
   const rows = await db.query(
-    "insert into reviews " +
-      "(worker_or_biz_id, account_kit_id, content, timestamp, fat_slider, skill_slider) values " +
-      "($1, $2, $3, $4, $5, $6) returning id",
+    "insert into businesses " +
+      "(name, google_id, address, phone, coordinates) values " +
+      "($1, $2, $3, $4, ST_MakePoint($5, $6)) returning id",
     [
-      businessId,
-      review.accountKitId,
-      review.reviewContent,
-      new Date(review.reviewTimestamp * 1000),
-      review.fatFriendlyRating,
-      review.skillRating
+      business.name,
+      business.googleId,
+      business.address,
+      business.phone,
+      parseFloat(business.latitude),
+      parseFloat(business.longitude)
     ]
   );
   return rows[0].id;
+};
+
+exports.createReview = async function(userId, businessId, review) {
+  return this.transact(async () => {
+    const [businessRow] = await db.query(
+      'select total_rating, review_count from businesses where id = $1 limit 1',
+      businessId
+    );
+
+    await db.query(
+      `
+        update businesses
+        set total_rating = $2, review_count = $3
+        where id = $1
+      `,
+      [
+        businessId,
+        businessRow.total_rating + review.rating,
+        businessRow.review_count + 1
+      ]
+    );
+
+    const rows = await db.query(
+      "insert into reviews " +
+        "(business_id, user_id, content, timestamp, rating) values " +
+        "($1, $2, $3, $4, $5) returning id",
+      [
+        businessId,
+        userId,
+        review.content,
+        new Date(),
+        review.rating,
+      ]
+    );
+    return rows[0].id;
+  })
 };
 
 exports.updateBusinessScore = async function(businessId, score) {
@@ -179,36 +150,25 @@ exports.updateBusinessScore = async function(businessId, score) {
   }
 };
 
-exports.getBusinessReviewsByYelpId = async function(yelpId) {
-  const business = await this.getBusinessByYelpId(yelpId);
-  if (business) {
-    const rows = await db.query(
-      "select * from reviews, users where worker_or_biz_id = $1 and reviews.account_kit_id = users.account_kit_id",
-      business.id
-    );
-    return rows.map(row => {
-      return {
-        content: row.content,
-        id: row.id,
-        workerOrBizId: row.worker_or_biz_id,
-        fatSlider: row.fat_slider,
-        skillSlider: row.skill_slider,
-        timestamp: row.timestamp.getTime(),
-        user: {
-          accountKitId: row.account_kit_id,
-          name: row.name
-        }
-      };
-    });
-  }
-  return [];
-};
-
-exports.getReviewsByBusinessId = async function(id) {
-  return await db.query(
-    "select * from reviews where worker_or_biz_id = $1",
-    id
+exports.getBusinessReviewsById = async function(id) {
+  const rows = await db.query(
+    "select * from reviews, users where business_id = $1 and reviews.user_id = users.id",
+    [id]
   );
+
+  return rows.map(row => {
+    return {
+      id: row.id,
+      content: row.content,
+      rating: row.rating,
+      timestamp: row.timestamp.getTime(),
+      user: {
+        id: row.user_id,
+        name: row.name,
+        accountKitId: row.account_kit_id
+      }
+    };
+  });
 };
 
 exports.getRecentReviews = async function() {
@@ -311,7 +271,7 @@ exports.getExistingBusinessesByCategoryandLocation = async function(
       state: row.state,
       address1: row.address1,
       address2: row.address2,
-      yelpId: row.yelp_id,
+      googleId: row.google_id,
       score: row.score,
       categoryTitles: categoryTitlesByBusinessId[row.id]
     }
@@ -325,6 +285,7 @@ exports.getCategoryById = async function(id) {
   ))[0];
   return category;
 };
+
 exports.getCategoriesById = async function(ids) {
   const category = await db.query(
     "select * from categories where id = ANY ($1)",
@@ -344,14 +305,6 @@ exports.getCategoriesforBusinessId = async function(businessId) {
   return categoryIds;
 };
 
-exports.getReviewsbyBusinessId = async function(id) {
-  const reviews = await db.query(
-    "select * from reviews where worker_or_biz_id = $1",
-    id
-  );
-  return reviews;
-};
-
 exports.getBusinessScoreById = async function(id) {
   const score = (await db.query(
     "select score from businesses where id = $1",
@@ -366,4 +319,35 @@ exports.getAliasForCategoryTitle = async function(title) {
     title
   ))[0].alias;
   return alias;
+};
+
+exports.createUser = async function (user) {
+  const rows = await db.query(
+    `insert into users
+     (name, account_kit_id, email, phone) values
+     ($1, $2, $3, $4) returning id`,
+    [
+      user.name,
+      user.accountKitId,
+      user.email,
+      user.phone,
+    ]
+  );
+  return rows[0].id;
+};
+
+exports.getUserByAccountKitId = async function (accountKitId) {
+  const [row] = await db.query(
+    'select * from users where account_kit_id = $1',
+    [accountKitId]
+  );
+
+  if (row) {
+    return {
+      name: row.name,
+      accountKitId: row.account_kit_id,
+      email: row.email,
+      phone: row.phone
+    }
+  }
 };

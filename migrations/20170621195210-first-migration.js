@@ -17,37 +17,37 @@ exports.setup = function(options, seedLink) {
 exports.up = async function(db) {
   await db.createTable('users', {
     id: { type: 'serial', primaryKey: true },
+    account_kit_id: 'bigint',
     name: 'string',
-    email: 'string',
-    location: 'geometry'
+    phone: 'string',
+    email: 'string'
   });
-  await db.createTable('workers', {
+
+  await db.createTable('businesses', {
     id: { type: 'serial', primaryKey: true },
+    google_id: 'string',
     name: 'string',
-    business_id: 'int'
+    coordinates: 'geometry',
+    phone: 'string',
+    address: 'string',
+    total_rating: 'int',
+    review_count: 'int'
   });
+
   await db.createTable('reviews', {
     id: { type: 'serial', primaryKey: true },
     user_id: 'int',
-    worker_id: 'int',
+    business_id: 'int',
     content: 'text',
-    timestamp: 'timestamp'
+    timestamp: 'timestamp',
+    rating: 'int'
   });
-  await db.createTable('businesses', {
-    id: { type: 'serial', primaryKey: true },
-    name: 'string',
-    location: 'geometry',
-    phone_number: 'string',
-    category_id: 'int'
-  });
-
 };
 
 exports.down = async function(db) {
   await db.dropTable('users');
-  await db.dropTable('workers');
-  await db.dropTable('reviews');
   await db.dropTable('businesses');
+  await db.dropTable('reviews');
 };
 
 exports._meta = {

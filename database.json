@@ -4,13 +4,13 @@
     "user": "app",
     "password": "",
     "host": "localhost",
-    "database": "everybody"
+    "database": "ample_dev"
   },
   "test": {
     "driver": "pg",
     "user": "app",
     "password": "",
     "host": "localhost",
-    "database": "everybody_test"
+    "database": "ample_test"
   }
 }
