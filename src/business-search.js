@@ -18,14 +18,22 @@ class BusinessSearch {
       googleBusinesses.map(business => business.place_id)
     );
 
-    ratedBusinesses.sort((a, b) => b.rating - a.rating);
+    const ratedBusinessesByGoogleId = {};
+    for (const ratedBusiness of ratedBusinesses) {
+      ratedBusinessesByGoogleId[ratedBusiness.googleId] = ratedBusiness
+    }
 
-    return ratedBusinesses.concat(
-      googleBusinesses.filter(googleBusiness =>
-        ratedBusinesses.every(ratedBusiness =>
-          ratedBusiness.googleId !== googleBusiness.place_id
-        )
-      )
-    );
+    const results = googleBusinesses.map(googleBusiness => {
+      const ratedBusiness = ratedBusinessesByGoogleId[googleBusiness.place_id];
+      return {
+        name: googleBusiness.name,
+        photoReference: googleBusiness.photos[0].photo_reference,
+        vicinity: googleBusiness.vicinity,
+        rating: ratedBusiness ? ratedBusiness.rating : null,
+        reviewCount: ratedBusiness ? ratedBusiness.reviewCount : 0
+      };
+    });
+
+    return results.sort((a, b) => b.rating - a.rating);
   }
 };

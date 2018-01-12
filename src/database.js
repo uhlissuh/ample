@@ -60,6 +60,7 @@ function businessFromRow(row) {
     latitude: row.latitude,
     longitude: row.longitude,
     phone: row.phone,
+    reviewCount: row.review_count,
     rating: row.review_count > 0
       ? row.total_rating / row.review_count
       : null

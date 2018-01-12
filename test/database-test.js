@@ -28,7 +28,8 @@ describe("database", () => {
         phone: '123-456-7890',
         latitude: 37.76,
         longitude: -122.42,
-        rating: null
+        rating: null,
+        reviewCount: null
       })
     });
   });

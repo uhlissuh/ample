@@ -29,54 +29,63 @@ describe("BusinessSearch", () => {
         return [
           {
             place_id: "stylist-0-id",
-            name: "Iris Hair Salon",
+            name: "Stylist 0",
             geometry: {
               location: {
                 lat: 45.49974739999999,
                 lng: -122.4294706
               }
             },
+            photos: [
+              {
+                photo_reference: 'stylist-0-photo-reference'
+              }
+            ],
             types: [
               "hair_care",
               "beauty_salon",
-              "health",
-              "point_of_interest",
               "establishment"
             ],
             vicinity: "Address 0"
           },
           {
             place_id: "stylist-1-id",
-            name: "Hibiscus Hair Salon",
+            name: "Stylist 1",
             geometry: {
               location: {
                 lat: 45.49974739999999,
                 lng: -122.4294706
               }
             },
+            photos: [
+              {
+                photo_reference: 'stylist-1-photo-reference'
+              }
+            ],
             types: [
               "hair_care",
               "beauty_salon",
-              "health",
-              "point_of_interest",
               "establishment"
             ],
             vicinity: "Address 1"
           },
           {
             place_id: "stylist-2-id",
-            name: "Hyacinth Hair Salon",
+            name: "Stylist 2",
             geometry: {
               location: {
                 lat: 45.49974739999999,
                 lng: -122.4294706
               }
             },
+            photos: [
+              {
+                photo_reference: 'stylist-2-photo-reference'
+              }
+            ],
             types: [
               "hair_care",
               "beauty_salon",
-              "health",
-              "point_of_interest",
               "establishment"
             ],
             vicinity: "Address 2"
@@ -116,7 +125,22 @@ describe("BusinessSearch", () => {
     assert.deepEqual(businesses.map(b => b.name), [
       'Stylist 2',
       'Stylist 1',
-      'Iris Hair Salon'
+      'Stylist 0'
+    ]);
+    assert.deepEqual(businesses.map(b => b.rating), [
+      60,
+      30,
+      null
+    ]);
+    assert.deepEqual(businesses.map(b => b.reviewCount), [
+      1,
+      1,
+      0
+    ]);
+    assert.deepEqual(businesses.map(b => b.photoReference), [
+      'stylist-2-photo-reference',
+      'stylist-1-photo-reference',
+      'stylist-0-photo-reference'
     ]);
   });
 });
