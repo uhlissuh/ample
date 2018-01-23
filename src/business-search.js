@@ -26,6 +26,7 @@ class BusinessSearch {
     const results = googleBusinesses.map(googleBusiness => {
       const ratedBusiness = ratedBusinessesByGoogleId[googleBusiness.place_id];
       return {
+        placeId: googleBusiness.place_id,
         name: googleBusiness.name,
         photoReference: googleBusiness.photos[0].photo_reference,
         vicinity: googleBusiness.vicinity,
