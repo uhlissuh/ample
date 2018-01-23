@@ -7,7 +7,7 @@
     <% for (const business of businesses) { %>
       <li class="row list-group-item">
         <img width="80" height="80" src="<%= business.imageUrl %>"/>
-        <span><%= business.name %></span>
+        <a href="<%=business.placeId%>"><span><%= business.name %></span></a>
 
         <% if (business.reviewCount > 0) { %>
           <span><%= business.reviewCount %> reviews</span>

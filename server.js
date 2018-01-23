@@ -38,6 +38,8 @@ app.get('/searchforbusinesses', async function(req, res) {
   const businessSearch = new BusinessSearch(googlePlacesClient);
   const searchResults = await businessSearch.findBusinesses(term, location);
 
+    console.log(searchResults);
+
   res.render('search_results',
     {
       term: term,
@@ -47,6 +49,22 @@ app.get('/searchforbusinesses', async function(req, res) {
   );
 
 });
+
+app.get('/:googleId', async function(req, res) {
+  const googleId = req.params.googleId;
+  console.log("google id ", googleId);
+  const googlePlacesClient = new GooglePlacesClient();
+  const business = await googlePlacesClient.getBusinessById(googleId);
+
+  console.log("business result is ", business);
+
+  res.render('business',
+    {
+      name: business.name
+    }
+  );
+
+})
 
 app.listen(port, function onStart(err) {
   if (err) {
