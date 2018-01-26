@@ -13,6 +13,9 @@
 
     /* Opera 11.10+ */
     background: -o-linear-gradient(left, #ffd7ea, #fecc72);
+
+
+    height: 700px;
 }
 
 
@@ -37,7 +40,7 @@
 
 .tag-line {
   padding-top: 20px;
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #EB6E79;
   font-size: 20px;
 
@@ -46,4 +49,21 @@
 .go-button {
   background-color: #EB6E79;
   color: white;
+}
+
+.business-header {
+  padding-top: 60px;
+}
+
+.picture-column {
+  background-color: gray;
+}
+
+.cards {
+  padding-top: 50px;
+}
+
+.dr-name {
+  font-family: 'Roboto', sans-serif;
+  color: #A9A9A9;
 }

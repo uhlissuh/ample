@@ -60,7 +60,11 @@ app.get('/:googleId', async function(req, res) {
 
   res.render('business',
     {
-      name: business.name
+      name: business.name,
+      formatted_address: business.formatted_address,
+      formatted_phone_number: business.formatted_phone_number,
+      location: business.geometry.location,
+      photos: business.photos
     }
   );
 

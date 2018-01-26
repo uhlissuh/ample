@@ -28,7 +28,7 @@ class BusinessSearch {
       return {
         placeId: googleBusiness.place_id,
         name: googleBusiness.name,
-        photoReference: googleBusiness.photos[0].photo_reference,
+        photoReference: googleBusiness.photos ? googleBusiness.photos[0].photo_reference : null,
         vicinity: googleBusiness.vicinity,
         rating: ratedBusiness ? ratedBusiness.rating : null,
         reviewCount: ratedBusiness ? ratedBusiness.reviewCount : 0
