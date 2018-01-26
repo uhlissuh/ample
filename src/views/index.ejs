@@ -1,57 +1,93 @@
 
+<div class="main-background">
+  <div class="container">
+    <div class="row logo-row">
+      <div class="col-12">
+        <p class="ample-logo">
+          ample
+        </p>
 
-<div class="container">
-  <div class="row logo-row">
-    <div class="col-12">
-      <p class="ample-logo">
-        ample
-      </p>
+      </div>
+    </div>
+    <form action="/searchforbusinesses" method="GET">
+      <div class="form-row search-row">
+        <div class="col-6">
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Find</div>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              id="business-search-term"
+              name="term"
+              placeholder="doctors, Sally's Hair Salon, massage" />
+          </div>
+        </div>
 
+        <div class="col-5">
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Near</div>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="location"
+              id="business-location"
+              placeholder="address, city, zip code" />
+          </div>
+        </div>
+        <div class="col-1">
+          <input type="submit" value="Go" class="btn go-button"/>
+        </div>
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-12">
+        <p class="tag-line">
+          Friends helping friends find doctors, establishments, and services where larger bodies are seen, respected, and celebrated.
+        </p>
+      </div>
     </div>
   </div>
-  <form action="/searchforbusinesses" method="GET">
-    <div class="form-row search-row">
-      <div class="col-6">
-        <div class="input-group mb-2">
-          <div class="input-group-prepend">
-            <div class="input-group-text">Find</div>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            id="business-search-term"
-            name="term"
-            placeholder="doctors, Sally's Hair Salon, massage" />
-        </div>
-      </div>
-
-      <div class="col-5">
-        <div class="input-group mb-2">
-          <div class="input-group-prepend">
-            <div class="input-group-text">Near</div>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            name="location"
-            id="business-location"
-            placeholder="address, city, zip code" />
-        </div>
-      </div>
-      <div class="col-1">
-        <input type="submit" value="Go" class="btn go-button"/>
-      </div>
-    </div>
-  </form>
+</div>
+<div class="container cards">
   <div class="row">
-    <div class="col-12">
-      <p class="tag-line">
-        Friends helping friends find doctors, establishments, and services where larger bodies are seen, respected, and celebrated.
-      </p>
+    <div class="col-md-4">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
     </div>
   </div>
-
-
 </div>
 
 <%- contentFor('title') -%>
