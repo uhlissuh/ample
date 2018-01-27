@@ -55,9 +55,6 @@
   padding-top: 60px;
 }
 
-.picture-column {
-  background-color: gray;
-}
 
 .cards {
   padding-top: 50px;
@@ -66,4 +63,18 @@
 .dr-name {
   font-family: 'Roboto', sans-serif;
   color: #A9A9A9;
+}
+
+.business-by-line {
+  font-size: 20px;
+}
+
+.reviews-title {
+  padding-top: 20px;
+}
+
+.review-button {
+  background-color: #EB6E79;
+  color: white;
+  width: 200px;
 }

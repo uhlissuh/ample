@@ -50,7 +50,7 @@ app.get('/searchforbusinesses', async function(req, res) {
 
 });
 
-app.get('/:googleId', async function(req, res) {
+app.get('/businesses/:googleId', async function(req, res) {
   const googleId = req.params.googleId;
   console.log("google id ", googleId);
   const googlePlacesClient = new GooglePlacesClient();
@@ -58,13 +58,17 @@ app.get('/:googleId', async function(req, res) {
 
   console.log("business result is ", business);
 
+  const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
+  console.log(reviewedBusiness);
+
   res.render('business',
     {
       name: business.name,
       formatted_address: business.formatted_address,
       formatted_phone_number: business.formatted_phone_number,
       location: business.geometry.location,
-      photos: business.photos
+      photos: business.photos,
+      rating: reviewedBusiness ? reviewedBusiness.total_rating/reviewedBusiness.review_count : null
     }
   );
 

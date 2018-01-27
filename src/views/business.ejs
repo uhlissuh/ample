@@ -1,11 +1,29 @@
 <div class="container">
   <div class="row business-header">
-    <div class="col-md-4 picture-column">
-      <img />
+    <div class="col-md-4">
+      <img
+      class="img-thumbnail"
+      src="/static/people-in-a-coffee-shop.jpg"
+       width="300px"
+      />
     </div>
     <div class="col-md-8">
       <h1 class="dr-name"><%- name -%></h1>
+      <p class="business-by-line"> <%- formatted_address -%></p>
+      <p class="business-by-line"> <%- formatted_phone_number -%></p>
+      <% if (rating === null) { %>
+      <p>Be the first to review!</p>
+      <% } else { %>
+      <p>score: <%- rating -%> </p>
+      <% } %>
+      <input type="submit" value="Review" class="btn review-button"/>
     </div>
+  </div>
+  <div class="row reviews-title">
+    <div class="col-md-12">
+      <h2>Reviews</h2>
+    </div>
+
   </div>
 </div>
 
