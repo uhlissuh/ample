@@ -64,6 +64,7 @@ app.get('/businesses/:googleId', async function(req, res) {
   res.render('business',
     {
       name: business.name,
+      googleId: googleId,
       formatted_address: business.formatted_address,
       formatted_phone_number: business.formatted_phone_number,
       location: business.geometry.location,
@@ -71,8 +72,14 @@ app.get('/businesses/:googleId', async function(req, res) {
       rating: reviewedBusiness ? reviewedBusiness.total_rating/reviewedBusiness.review_count : null
     }
   );
-
 })
+
+app.get('/businesses/:googleId/reviews/new', async function(req, res) {
+  res.render('new_review', {
+    name: "hi"
+  })
+})
+
 
 app.listen(port, function onStart(err) {
   if (err) {
