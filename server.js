@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const expressLayout = require('express-ejs-layouts');
 
 const database = require("./src/database");
+const memcached = require("./src/memcached")
 const apiServer = require('./api-server');
 const BusinessSearch = require("./src/business-search");
 const GooglePlacesClient = require('./src/google-places');
@@ -38,8 +39,6 @@ app.get('/searchforbusinesses', async function(req, res) {
   const businessSearch = new BusinessSearch(googlePlacesClient);
   const searchResults = await businessSearch.findBusinesses(term, location);
 
-    console.log(searchResults);
-
   res.render('search_results',
     {
       term: term,
@@ -52,14 +51,15 @@ app.get('/searchforbusinesses', async function(req, res) {
 
 app.get('/businesses/:googleId', async function(req, res) {
   const googleId = req.params.googleId;
-  console.log("google id ", googleId);
-  const googlePlacesClient = new GooglePlacesClient();
-  const business = await googlePlacesClient.getBusinessById(googleId);
+  let business = await memcached.get(googleId);
+  if (!business) {
+    const googlePlacesClient = new GooglePlacesClient();
+    business = await googlePlacesClient.getBusinessById(googleId);
+    await memcached.set(googleId, business, 3600);
+  }
 
-  console.log("business result is ", business);
 
   const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
-  console.log(reviewedBusiness);
 
   res.render('business',
     {
