@@ -11,10 +11,10 @@
       <h1 class="dr-name"><%- name -%></h1>
       <p class="business-by-line"> <%- formatted_address -%></p>
       <p class="business-by-line"> <%- formatted_phone_number -%></p>
-      <% if (rating === null) { %>
+      <% if (averageRating === null) { %>
       <p>Be the first to review!</p>
       <% } else { %>
-      <p>score: <%- rating -%> </p>
+      <p>score: <%- averageRating -%> from <%- reviewCount -%> users </p>
       <% } %>
       <a class="btn btn-info review-button" href="/businesses/<%- googleId -%>/reviews/new" role="button">Review</a>
     </div>

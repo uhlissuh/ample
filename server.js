@@ -55,11 +55,13 @@ app.get('/businesses/:googleId', async function(req, res) {
   if (!business) {
     const googlePlacesClient = new GooglePlacesClient();
     business = await googlePlacesClient.getBusinessById(googleId);
+    const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
+    business["totalRating"] = reviewedBusiness ? reviewedBusiness.total_rating : null;
+    business["reviewCount"] = reviewedBusiness ? reviewedBusiness.review_count : null;
     await memcached.set(googleId, business, 3600);
   }
 
-
-  const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
+  console.log(business.rating);
 
   res.render('business',
     {
@@ -69,14 +71,30 @@ app.get('/businesses/:googleId', async function(req, res) {
       formatted_phone_number: business.formatted_phone_number,
       location: business.geometry.location,
       photos: business.photos,
-      rating: reviewedBusiness ? reviewedBusiness.total_rating/reviewedBusiness.review_count : null
+      totalRating: business.totalRating,
+      reviewCount: business.reviewCount,
+      averageRating: business.totalRating ? business.totalRating / business.reviewCount : null
     }
   );
 })
 
 app.get('/businesses/:googleId/reviews/new', async function(req, res) {
+  const googleId = req.params.googleId;
+  let business = await memcached.get(req.params.googleId);
+  if (!business) {
+    const googlePlacesClient = new GooglePlacesClient();
+    business = await googlePlacesClient.getBusinessById(googleId);
+    await memcached.set(googleId, business, 3600);
+  }
+  console.log(business);
   res.render('new_review', {
-    name: "hi"
+    name: business.name,
+    googleId: googleId,
+    formatted_address: business.formatted_address,
+    formatted_phone_number: business.formatted_phone_number,
+    location: business.geometry.location,
+    photos: business.photos,
+    rating: business.rating
   })
 })
 
