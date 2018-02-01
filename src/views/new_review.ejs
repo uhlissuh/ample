@@ -1,6 +1,123 @@
 <div class= "container">
 
-  <%- name -%>
+  <div class="row review-top-row">
+    <%- name -%>
+  </div>
+  <div class="row">
+    <%- formatted_address -%>
+  </div>
+  <div class="row">
+    <%- formatted_phone_number -%>
+  </div>
+  <div class="row review-title">
+    <h2>Write a Review</h2>
+  </div>
+  <div class="row">
+    <form class="main-form" method="POST" action="/businesses/<%- googleId -%>/reviews">
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Help clarify your rating with a written review</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </label>
+        <div class="row">
+          <div class="col-md-6">
+            <h4 class="accessibility-title">Accessibility</h4>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="sturdySeating">
+              <label class="form-check-label" for="sturdySeating">
+                Sturdy Seating
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="armlesschair">
+              <label class="form-check-label" for="armlesschair">
+                Armless Chair Options
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="widespacing">
+              <label class="form-check-label" for="widespacing">
+                Wide Chair/Table Spacing
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="widetable">
+              <label class="form-check-label" for="widetable">
+                Wide Exam/Bodywork Table
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="benchseating">
+              <label class="form-check-label" for="benchseating">
+                Bench Seating
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="wheelchair">
+              <label class="form-check-label" for="wheelchair">
+                Wheelchair Accessible
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="handicap">
+              <label class="form-check-label" for="handicap">
+                Handicap Parking
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="stairsrequired">
+              <label class="form-check-label" for="stairsrequired">
+                Stairs Required
+              </label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h4 class="accessibility-title">Attitudes</h4>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="weightneutral">
+              <label class="form-check-label" for="weightneutral">
+                Weight-neutral
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="haes">
+              <label class="form-check-label" for="haes">
+                Health at Every Size Informed
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="fatpositive">
+              <label class="form-check-label" for="fatpositive">
+                Fat-Positive
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="lgbtq">
+              <label class="form-check-label" for="lgbtq">
+                LGBTQ-Friendly
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="transfriendly">
+              <label class="form-check-label" for="transfriendly">
+                Trans-Friendly
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="poccentered">
+              <label class="form-check-label" for="poccentered">
+                POC-Centered
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row review-submit-row">
+          <button type="submit" class="btn review-submit-button">Submit Review</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
 </div>
 
 

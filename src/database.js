@@ -21,10 +21,15 @@ exports.getBusinessbyName = async function(businessName) {
 };
 
 exports.getBusinessByGoogleId = async function(googleId) {
-  return (await db.query(
-    "select * from businesses where google_id = $1 limit 1",
+  const [row] = await db.query(
+    `
+      select *, ST_x(coordinates) as latitude, ST_y(coordinates) as longitude
+      from businesses
+      where google_id = $1 limit 1
+    `,
     googleId
-  ))[0];
+  );
+  if (row) return businessFromRow(row);
 };
 
 exports.getBusinessesByGoogleIds = async function(googleIds) {
@@ -48,7 +53,7 @@ exports.getBusinessById = async function(id) {
     `,
     id
   );
-  return businessFromRow(row);
+  if (row) return businessFromRow(row);
 };
 
 function businessFromRow(row) {

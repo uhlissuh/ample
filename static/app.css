@@ -21,7 +21,8 @@
 
 
 .navigation {
-  background-color: #FFA586
+  background-color: white;
+  border-bottom: 1px solid #D9D9D9;
 }
 
 .search-row {
@@ -77,4 +78,31 @@
   background-color: #EB6E79;
   color: white;
   width: 200px;
+}
+
+.review-top-row {
+  padding-top: 40px;
+}
+
+.review-title {
+  padding-top: 40px;
+}
+
+.accessibility-title {
+  padding-top: 30px;
+}
+
+.main-form {
+  width: 75%;
+  align-content: center;
+}
+
+.review-submit-button {
+  background-color: #EB6E79;
+  color: white;
+  width:100%;
+}
+
+.review-submit-row {
+  padding-top: 40px;
 }

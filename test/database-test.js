@@ -31,6 +31,8 @@ describe("database", () => {
         rating: null,
         reviewCount: null
       })
+
+      assert.deepEqual(await database.getBusinessByGoogleId('5'), business)
     });
   });
 

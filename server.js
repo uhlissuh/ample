@@ -98,6 +98,33 @@ app.get('/businesses/:googleId/reviews/new', async function(req, res) {
   })
 })
 
+app.post('/businesses/:googleId/reviews', async function(req, res) {
+  const googleId = req.params.googleId;
+  let business = await memcached.get(googleId);
+  if (!business) {
+    const googlePlacesClient = new GooglePlacesClient();
+    business = await googlePlacesClient.getBusinessById(googleId);
+    await memcached.set(googleId, business, 3600);
+  }
+
+  const existingBusiness = await database.getBusinessByGoogleId(googleId);
+  if (!existingBusiness) {
+    businessId = await database.createBusiness(
+    {
+      googleId: googleId,
+      name: business.name,
+      latitude: business.geometry.location.lat,
+      longitude: business.geometry.location.lng,
+      phone: business.formatted_phone_number,
+      address: business.formatted_address
+    })
+  }
+  const review = req.body;
+  review.rating = 4.0;
+  database.createReview(5, businessId, review)
+  res.redirect(`/businesses/${googleId}`)
+})
+
 
 app.listen(port, function onStart(err) {
   if (err) {
