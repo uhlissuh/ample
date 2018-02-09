@@ -52,17 +52,15 @@ app.get('/searchforbusinesses', async function(req, res) {
 app.get('/businesses/:googleId', async function(req, res) {
   const googleId = req.params.googleId;
   let business = await memcached.get(googleId);
+  const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
   if (!business) {
     const googlePlacesClient = new GooglePlacesClient();
     business = await googlePlacesClient.getBusinessById(googleId);
-    const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
     business["totalRating"] = reviewedBusiness ? reviewedBusiness.total_rating : null;
     business["reviewCount"] = reviewedBusiness ? reviewedBusiness.review_count : null;
     await memcached.set(googleId, business, 3600);
   }
-
-  console.log(business.rating);
-
+  const reviews = await database.getBusinessReviewsById(reviewedBusiness.id)
   res.render('business',
     {
       name: business.name,
@@ -73,7 +71,8 @@ app.get('/businesses/:googleId', async function(req, res) {
       photos: business.photos,
       totalRating: business.totalRating,
       reviewCount: business.reviewCount,
-      averageRating: business.totalRating ? business.totalRating / business.reviewCount : null
+      averageRating: business.totalRating ? business.totalRating / business.reviewCount : null,
+      reviews: reviews
     }
   );
 })
@@ -86,7 +85,6 @@ app.get('/businesses/:googleId/reviews/new', async function(req, res) {
     business = await googlePlacesClient.getBusinessById(googleId);
     await memcached.set(googleId, business, 3600);
   }
-  console.log(business);
   res.render('new_review', {
     name: business.name,
     googleId: googleId,
@@ -108,6 +106,7 @@ app.post('/businesses/:googleId/reviews', async function(req, res) {
   }
 
   const existingBusiness = await database.getBusinessByGoogleId(googleId);
+  let businessId = existingBusiness.id;
   if (!existingBusiness) {
     businessId = await database.createBusiness(
     {
@@ -121,7 +120,7 @@ app.post('/businesses/:googleId/reviews', async function(req, res) {
   }
   const review = req.body;
   review.rating = 4.0;
-  database.createReview(5, businessId, review)
+  database.createReview(1, businessId, review)
   res.redirect(`/businesses/${googleId}`)
 })
 

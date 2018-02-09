@@ -161,7 +161,6 @@ exports.getBusinessReviewsById = async function(id) {
     "select * from reviews, users where business_id = $1 and reviews.user_id = users.id",
     [id]
   );
-
   return rows.map(row => {
     return {
       id: row.id,
