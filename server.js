@@ -2,12 +2,20 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressLayout = require('express-ejs-layouts');
+const Guid = require('guid');
+const Querystring  = require('querystring');
+const RequestPromise  = require('request-promise');
 
 const database = require("./src/database");
 const memcached = require("./src/memcached")
 const apiServer = require('./api-server');
 const BusinessSearch = require("./src/business-search");
 const GooglePlacesClient = require('./src/google-places');
+const {FACEBOOK_APP_ID, ACCOUNT_KIT_APP_SECRET, CSRF_GUID} = process.env;
+
+const accountKitApiVersion = 'v1.1';
+const meEndpointBaseUrl = `https://graph.accountkit.com/${accountKitApiVersion}/me`;
+const tokenExchangeBaseUrl = `https://graph.accountkit.com/${accountKitApiVersion}/access_token`;
 
 const port = 8000;
 
@@ -46,8 +54,56 @@ app.get('/searchforbusinesses', async function(req, res) {
       businesses: searchResults
     }
   );
+});
+
+app.get('/login', async function(req, res) {
+  res.render('login',
+    {
+      appId: FACEBOOK_APP_ID,
+      csrf: CSRF_GUID,
+      version: accountKitApiVersion
+    }
+  )
+});
+
+app.post('/login_success', async function(req, res) {
+  // CSRF check
+  if (req.body.csrf === CSRF_GUID) {
+    const appAccessToken = ['AA', FACEBOOK_APP_ID, ACCOUNT_KIT_APP_SECRET].join('|');
+    const params = {
+      grant_type: 'authorization_code',
+      code: req.body.code,
+      access_token: appAccessToken
+    };
+
+    // exchange tokens
+    const tokenExchangeUrl = tokenExchangeBaseUrl + '?' + Querystring.stringify(params);
+    const response = await RequestPromise({uri: tokenExchangeUrl, json: true});
+    var view = {
+      userAccessToken: response.access_token,
+      expiresAt: response.expiresAt,
+      userId: response.id,
+    };
+
+    // get account details at /me endpoint
+    const meEndpointUrl = meEndpointBaseUrl + '?access_token=' + response.access_token;
+    const meResponse = await RequestPromise({uri: meEndpointUrl, json: true})
+    if (meResponse.phone) {
+      view.phoneNum = meResponse.phone.number;
+      view.emailAddress = null;
+    } else if (meResponse.email) {
+      view.emailAddress = meResponse.email.address;
+      view.phoneNum = null;
+    }
+    res.render('login_success', view);
+  } else {
+    // login failed
+   res.writeHead(200, {'Content-Type': 'text/html'});
+   res.end("Something went wrong. :( ");
+  }
 
 });
+
 
 app.get('/businesses/:googleId', async function(req, res) {
   const googleId = req.params.googleId;
