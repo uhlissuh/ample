@@ -326,7 +326,7 @@ exports.getAliasForCategoryTitle = async function(title) {
   return alias;
 };
 
-exports.createUser = async function (user) {
+exports.createUser = async function(user) {
   const rows = await db.query(
     `insert into users
      (name, account_kit_id, email, phone) values
@@ -341,7 +341,7 @@ exports.createUser = async function (user) {
   return rows[0].id;
 };
 
-exports.getUserByAccountKitId = async function (accountKitId) {
+exports.getUserByAccountKitId = async function(accountKitId) {
   const [row] = await db.query(
     'select * from users where account_kit_id = $1',
     [accountKitId]
@@ -356,3 +356,42 @@ exports.getUserByAccountKitId = async function (accountKitId) {
     }
   }
 };
+
+exports.getUserByFacebookId = async function(facebookId) {
+  const [row] = await db.query(
+    'select * from users where facebook_id = $1',
+    [facebookId]
+  );
+
+  if (row) {
+    return {
+      name: row.name,
+      facebookId: row.facebook_id,
+      email: row.email,
+      phone: row.phone
+    }
+  }
+};
+
+exports.updateUser = async function(user) {
+
+}
+
+
+exports.findOrCreateUser = async function(user) {
+  const row = await db.query(
+    `insert into users
+    (name, email, facebook_id) values
+    ($1, $2, $3)
+    on conflict (facebook_id)
+    do update
+      set name = $1, email = $2
+    returning id`,
+    [
+      user.name,
+      user.email,
+      user.facebookId
+    ]
+  );
+  return row[0].id;
+}

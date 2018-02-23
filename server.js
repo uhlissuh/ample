@@ -8,6 +8,8 @@ const memcached = require("./src/memcached")
 const apiServer = require('./api-server');
 const BusinessSearch = require("./src/business-search");
 const GooglePlacesClient = require('./src/google-places');
+const {FACEBOOK_APP_ID, FACEBOOK_APP_SECRET} = process.env;
+const {Facebook} = require('fb');
 
 const port = 8000;
 
@@ -31,6 +33,29 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.render('index', {currentTime: Date.now()})
 });
+
+app.get('/login', (req, res) => {
+  res.render('login', {
+    facebookAppId: FACEBOOK_APP_ID
+  });
+});
+
+app.post('/login', (req, res) => {
+  const accessToken = req.body['access-token']
+  const fb = new Facebook({
+    appId: FACEBOOK_APP_ID,
+    appSecret: FACEBOOK_APP_SECRET
+  })
+  fb.setAccessToken(accessToken)
+  fb.api('/me?fields=name,email,id', async (response) => {
+    const userId = await database.findOrCreateUser({
+      facebookId: response.id,
+      email: response.email,
+      name: response.name
+    })
+    res.redirect(`/`)
+  })
+})
 
 app.get('/searchforbusinesses', async function(req, res) {
   const term = req.query.term;
