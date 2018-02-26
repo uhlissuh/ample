@@ -1,7 +1,7 @@
 const express = require('express');
-const database = require("./src/database");
+const database = require("./database");
 const bodyParser = require('body-parser');
-const BusinessSearch = require('./src/business-search');
+const BusinessSearch = require('./business-search');
 
 const app = express();
 

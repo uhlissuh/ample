@@ -1,17 +1,16 @@
-require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressLayout = require('express-ejs-layouts');
-
-const database = require("./src/database");
-const memcached = require("./src/memcached")
+const database = require("./database");
+const memcached = require("./memcached")
 const apiServer = require('./api-server');
-const BusinessSearch = require("./src/business-search");
-const GooglePlacesClient = require('./src/google-places');
-const {FACEBOOK_APP_ID, FACEBOOK_APP_SECRET} = process.env;
-const {Facebook} = require('fb');
+const BusinessSearch = require("./business-search");
+const GooglePlacesClient = require('./google-places');
+const FacebookClient = require('./facebook-client');
 
-const port = 8000;
+const {FACEBOOK_APP_ID, FACEBOOK_APP_SECRET} = process.env;
+
+const facebookClient = new FacebookClient(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET);
 
 process.on('unhandledRejection', (error) => {
   console.error(error)
@@ -40,21 +39,18 @@ app.get('/login', (req, res) => {
   });
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const accessToken = req.body['access-token']
-  const fb = new Facebook({
-    appId: FACEBOOK_APP_ID,
-    appSecret: FACEBOOK_APP_SECRET
+  const response = await facebookClient.getUserInfo(accessToken);
+
+  console.log("RESPONSE", response)
+  
+  const userId = await database.findOrCreateUser({
+    facebookId: response.id,
+    email: response.email,
+    name: response.name
   })
-  fb.setAccessToken(accessToken)
-  fb.api('/me?fields=name,email,id', async (response) => {
-    const userId = await database.findOrCreateUser({
-      facebookId: response.id,
-      email: response.email,
-      name: response.name
-    })
-    res.redirect(`/`)
-  })
+  res.redirect(`/`)
 })
 
 app.get('/searchforbusinesses', async function(req, res) {
@@ -149,10 +145,4 @@ app.post('/businesses/:googleId/reviews', async function(req, res) {
   res.redirect(`/businesses/${googleId}`)
 })
 
-
-app.listen(port, function onStart(err) {
-  if (err) {
-    console.log(err);
-  }
-  console.info('==> 🌎 Listening on port %s.', port);
-});
+module.exports = app;
