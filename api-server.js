@@ -1,10 +1,5 @@
 const express = require('express');
-const pgp = require('pg-promise');
 const database = require("./src/database");
-const yelp = require("./src/yelp");
-const request = require('request-promise');
-const FACEBOOK_APP_ID = '156289218248813';
-const APP_SECRET = 'c322f877c00b73fc9607399d619952b7';
 const bodyParser = require('body-parser');
 const BusinessSearch = require('./src/business-search');
 
