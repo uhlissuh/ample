@@ -136,4 +136,46 @@ describe("database", () => {
       })
     });
   });
+
+  describe(".findOrCreateUser", () => {
+    it("creates a user when none exists with the given facebook id", async () => {
+      const id = await database.findOrCreateUser({
+        facebookId: '123',
+        name: 'Harold',
+        email: 'harold@example.com'
+      });
+
+      assert.deepEqual(await database.getUserById(id), {
+        id,
+        facebookId: '123',
+        name: 'Harold',
+        email: 'harold@example.com',
+        phone: null
+      });
+    });
+
+    it("updates a user if one already exists with the given facebook id", async () => {
+      const id1 = await database.findOrCreateUser({
+        facebookId: '123',
+        name: 'Harold',
+        email: 'harold@example.com'
+      });
+
+      const id2 = await database.findOrCreateUser({
+        facebookId: '123',
+        name: 'Shmarold',
+        email: 'shmarold@example.com'
+      });
+
+      assert.equal(id2, id1);
+
+      assert.deepEqual(await database.getUserById(id1), {
+        id: id1,
+        facebookId: '123',
+        name: 'Shmarold',
+        email: 'shmarold@example.com',
+        phone: null
+      });
+    });
+  });
 });
