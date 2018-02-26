@@ -70,7 +70,7 @@ describe("database", () => {
   describe(".createReview", () => {
     it("creates a review and updates the business's score", async () => {
       const userId = await database.createUser({
-        accountKitId: '567',
+        facebookId: '567',
         name: 'Bob Carlson',
         phone: '123-456-7890',
         email: 'bob@example.com'
@@ -111,7 +111,6 @@ describe("database", () => {
       ]);
 
       assert.deepEqual(reviews[0].user, {
-        accountKitId: '567',
         name: 'Bob Carlson',
         id: userId
       })
@@ -120,19 +119,17 @@ describe("database", () => {
 
   describe(".createUser", () => {
     it("allows the user to be retrieved afterwards", async () => {
-      await database.createUser({
-        accountKitId: '5',
+      const id = await database.createUser({
+        facebookId: '5',
         name: 'John Smith',
         email: 'john@example.com',
         phone: '123-456-7890'
       });
 
-      let user = await database.getUserByAccountKitId('4')
-      assert.equal(user, null)
-
-      user = await database.getUserByAccountKitId('5')
+      const user = await database.getUserById(id)
       assert.deepEqual(user, {
-        accountKitId: '5',
+        id,
+        facebookId: '5',
         name: 'John Smith',
         email: 'john@example.com',
         phone: '123-456-7890'
