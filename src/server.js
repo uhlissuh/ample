@@ -28,7 +28,6 @@ function (cookieSigningSecret, facebookClient) {
     if (userId) {
       user = await database.getUserById(userId);
     }
-
     res.render('index',
       {
         user: user
@@ -38,7 +37,8 @@ function (cookieSigningSecret, facebookClient) {
 
   app.get('/login', (req, res) => {
     res.render('login', {
-      facebookAppId: facebookClient.appId
+      facebookAppId: facebookClient.appId,
+      user: null
     });
   });
 
@@ -54,7 +54,29 @@ function (cookieSigningSecret, facebookClient) {
     res.redirect(`/`)
   })
 
+  app.post('/logout', (req, res) => {
+    res.clearCookie('userId');
+    res.redirect("/");
+  })
+
+  app.get('/profiles/:userId', async function(req, res) {
+    if (req.signedCookies["userId"]) {
+      const user = await database.getUserById(req.params.userId)
+      res.render('profile', {
+        user: user
+      });
+    } else {
+      res.redirect('/login');
+    }
+
+  })
+
   app.get('/searchforbusinesses', async function(req, res) {
+    let user = null;
+    const userId = req.signedCookies['userId'];
+    if (userId) {
+      user = await database.getUserById(req.signedCookies['userId'])
+    }
     const term = req.query.term;
     const location = req.query.location;
     const googlePlacesClient = new GooglePlacesClient();
@@ -65,13 +87,19 @@ function (cookieSigningSecret, facebookClient) {
       {
         term: term,
         location: location,
-        businesses: searchResults
+        businesses: searchResults,
+        user: user
       }
     );
 
   });
 
   app.get('/businesses/:googleId', async function(req, res) {
+    let user = null;
+    const userId = req.signedCookies['userId'];
+    if (userId) {
+      user = await database.getUserById(req.signedCookies['userId'])
+    }
     const googleId = req.params.googleId;
     let business = await memcached.get(googleId);
     const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
@@ -97,7 +125,8 @@ function (cookieSigningSecret, facebookClient) {
         totalRating: business.totalRating,
         reviewCount: business.reviewCount,
         averageRating: business.totalRating ? business.totalRating / business.reviewCount : null,
-        reviews: reviews
+        reviews: reviews,
+        user: user
       }
     );
   })

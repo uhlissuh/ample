@@ -22,7 +22,7 @@
       </li>
   </div>
   <% if (user) { %>
-    <%- user.name -%>
+    <a href="/profiles/<%- user.id -%>"> <%- user.name -%> </a>
   <% } %>
   </nav>
   <%- body %>
