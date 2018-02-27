@@ -110,7 +110,7 @@ function (cookieSigningSecret, facebookClient) {
       business["reviewCount"] = reviewedBusiness ? reviewedBusiness.review_count : null;
       await memcached.set(googleId, business, 3600);
     }
-    const reviews = [];
+    let reviews = [];
     if (reviewedBusiness) {
       reviews = await database.getBusinessReviewsById(reviewedBusiness.id);
     }
@@ -132,10 +132,11 @@ function (cookieSigningSecret, facebookClient) {
   })
 
   app.get('/businesses/:googleId/reviews/new', async function(req, res) {
-    if (!req.signedCookies["userId"]) {
-      console.log("not logged in");
+    const userId = req.signedCookies['userId'];
+    if (!userId) {
       res.redirect('/login');
     } else {
+      const user = await database.getUserById(userId);
       const googleId = req.params.googleId;
       let business = await memcached.get(req.params.googleId);
       if (!business) {
@@ -151,7 +152,8 @@ function (cookieSigningSecret, facebookClient) {
         location: business.geometry.location,
         photos: business.photos,
         rating: business.rating,
-        reviewerId: req.signedCookies["userId"]
+        reviewerId: req.signedCookies["userId"],
+        user: user
       })
     }
 
@@ -167,8 +169,10 @@ function (cookieSigningSecret, facebookClient) {
     }
 
     const existingBusiness = await database.getBusinessByGoogleId(googleId);
-    let businessId = existingBusiness.id;
-    if (!existingBusiness) {
+    let businessId;
+    if (existingBusiness) {
+      businessId = existingBusiness.id;
+    } else {
       businessId = await database.createBusiness(
       {
         googleId: googleId,
@@ -180,8 +184,10 @@ function (cookieSigningSecret, facebookClient) {
       })
     }
     const review = req.body;
+    console.log(req.body);
     review.rating = 4.0;
-    database.createReview(1, businessId, review)
+    const user = await database.getUserById(req.signedCookies['userId']);
+    // database.createReview(user.id, businessId, review)
     res.redirect(`/businesses/${googleId}`)
   })
 
