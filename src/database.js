@@ -100,6 +100,7 @@ exports.createReview = async function(userId, businessId, review) {
       businessId
     );
 
+
     await db.query(
       `
         update businesses
@@ -114,20 +115,42 @@ exports.createReview = async function(userId, businessId, review) {
     );
 
     const rows = await db.query(
-      "insert into reviews " +
-        "(business_id, user_id, content, timestamp, rating) values " +
-        "($1, $2, $3, $4, $5) returning id",
+      `insert into reviews
+        (business_id, user_id, content, timestamp, rating, sturdy_seating,
+          armless_chairs, wide_table_spacing, wide_exam_table, bench_seating, wheelchair_accessible,
+          handicap_parking, dedicated_parking, stairs_required, weight_neutral,
+          haes_informed, fat_positive, lgbtq_friendly, trans_friendly, poc_centered)
+        values
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+        returning id`,
       [
         businessId,
         userId,
         review.content,
         new Date(),
         review.rating,
+        review.sturdySeating,
+        review.armlessChairs,
+        review.wideTableSpacing,
+        review.wideTable,
+        review.benchSeating,
+        review.wheelchair,
+        review.handicapParking,
+        review.dedicatedParking,
+        review.stairsRequired,
+        review.weightNeutral,
+        review.haes,
+        review.fatPositive,
+        review. lgbtq,
+        review.transFriendly,
+        review.pocCentered
       ]
     );
+
     return rows[0].id;
   })
 };
+
 
 exports.updateBusinessScore = async function(businessId, score) {
   const oldScore = (await db.query(
@@ -159,10 +182,26 @@ exports.getBusinessReviewsById = async function(id) {
       content: row.content,
       rating: row.rating,
       timestamp: row.timestamp.getTime(),
+      sturdySeating: row.sturdy_seating,
+      armlessChairs: row.armless_chairs,
+      wideTableSpacing: row.wide_table_spacing,
+      wideTable: row.wide_exam_table,
+      benchSeating: row.bench_seating,
+      wheelchair: row.wheelchair_accessible,
+      dedicatedParking: row.dedicated_parking,
+      handicapParking: row.handicap_parking,
+      stairsRequired: row.stairs_required,
+      weightNeutral: row.weight_neutral,
+      haes: row.haes_informed,
+      fatPositive: row.fat_positive,
+      lgbtq: row.lgbtq_friendly,
+      transFriendly: row.trans_friendly,
+      pocCentered: row.poc_centered,
       user: {
         id: row.user_id,
         name: row.name
-      }
+      },
+
     };
   });
 };

@@ -183,11 +183,31 @@ function (cookieSigningSecret, facebookClient) {
         address: business.formatted_address
       })
     }
-    const review = req.body;
-    console.log(req.body);
-    review.rating = 4.0;
-    const user = await database.getUserById(req.signedCookies['userId']);
-    // database.createReview(user.id, businessId, review)
+
+    const review = {
+      content: req.body.content,
+      rating: Math.floor(Math.random() * 5) + 1,
+      sturdySeating: req.body.sturdySeating === '' ? true : false,
+      armlessChairs: req.body.armlessChairs === '' ? true : false,
+      wideTableSpacing: req.body.wideTableSpacing === '' ? true : false,
+      wideTable: req.body.wideTable === '' ? true : false,
+      benchSeating: req.body.benchSeating === '' ? true : false,
+      wheelchair: req.body.wheelchair === '' ? true : false,
+      dedicatedParking: req.body.dedicatedParking === '' ? true : false,
+      handicapParking: req.body.handicapParking === '' ? true : false,
+      stairsRequired: req.body.stairsRequired === '' ? true : false,
+      weightNeutral: req.body.weightNeutral === '' ? true : false,
+      haes: req.body.haes === '' ? true : false,
+      fatPositive: req.body.fatPositive === '' ? true : false,
+      lgbtq: req.body.lgbtq === '' ? true : false,
+      transFriendly: req.body.transFriendly === '' ? true : false,
+      pocCentered: req.body.pocCentered === '' ? true : false
+    }
+
+
+    console.log(review);
+    const userId = req.signedCookies['userId'];
+    database.createReview(userId, businessId, review)
     res.redirect(`/businesses/${googleId}`)
   })
 

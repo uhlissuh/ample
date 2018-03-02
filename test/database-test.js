@@ -68,7 +68,7 @@ describe("database", () => {
   });
 
   describe(".createReview", () => {
-    it("creates a review and updates the business's score", async () => {
+    it.only("creates a review and updates the business's score", async () => {
       const userId = await database.createUser({
         facebookId: '567',
         name: 'Bob Carlson',
@@ -87,23 +87,73 @@ describe("database", () => {
 
       await database.createReview(userId, businessId, {
         content: "I love this person deeply.",
-        rating: 90
+        rating: 5,
+        sturdySeating: true,
+        armlessChairs: false,
+        wideTableSpacing: false,
+        wideTable: false,
+        benchSeating: true,
+        wheelchair: true,
+        dedicatedParking: true,
+        handicapParking: true,
+        stairsRequired: false,
+        weightNeutral: false,
+        haes: false,
+        fatPositive: true,
+        lgbtq: false,
+        transFriendly: false,
+        pocCentered: false
       });
-      assert.equal((await database.getBusinessById(businessId)).rating, 90)
+      assert.equal((await database.getBusinessById(businessId)).rating, 5)
 
       await database.createReview(userId, businessId, {
         content: "I hate.",
-        rating: 30
+        rating: 1,
+        sturdySeating: true,
+        armlessChairs: false,
+        wideTableSpacing: false,
+        wideTable: false,
+        benchSeating: true,
+        wheelchair: false,
+        dedicatedParking: false,
+        handicapParking: true,
+        stairsRequired: false,
+        weightNeutral: false,
+        haes: false,
+        fatPositive: true,
+        lgbtq: false,
+        transFriendly: false,
+        pocCentered: false
       });
-      assert.equal((await database.getBusinessById(businessId)).rating, 60)
+
+      const secondRating = (await database.getBusinessById(businessId)).rating;
+      assert.equal(secondRating, 3);
 
       await database.createReview(userId, businessId, {
         content: "I pretty much love this person.",
-        rating: 66
+        rating: 5,
+        sturdySeating: true,
+        armlessChairs: false,
+        wideTableSpacing: false,
+        wideTable: false,
+        benchSeating: true,
+        wheelchair: false,
+        dedicatedParking: false,
+        handicapParking: true,
+        stairsRequired: true,
+        weightNeutral: false,
+        haes: false,
+        fatPositive: true,
+        lgbtq: false,
+        transFriendly: false,
+        pocCentered: true
       });
-      assert.equal((await database.getBusinessById(businessId)).rating, 62)
+
+      const thirdRating = Math.round(((await database.getBusinessById(businessId)).rating * 10)) / 10
+      assert.equal(thirdRating, 3.7)
 
       const reviews = await database.getBusinessReviewsById(businessId);
+
       assert.deepEqual(reviews.map(review => review.content).sort(), [
         'I hate.',
         'I love this person deeply.',
@@ -114,6 +164,9 @@ describe("database", () => {
         name: 'Bob Carlson',
         id: userId
       })
+
+
+      assert.deepEqual(reviews.map(review => review.stairsRequired).sort(), [false, false, true]);
     });
   })
 

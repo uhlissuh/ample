@@ -31,7 +31,7 @@ describe("server", () => {
 
   describe("login", () => {
     describe("when the access token is valid", () => {
-      it.only("sets a cookie", async () => {
+      it("sets a cookie", async () => {
         facebookClient.getUserInfo = function() {
           return {
             email: 'bob@example.com',
