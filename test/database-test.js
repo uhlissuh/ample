@@ -68,7 +68,7 @@ describe("database", () => {
   });
 
   describe(".createReview", () => {
-    it.only("creates a review and updates the business's score", async () => {
+    it("creates a review and updates the business's score", async () => {
       const userId = await database.createUser({
         facebookId: '567',
         name: 'Bob Carlson',
@@ -164,7 +164,6 @@ describe("database", () => {
         name: 'Bob Carlson',
         id: userId
       })
-
 
       assert.deepEqual(reviews.map(review => review.stairsRequired).sort(), [false, false, true]);
     });
