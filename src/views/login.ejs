@@ -5,26 +5,22 @@
       <input id="access-token-field" type="hidden" name="access-token" />
     </form>
     <script>
-      function statusChangeCallback(response) {
-        if (response.status === 'connected') {
-          document.getElementById('access-token-field').value = response.authResponse.accessToken;
-          document.getElementById('login-hidden-form').submit();
-        }
-      }
-
       function checkLoginState() {
-        FB.getLoginStatus(statusChangeCallback);
+        FB.getLoginStatus(response => {
+          if (response.status === 'connected') {
+            document.getElementById('access-token-field').value = response.authResponse.accessToken;
+            document.getElementById('login-hidden-form').submit();
+          }
+        });
       }
 
       window.fbAsyncInit = function() {
         FB.init({
-          appId      : '<%- facebookAppId -%>',
-          cookie     : true,
-          xfbml      : true,
-          version    : 'v2.8'
+          appId: '<%- facebookAppId -%>',
+          cookie: true,
+          xfbml: true,
+          version: 'v2.8'
         });
-
-        FB.getLoginStatus(statusChangeCallback);
       };
 
       (function(d, s, id) {
@@ -40,7 +36,18 @@
       <div class="col-md-4">
       </div>
       <div class="col-md-4 ">
-        <div class="fb-login-button" data-scope="public_profile,email" data-width="120" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div>
+        <div
+          class="fb-login-button"
+          data-scope="public_profile,email"
+          data-width="120"
+          data-max-rows="1"
+          data-size="large"
+          data-button-type="login_with"
+          data-show-faces="false"
+          data-auto-logout-link="false"
+          data-onlogin="checkLoginState()"
+          data-use-continue-as="false"
+        ></div>
       </div>
     </div>
     <div class="row">
