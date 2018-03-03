@@ -23,6 +23,8 @@
   </div>
   <% if (user) { %>
     <a href="/profiles/<%- user.id -%>"> <%- user.name -%> </a>
+  <% } else { %>
+    <a href="/login">Log In</a>
   <% } %>
   </nav>
   <%- body %>
