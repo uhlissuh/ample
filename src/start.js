@@ -1,7 +1,9 @@
 require('dotenv').config();
 const FacebookClient = require('./facebook-client');
+const GooglePlacesClient = require('./google-places');
 const database = require('./database');
 const server = require('./server');
+const memcached = require("./memcached")
 
 const {
   FACEBOOK_APP_ID,
@@ -16,7 +18,9 @@ database.connect("dev");
 
 const app = server(
   COOKIE_SIGNING_SECRET,
-  new FacebookClient(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET)
+  new FacebookClient(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET),
+  new GooglePlacesClient(),
+  memcached
 );
 
 app.listen(PORT, err => {

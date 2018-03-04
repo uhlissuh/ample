@@ -3,6 +3,7 @@
     <div id="fb-root"></div>
     <form id="login-hidden-form" method="post" action="/login">
       <input id="access-token-field" type="hidden" name="access-token" />
+      <input name="referer" value="<%- referer -%>" type="hidden" />
     </form>
     <script>
       function checkLoginState() {

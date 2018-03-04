@@ -3,13 +3,11 @@ const bodyParser = require('body-parser');
 const expressLayout = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const database = require("./database");
-const memcached = require("./memcached")
 const apiServer = require('./api-server');
 const BusinessSearch = require("./business-search");
-const GooglePlacesClient = require('./google-places');
 
 module.exports =
-function (cookieSigningSecret, facebookClient) {
+function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
   const app = express();
 
   app.set('view engine', 'ejs')
@@ -38,7 +36,8 @@ function (cookieSigningSecret, facebookClient) {
   app.get('/login', (req, res) => {
     res.render('login', {
       facebookAppId: facebookClient.appId,
-      user: null
+      user: null,
+      referer: req.query.referer
     });
   });
 
@@ -51,7 +50,7 @@ function (cookieSigningSecret, facebookClient) {
       name: response.name
     })
     res.cookie('userId', userId, {signed: true, encode: String})
-    res.redirect(`/`)
+    res.redirect(req.body.referer || '/')
   })
 
   app.post('/logout', (req, res) => {
@@ -79,7 +78,6 @@ function (cookieSigningSecret, facebookClient) {
     }
     const term = req.query.term;
     const location = req.query.location;
-    const googlePlacesClient = new GooglePlacesClient();
     const businessSearch = new BusinessSearch(googlePlacesClient);
     const searchResults = await businessSearch.findBusinesses(term, location);
 
@@ -91,7 +89,6 @@ function (cookieSigningSecret, facebookClient) {
         user: user
       }
     );
-
   });
 
   app.get('/businesses/:googleId', async function(req, res) {
@@ -101,14 +98,14 @@ function (cookieSigningSecret, facebookClient) {
       user = await database.getUserById(req.signedCookies['userId'])
     }
     const googleId = req.params.googleId;
-    let business = await memcached.get(googleId);
+    let business = await cache.get(googleId);
     const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
     if (!business) {
       const googlePlacesClient = new GooglePlacesClient();
       business = await googlePlacesClient.getBusinessById(googleId);
       business["totalRating"] = reviewedBusiness ? reviewedBusiness.total_rating : null;
       business["reviewCount"] = reviewedBusiness ? reviewedBusiness.review_count : null;
-      await memcached.set(googleId, business, 3600);
+      await cache.set(googleId, business, 3600);
     }
     let reviews = [];
     if (reviewedBusiness) {
@@ -129,20 +126,19 @@ function (cookieSigningSecret, facebookClient) {
         user: user
       }
     );
-  })
+  });
 
   app.get('/businesses/:googleId/reviews/new', async function(req, res) {
     const userId = req.signedCookies['userId'];
     if (!userId) {
-      res.redirect('/login');
+      res.redirect('/login?referer=' + req.url);
     } else {
       const user = await database.getUserById(userId);
       const googleId = req.params.googleId;
-      let business = await memcached.get(req.params.googleId);
+      let business = await cache.get(req.params.googleId);
       if (!business) {
-        const googlePlacesClient = new GooglePlacesClient();
         business = await googlePlacesClient.getBusinessById(googleId);
-        await memcached.set(googleId, business, 3600);
+        await cache.set(googleId, business, 3600);
       }
       res.render('new_review', {
         name: business.name,
@@ -156,16 +152,14 @@ function (cookieSigningSecret, facebookClient) {
         user: user
       })
     }
-
-  })
+  });
 
   app.post('/businesses/:googleId/reviews', async function(req, res) {
     const googleId = req.params.googleId;
-    let business = await memcached.get(googleId);
+    let business = await cache.get(googleId);
     if (!business) {
-      const googlePlacesClient = new GooglePlacesClient();
       business = await googlePlacesClient.getBusinessById(googleId);
-      await memcached.set(googleId, business, 3600);
+      await cache.set(googleId, business, 3600);
     }
 
     const existingBusiness = await database.getBusinessByGoogleId(googleId);
@@ -204,12 +198,10 @@ function (cookieSigningSecret, facebookClient) {
       pocCentered: req.body.pocCentered === '' ? true : false
     }
 
-
-    console.log(review);
     const userId = req.signedCookies['userId'];
     database.createReview(userId, businessId, review)
     res.redirect(`/businesses/${googleId}`)
-  })
+  });
 
   return app;
 }

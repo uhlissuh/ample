@@ -1,6 +1,7 @@
 require('./test-helper');
 const assert = require('assert');
 const cookieParser = require('cookie-parser');
+const cookieSignature = require('cookie-signature');
 const database = require('../src/database');
 const request = require('request-promise').defaults({
   simple: false,
@@ -9,14 +10,22 @@ const request = require('request-promise').defaults({
 });
 
 const facebookClient = {};
+const googlePlacesClient = {};
+const cookieSigningSecret = 'the-cookie-signing-secret';
+const cache = {
+  get() { return null },
+  set(key, value) {}
+}
 
 const server = require('../src/server')(
-  'the-cookie-signing-secret',
-  facebookClient
-)
+  cookieSigningSecret,
+  facebookClient,
+  googlePlacesClient,
+  cache
+);
 
 describe("server", () => {
-  let port
+  let port, jar
 
   before(done => {
     const listener = server.listen(err => {
@@ -27,37 +36,32 @@ describe("server", () => {
 
   beforeEach(async () => {
     await database.clear();
-  })
+    jar = request.jar();
+  });
 
   describe("login", () => {
     describe("when the access token is valid", () => {
-      it("sets a cookie", async () => {
-        facebookClient.getUserInfo = function() {
+      beforeEach(() => {
+        facebookClient.getUserInfo = function(accessToken) {
+          assert.equal(accessToken, 'the-access-token')
           return {
             email: 'bob@example.com',
             name: 'Bob',
             id: '12345'
           };
         };
+      });
 
-        const jar = request.jar();
-
+      it("sets a cookie", async () => {
         const response = await request.post({
           uri: `http://localhost:${port}/login`,
           jar: jar,
-          formData: {
-            'access-token': 'ok'
+          form: {
+            'access-token': 'the-access-token'
           }
         });
 
-        const cookie = jar.getCookies(`http://localhost:${port}`).find(cookie =>
-          cookie.key === 'userId'
-        )
-
-        const userId = cookieParser.signedCookie(
-          cookie.value,
-          'the-cookie-signing-secret'
-        );
+        const userId = getLoggedInUser();
 
         assert.deepEqual(await database.getUserById(userId), {
           id: userId,
@@ -66,7 +70,68 @@ describe("server", () => {
           facebookId: '12345',
           phone: null
         });
+
+        assert.equal(response.statusCode, 302);
+        assert.equal(response.headers.location, '/')
+      });
+
+      it("redirects to the given referer URL", async () => {
+        const response = await request.post({
+          uri: `http://localhost:${port}/login`,
+          jar: jar,
+          form: {
+            'access-token': 'the-access-token',
+            'referer': '/businesses/123/reviews/new'
+          }
+        });
+
+        assert.equal(response.statusCode, 302);
+        assert.equal(response.headers.location, '/businesses/123/reviews/new')
       });
     });
   });
+
+  describe("review business", () => {
+    it("redirects to the login page if the user isn't logged in", async () => {
+      const response = await request({
+        uri: `http://localhost:${port}/businesses/567/reviews/new`,
+        jar: jar
+      });
+
+      assert.equal(response.statusCode, 302);
+      assert.equal(response.headers.location, '/login?referer=/businesses/567/reviews/new')
+    });
+
+    it("shows the review form if the user is logged in", async () => {
+      logIn('123');
+
+      googlePlacesClient.getBusinessById = async function (id) {
+        assert.equal(id, '567');
+        return {
+          name: 'the-business',
+          formatted_address: '123 Example St',
+          geometry: {}
+        }
+      }
+
+      const response = await request({
+        uri: `http://localhost:${port}/businesses/567/reviews/new`,
+        jar: jar
+      });
+
+      assert.equal(response.statusCode, 200);
+      assert(response.body.includes('the-business'));
+    });
+  });
+
+  function getLoggedInUser() {
+    const cookies = jar.getCookies(`http://localhost:${port}`);
+    const cookie = cookies.find(cookie => cookie.key === 'userId');
+    return cookieParser.signedCookie(cookie.value, cookieSigningSecret);
+  }
+
+  function logIn(userId) {
+    const signedUserId = cookieSignature.sign(userId, cookieSigningSecret);
+    jar.setCookie(`userId=s:${signedUserId}; path=/;`, `http://localhost:${port}`)
+  }
 });
