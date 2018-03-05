@@ -6,7 +6,9 @@
   <ol class="list-group">
     <% for (const business of businesses) { %>
       <li class="row list-group-item">
-        <img width="80" height="80" src="<%= business.imageUrl %>"/>
+        <img
+          src="<%- business.photoURL -%>"
+        />
         <a href="/businesses/<%=business.placeId%>"><span><%= business.name %></span></a>
 
         <% if (business.reviewCount > 0) { %>

@@ -7,6 +7,10 @@ class GooglePlacesClient {
     this.request = request || require('request-promise');
   }
 
+  getPhotoURL(photoReference, maxWidth, maxHeight) {
+    return `${GOOGLE_URL}/place/photo?key=${GOOGLE_API_KEY}&maxwidth=${maxWidth}&maxheight=${maxHeight}&photoreference=${photoReference}`
+  }
+
   async getBusinessesNearCoordinates(term, latitude, longitude) {
     const response = await this.makeRequest(
       `place/nearbysearch/json?` +
