@@ -20,11 +20,15 @@
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "mocha": "^3.5.0"
+    "concurrently": "^3.5.1",
+    "mocha": "^3.5.0",
+    "webpack": "^4.1.0",
+    "webpack-cli": "^2.0.10"
   },
   "scripts": {
     "test": "mocha",
-    "start": "node src/start.js"
+    "start": "node src/start.js",
+    "start-dev": "concurrently -k \"npm run start\" \"webpack --watch --mode=development\""
   },
   "author": "",
   "license": "ISC"
