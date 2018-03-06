@@ -59,7 +59,7 @@ function businessFromRow(row) {
     phone: row.phone,
     reviewCount: row.review_count,
     rating: row.review_count > 0
-      ? row.total_rating / row.review_count
+      ? Math.round((row.total_rating / row.review_count) * 10) / 10
       : null
   };
 }
