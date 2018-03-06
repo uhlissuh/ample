@@ -3,7 +3,7 @@
     Search Results for <%- term -%> near <%- location -%>
   </p>
 
-  <ol class="list-group">
+  <ul class="list-group">
     <% for (const business of businesses) { %>
       <li class="row list-group-item">
         <img
@@ -13,7 +13,7 @@
 
         <% if (business.reviewCount > 0) { %>
           <span><%= business.reviewCount %> reviews</span>
-          <span><%= business.rating %></span>
+          <span class="float-right business-rating"><%= business.rating %></span>
         <% } else { %>
           <span>Be the first to review</span>
         <% } %>

@@ -15,7 +15,7 @@
     background: -o-linear-gradient(left, #ffd7ea, #fecc72);
 
 
-    height: 700px;
+    height: 550px;
 }
 
 
@@ -109,4 +109,14 @@
 
 .login-button {
   padding-top: 100px;
+}
+
+.reviewer-headline {
+  font-weight: 500;
+  color: #EB6E79;
+}
+
+.business-rating {
+  font-size: 30px;
+  font-weight: bold;
 }

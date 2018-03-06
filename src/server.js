@@ -102,13 +102,16 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
     if (!business) {
       business = await googlePlacesClient.getBusinessById(googleId);
-      business["totalRating"] = reviewedBusiness ? reviewedBusiness.total_rating : null;
-      business["reviewCount"] = reviewedBusiness ? reviewedBusiness.review_count : null;
       await cache.set(googleId, business, 3600);
     }
+    business.rating = reviewedBusiness ? reviewedBusiness.rating : null;
+    business.reviewCount = reviewedBusiness ? reviewedBusiness.reviewCount : null;
     let reviews = [];
     if (reviewedBusiness) {
       reviews = await database.getBusinessReviewsById(reviewedBusiness.id);
+      for (review of reviews) {
+        review.date = new Date(review.timestamp);
+      }
     }
     const photoReference = business.photos && business.photos[0].photo_reference;
 
@@ -120,7 +123,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         formatted_phone_number: business.formatted_phone_number,
         location: business.geometry.location,
         photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 400, 300),
-        totalRating: business.totalRating,
+        rating: business.rating,
         reviewCount: business.reviewCount,
         averageRating: business.totalRating ? business.totalRating / business.reviewCount : null,
         reviews: reviews,
