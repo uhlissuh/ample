@@ -13,7 +13,7 @@
       <% if (reviews.length === 0) { %>
       <p>Be the first to review!</p>
       <% } else { %>
-      <p>score: <%- averageRating -%> from <%- reviewCount -%> users </p>
+      <p>score: <%- rating -%> from <%- reviewCount -%> users </p>
       <% } %>
       <a class="btn btn-info review-button" href="/businesses/<%- googleId -%>/reviews/new" role="button">Review</a>
     </div>
@@ -22,12 +22,19 @@
     <div class="col-md-12">
       <% if (reviews.length != 0) { %>
           <h2>Reviews</h2>
-        <% for (const review of reviews) { %>
-          <p>
-            <%- review.content -%>
-            <%- review.user -%>
-          </p>
-        <% } %>
+          <ul class="list-group">
+            <% for (const review of reviews) { %>
+              <li class="list-group-item">
+                <div class="row reviewer-headline">
+                  <%- review.user.name -%> on <%- review.date -%> says:
+                </div>
+                <div class="row">
+                  <%- review.content -%>
+                </div>
+              </li>
+            <% } %>
+          </ul>
+
       <% } %>
     </div>
   </div>
