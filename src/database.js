@@ -173,7 +173,7 @@ exports.updateBusinessScore = async function(businessId, score) {
 
 exports.getBusinessReviewsById = async function(id) {
   const rows = await db.query(
-    "select * from reviews, users where business_id = $1 and reviews.user_id = users.id",
+    "select * from reviews, users where business_id = $1 and reviews.user_id = users.id order by reviews.timestamp desc",
     [id]
   );
   return rows.map(row => {
