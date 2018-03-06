@@ -19,6 +19,21 @@
 }
 
 
+.star-rating-radio {
+  position: absolute;
+  visibility: hidden;
+}
+
+.star-rating-label {
+  width: 30px;
+  height: 30px;
+  background-image: url('/static/star-off-big.png');
+  background-repeat: no-repeat;
+}
+
+.star-rating-label.highlighted {
+  background-image: url('/static/star-on-big.png');
+}
 
 .navigation {
   background-color: white;

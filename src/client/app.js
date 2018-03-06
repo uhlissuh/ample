@@ -1,1 +1,3 @@
-const StarView = require('./star-view');
+ample = {
+  StarRatingView: require('./star-rating-view')
+}

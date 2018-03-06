@@ -184,7 +184,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
 
     const review = {
       content: req.body.content,
-      rating: Math.floor(Math.random() * 5) + 1,
+      rating: parseInt(req.body.rating),
       sturdySeating: req.body.sturdySeating === '' ? true : false,
       armlessChairs: req.body.armlessChairs === '' ? true : false,
       wideTableSpacing: req.body.wideTableSpacing === '' ? true : false,

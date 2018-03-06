@@ -15,9 +15,16 @@
   <div class="row">
     <form class="main-form" method="POST" action="/businesses/<%- googleId -%>/reviews">
       <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <div id="star-rating" data-name="rating"></div>
+          </div>
+        </div>
+
         <label for="content">Help clarify your rating with a written review</label>
-            <textarea class="form-control" name="content" rows="5"></textarea>
+          <textarea class="form-control" name="content" rows="5"></textarea>
         </label>
+
         <div class="row">
           <div class="col-md-6">
             <h4 class="accessibility-title">Accessibility</h4>
@@ -123,6 +130,11 @@
     </form>
   </div>
 </div>
+
+<%- contentFor('scripts') -%>
+<script>
+new ample.StarRatingView(document.getElementById('star-rating'))
+</script>
 
 <%- contentFor('title') -%>
 Ample | New Review
