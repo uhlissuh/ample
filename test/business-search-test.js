@@ -21,6 +21,10 @@ describe("BusinessSearch", () => {
         };
       },
 
+      getPhotoURL(photoReference) {
+        return `http://google.com/${photoReference}`
+      },
+
       async getBusinessesNearCoordinates(term, latitude, longitude) {
         assert.equal(term, 'hair stylist');
         assert.equal(latitude, 45.6);
@@ -137,10 +141,10 @@ describe("BusinessSearch", () => {
       1,
       0
     ]);
-    assert.deepEqual(businesses.map(b => b.photoReference), [
-      'stylist-2-photo-reference',
-      'stylist-1-photo-reference',
-      'stylist-0-photo-reference'
+    assert.deepEqual(businesses.map(b => b.photoURL), [
+      'http://google.com/stylist-2-photo-reference',
+      'http://google.com/stylist-1-photo-reference',
+      'http://google.com/stylist-0-photo-reference'
     ]);
   });
 });
