@@ -15,39 +15,56 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = async function(db) {
-    await db.addColumn('reviews', 'sturdy_seating', {type: 'boolean'});
-    await db.addColumn('reviews', 'armless_chairs', {type: 'boolean'});
-    await db.addColumn('reviews', 'wide_table_spacing', {type: 'boolean'});
-    await db.addColumn('reviews', 'wide_exam_table', {type: 'boolean'});
-    await db.addColumn('reviews', 'bench_seating', {type: 'boolean'});
-    await db.addColumn('reviews', 'wheelchair_accessible', {type: 'boolean'});
-    await db.addColumn('reviews', 'handicap_parking', {type: 'boolean'});
-    await db.addColumn('reviews', 'dedicated_parking', {type: 'boolean'});
-    await db.addColumn('reviews', 'stairs_required', {type: 'boolean'});
-    await db.addColumn('reviews', 'weight_neutral', {type: 'boolean'});
-    await db.addColumn('reviews', 'haes_informed', {type: 'boolean'});
-    await db.addColumn('reviews', 'fat_positive', {type: 'boolean'});
-    await db.addColumn('reviews', 'lgbtq_friendly', {type: 'boolean'});
-    await db.addColumn('reviews', 'trans_friendly', {type: 'boolean'});
-    await db.addColumn('reviews', 'poc_centered', {type: 'boolean'});
+  await db.addColumn('reviews', 'body_positivity', {type: 'int'});
+  await db.addColumn('reviews', 'poc_inclusivity', {type: 'int'});
+  await db.addColumn('reviews', 'lgbtq_inclusivity', {type: 'int'});
+  await db.addColumn('reviews', 'building_accessibility', {type: 'int'});
+  await db.addColumn('reviews', 'furniture_size', {type: 'int'});
+
+  await db.addColumn('businesses', 'body_positivity_rating_total', {type: 'int'});
+  await db.addColumn('businesses', 'body_positivity_rating_count', {type: 'int'});
+  await db.addColumn('businesses', 'poc_inclusivity_rating_total', {type: 'int'});
+  await db.addColumn('businesses', 'poc_inclusivity_rating_count', {type: 'int'});
+  await db.addColumn('businesses', 'lgbtq_inclusivity_rating_total', {type: 'int'});
+  await db.addColumn('businesses', 'lgbtq_inclusivity_rating_count', {type: 'int'});
+  await db.addColumn('businesses', 'building_accessibility_rating_total', {type: 'int'});
+  await db.addColumn('businesses', 'building_accessibility_rating_count', {type: 'int'});
+  await db.addColumn('businesses', 'furniture_size_rating_total', {type: 'int'});
+  await db.addColumn('businesses', 'furniture_size_rating_count', {type: 'int'});
+
+  await db.removeColumn('businesses', 'total_rating');
+  await db.removeColumn('businesses', 'review_count');
+
+  await db.removeColumn('reviews', 'rating');
+
+  await db.removeColumn('users', 'phone');
+
 };
 
 exports.down = async function(db) {
-  await db.removeColumn('reviews', 'sturdy_seating');
-  await db.removeColumn('reviews', 'armless_chairs');
-  await db.removeColumn('reviews', 'wide_table_spacing');
-  await db.removeColumn('reviews', 'wide_exam_table');
-  await db.removeColumn('reviews', 'bench_seating');
-  await db.removeColumn('reviews', 'wheelchair_accessible');
-  await db.removeColumn('reviews', 'handicap_parking');
-  await db.removeColumn('reviews', 'dedicated_parking');
-  await db.removeColumn('reviews', 'stairs_required');
-  await db.removeColumn('reviews', 'weight_neutral');
-  await db.removeColumn('reviews', 'haes_informed');
-  await db.removeColumn('reviews', 'fat_positive');
-  await db.removeColumn('reviews', 'lgbtq_friendly');
-  await db.removeColumn('reviews', 'poc_centered');
-  await db.removeColumn('reviews', 'trans_friendly');
+  await db.removeColumn('reviews', 'body_positivity');
+  await db.removeColumn('reviews', 'poc_inclusivity');
+  await db.removeColumn('reviews', 'lgbtq_inclusivity');
+  await db.removeColumn('reviews', 'building_accessibility');
+  await db.removeColumn('reviews', 'furniture_size');
+
+  await db.removeColumn('businesses', 'body_positivity_rating_total');
+  await db.removeColumn('businesses', 'body_positivity_rating_count');
+  await db.removeColumn('businesses', 'poc_inclusivity_rating_total');
+  await db.removeColumn('businesses', 'poc_inclusivity_rating_count');
+  await db.removeColumn('businesses', 'lgbtq_inclusivity_rating_total');
+  await db.removeColumn('businesses', 'lgbtq_inclusivity_rating_count');
+  await db.removeColumn('businesses', 'building_accessibility_rating_total');
+  await db.removeColumn('businesses', 'building_accessibility_rating_count');
+  await db.removeColumn('businesses', 'furniture_size_rating_total');
+  await db.removeColumn('businesses', 'furniture_size_rating_count');
+
+  await db.addColumn('businesses', 'total_rating', {type: 'int'});
+  await db.addColumn('businesses', 'review_count', {type: 'int'});
+  await db.addColumn('users', 'phone', {type: 'string'});
+  await db.addColumn('reviews', 'rating', {type: 'int'});
+
+
 };
 
 exports._meta = {
