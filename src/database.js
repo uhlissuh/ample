@@ -151,6 +151,47 @@ exports.createReview = async function(userId, businessId, review) {
   })
 };
 
+exports.getMostRecentReviews = async function() {
+  const rows = await db.query(
+    `select *, users.name as user_name
+    from reviews, users, businesses
+    where reviews.user_id = users.id and
+    reviews.business_id = businesses.id
+    order by reviews.timestamp
+    desc limit 3`
+  );
+  return rows.map(row => {
+    return {
+      id: row.id,
+      content: row.content,
+      businessId: row.business_id,
+      businessName: row.name,
+      businessAddress: row.address,
+      rating: row.rating,
+      timestamp: row.timestamp.getTime(),
+      sturdySeating: row.sturdy_seating,
+      armlessChairs: row.armless_chairs,
+      wideTableSpacing: row.wide_table_spacing,
+      wideTable: row.wide_exam_table,
+      benchSeating: row.bench_seating,
+      wheelchair: row.wheelchair_accessible,
+      dedicatedParking: row.dedicated_parking,
+      handicapParking: row.handicap_parking,
+      stairsRequired: row.stairs_required,
+      weightNeutral: row.weight_neutral,
+      haes: row.haes_informed,
+      fatPositive: row.fat_positive,
+      lgbtq: row.lgbtq_friendly,
+      transFriendly: row.trans_friendly,
+      pocCentered: row.poc_centered,
+      user: {
+        id: row.user_id,
+        name: row.user_name
+      },
+    };
+  });
+}
+
 
 exports.updateBusinessScore = async function(businessId, score) {
   const oldScore = (await db.query(
@@ -201,7 +242,6 @@ exports.getBusinessReviewsById = async function(id) {
         id: row.user_id,
         name: row.name
       },
-
     };
   });
 };

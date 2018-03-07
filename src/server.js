@@ -26,9 +26,13 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     if (userId) {
       user = await database.getUserById(userId);
     }
+    const recentReviews = await database.getMostRecentReviews();
+    console.log(recentReviews);
+
     res.render('index',
       {
-        user: user
+        user: user,
+        recentReviews: recentReviews
       }
     )
   });

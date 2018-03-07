@@ -135,3 +135,7 @@
   font-size: 30px;
   font-weight: bold;
 }
+
+.card-subtitle {
+  font-size: 12px;
+}
