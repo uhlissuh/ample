@@ -28,8 +28,18 @@ describe("database", () => {
         phone: '123-456-7890',
         latitude: 37.76,
         longitude: -122.42,
-        rating: null,
-        reviewCount: null
+        overallRating: null,
+        reviewCount: 0,
+        pocInclusivityAverageRating: null,
+        pocInclusivityRatingCount: 0,
+        bodyPositivityAverageRating: null,
+        bodyPositivityRatingCount: 0,
+        lgbtqInclusivityAverageRating: null,
+        lgbtqInclusivityRatingCount: 0,
+        furnitureSizeAverageRating: null,
+        furnitureSizeRatingCount: 0,
+        buildingAccessibilityAverageRating: null,
+        buildingAccessibilityRatingCount: 0,
       })
 
       assert.deepEqual(await database.getBusinessByGoogleId('5'), business)
@@ -68,15 +78,16 @@ describe("database", () => {
   });
 
   describe(".createReview", () => {
-    it("creates a review and updates the business's score", async () => {
-      const userId = await database.createUser({
+    let userId, businessId
+
+    beforeEach(async () => {
+      userId = await database.createUser({
         facebookId: '567',
         name: 'Bob Carlson',
-        phone: '123-456-7890',
         email: 'bob@example.com'
       })
 
-      const businessId = await database.createBusiness({
+      businessId = await database.createBusiness({
         googleId: "dr-brain",
         name: 'Dr Brain',
         address: '123 Main St',
@@ -84,72 +95,45 @@ describe("database", () => {
         latitude: 37.767423217936834,
         longitude: -122.42821739746094
       })
+    });
 
+    it("creates a review and updates the business's score", async () => {
       await database.createReview(userId, businessId, {
         content: "I love this person deeply.",
-        rating: 5,
-        sturdySeating: true,
-        armlessChairs: false,
-        wideTableSpacing: false,
-        wideTable: false,
-        benchSeating: true,
-        wheelchair: true,
-        dedicatedParking: true,
-        handicapParking: true,
-        stairsRequired: false,
-        weightNeutral: false,
-        haes: false,
-        fatPositive: true,
-        lgbtq: false,
-        transFriendly: false,
-        pocCentered: false
+        bodyPositivity: 5,
+        pocInclusivity: 2,
+        lgbtqInclusivity: 5,
+        buildingAccessibility: 5,
+        furnitureSize: 5
       });
-      assert.equal((await database.getBusinessById(businessId)).rating, 5)
+
+      assert.equal(
+        (await database.getBusinessById(businessId)).bodyPositivityAverageRating,
+        5
+      )
 
       await database.createReview(userId, businessId, {
         content: "I hate.",
-        rating: 1,
-        sturdySeating: true,
-        armlessChairs: false,
-        wideTableSpacing: false,
-        wideTable: false,
-        benchSeating: true,
-        wheelchair: false,
-        dedicatedParking: false,
-        handicapParking: true,
-        stairsRequired: false,
-        weightNeutral: false,
-        haes: false,
-        fatPositive: true,
-        lgbtq: false,
-        transFriendly: false,
-        pocCentered: false
+        bodyPositivity: 1,
+        pocInclusivity: 4,
+        lgbtqInclusivity: 3,
+        buildingAccessibility: 1,
+        furnitureSize: 1
       });
 
-      const secondRating = (await database.getBusinessById(businessId)).rating;
+      const secondRating = (await database.getBusinessById(businessId)).bodyPositivityAverageRating;
       assert.equal(secondRating, 3);
 
       await database.createReview(userId, businessId, {
         content: "I pretty much love this person.",
-        rating: 5,
-        sturdySeating: true,
-        armlessChairs: false,
-        wideTableSpacing: false,
-        wideTable: false,
-        benchSeating: true,
-        wheelchair: false,
-        dedicatedParking: false,
-        handicapParking: true,
-        stairsRequired: true,
-        weightNeutral: false,
-        haes: false,
-        fatPositive: true,
-        lgbtq: false,
-        transFriendly: false,
-        pocCentered: true
+        bodyPositivity: 5,
+        pocInclusivity: 4,
+        lgbtqInclusivity: 2,
+        buildingAccessibility: 2,
+        furnitureSize: 1
       });
 
-      const thirdRating = Math.round(((await database.getBusinessById(businessId)).rating * 10)) / 10
+      const thirdRating = Math.round(((await database.getBusinessById(businessId)).bodyPositivityAverageRating * 10)) / 10
       assert.equal(thirdRating, 3.7)
 
       const reviews = await database.getBusinessReviewsById(businessId);
@@ -165,7 +149,22 @@ describe("database", () => {
         id: userId
       })
 
-      assert.deepEqual(reviews.map(review => review.stairsRequired).sort(), [false, false, true]);
+      assert.deepEqual(reviews.map(review => review.bodyPositivity).sort(), [1, 5, 5]);
+    });
+
+    it("allows ratings to be omitted", async () => {
+      await database.createReview(userId, businessId, {
+        content: "I love this person deeply.",
+        bodyPositivity: 4,
+        furnitureSize: 3,
+        lgbtqInclusivity: NaN
+      });
+
+      const business = await database.getBusinessById(businessId);
+      assert.equal(business.lgbtqInclusivityRatingCount, 0);
+      assert.equal(business.lgbtqInclusivityAverageRating, null);
+      assert.equal(business.bodyPositivityRatingCount, 1);
+      assert.equal(business.bodyPositivityAverageRating, 4);
     });
   })
 
@@ -175,7 +174,6 @@ describe("database", () => {
         facebookId: '5',
         name: 'John Smith',
         email: 'john@example.com',
-        phone: '123-456-7890'
       });
 
       const user = await database.getUserById(id)
@@ -184,7 +182,6 @@ describe("database", () => {
         facebookId: '5',
         name: 'John Smith',
         email: 'john@example.com',
-        phone: '123-456-7890'
       })
     });
   });
@@ -201,8 +198,7 @@ describe("database", () => {
         id,
         facebookId: '123',
         name: 'Harold',
-        email: 'harold@example.com',
-        phone: null
+        email: 'harold@example.com'
       });
     });
 
@@ -226,7 +222,6 @@ describe("database", () => {
         facebookId: '123',
         name: 'Shmarold',
         email: 'shmarold@example.com',
-        phone: null
       });
     });
   });

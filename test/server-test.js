@@ -68,7 +68,6 @@ describe("server", () => {
           email: 'bob@example.com',
           name: 'Bob',
           facebookId: '12345',
-          phone: null
         });
 
         assert.equal(response.statusCode, 302);

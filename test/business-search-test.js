@@ -100,7 +100,8 @@ describe("BusinessSearch", () => {
 
     const businessId1 = await database.createBusiness({
       name: "Stylist 1",
-      googleId: "stylist-1-id"
+      googleId: "stylist-1-id",
+
     });
     const businessId2 = await database.createBusiness({
       name: "Stylist 2",
@@ -113,11 +114,19 @@ describe("BusinessSearch", () => {
 
     await database.createReview(userId, businessId1, {
       content: 'mediocre stylist.',
-      rating: 30,
+      bodyPositivity: 2,
+      pocInclusivity: 1,
+      lgbtqInclusivity: 1,
+      buildingAccessibility: 2,
+      furnitureSize: 2
     });
     await database.createReview(userId, businessId2, {
       content: 'awesome stylist.',
-      rating: 60,
+      bodyPositivity: 4,
+      pocInclusivity: 4,
+      lgbtqInclusivity: 5,
+      buildingAccessibility: 5,
+      furnitureSize: 4
     });
 
     const search = new BusinessSearch(googlePlacesClient);
@@ -131,11 +140,7 @@ describe("BusinessSearch", () => {
       'Stylist 1',
       'Stylist 0'
     ]);
-    assert.deepEqual(businesses.map(b => b.rating), [
-      60,
-      30,
-      null
-    ]);
+
     assert.deepEqual(businesses.map(b => b.reviewCount), [
       1,
       1,

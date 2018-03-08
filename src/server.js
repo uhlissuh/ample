@@ -188,23 +188,13 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
 
     const review = {
       content: req.body.content,
-      rating: parseInt(req.body.rating),
-      sturdySeating: req.body.sturdySeating === '' ? true : false,
-      armlessChairs: req.body.armlessChairs === '' ? true : false,
-      wideTableSpacing: req.body.wideTableSpacing === '' ? true : false,
-      wideTable: req.body.wideTable === '' ? true : false,
-      benchSeating: req.body.benchSeating === '' ? true : false,
-      wheelchair: req.body.wheelchair === '' ? true : false,
-      dedicatedParking: req.body.dedicatedParking === '' ? true : false,
-      handicapParking: req.body.handicapParking === '' ? true : false,
-      stairsRequired: req.body.stairsRequired === '' ? true : false,
-      weightNeutral: req.body.weightNeutral === '' ? true : false,
-      haes: req.body.haes === '' ? true : false,
-      fatPositive: req.body.fatPositive === '' ? true : false,
-      lgbtq: req.body.lgbtq === '' ? true : false,
-      transFriendly: req.body.transFriendly === '' ? true : false,
-      pocCentered: req.body.pocCentered === '' ? true : false
+      bodyPositivity: parseInt(req.body["body-positivity-rating"]),
+      pocInclusivity: parseInt(req.body["poc-inclusivity-rating"]),
+      lgbtqInclusivity: parseInt(req.body["lgbtq-inclusivity-rating"]),
+      buildingAccessibility: parseInt(req.body["building-accessibility-rating"]),
+      furnitureSize: parseInt(req.body["furniture-size-rating"])
     }
+
 
     const userId = req.signedCookies['userId'];
     database.createReview(userId, businessId, review)

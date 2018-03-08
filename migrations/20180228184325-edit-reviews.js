@@ -21,24 +21,24 @@ exports.up = async function(db) {
   await db.addColumn('reviews', 'building_accessibility', {type: 'int'});
   await db.addColumn('reviews', 'furniture_size', {type: 'int'});
 
-  await db.addColumn('businesses', 'body_positivity_rating_total', {type: 'int'});
-  await db.addColumn('businesses', 'body_positivity_rating_count', {type: 'int'});
-  await db.addColumn('businesses', 'poc_inclusivity_rating_total', {type: 'int'});
-  await db.addColumn('businesses', 'poc_inclusivity_rating_count', {type: 'int'});
-  await db.addColumn('businesses', 'lgbtq_inclusivity_rating_total', {type: 'int'});
-  await db.addColumn('businesses', 'lgbtq_inclusivity_rating_count', {type: 'int'});
-  await db.addColumn('businesses', 'building_accessibility_rating_total', {type: 'int'});
-  await db.addColumn('businesses', 'building_accessibility_rating_count', {type: 'int'});
-  await db.addColumn('businesses', 'furniture_size_rating_total', {type: 'int'});
-  await db.addColumn('businesses', 'furniture_size_rating_count', {type: 'int'});
+  await db.addColumn('businesses', 'body_positivity_rating_total', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'body_positivity_rating_count', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'poc_inclusivity_rating_total', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'poc_inclusivity_rating_count', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'lgbtq_inclusivity_rating_total', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'lgbtq_inclusivity_rating_count', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'building_accessibility_rating_total', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'building_accessibility_rating_count', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'furniture_size_rating_total', {type: 'int', defaultValue: 0});
+  await db.addColumn('businesses', 'furniture_size_rating_count', {type: 'int', defaultValue: 0});
 
   await db.removeColumn('businesses', 'total_rating');
-  await db.removeColumn('businesses', 'review_count');
 
   await db.removeColumn('reviews', 'rating');
 
   await db.removeColumn('users', 'phone');
 
+  await db.changeColumn('businesses', 'review_count', {type: 'int', defaultValue: 0});
 };
 
 exports.down = async function(db) {
@@ -60,11 +60,8 @@ exports.down = async function(db) {
   await db.removeColumn('businesses', 'furniture_size_rating_count');
 
   await db.addColumn('businesses', 'total_rating', {type: 'int'});
-  await db.addColumn('businesses', 'review_count', {type: 'int'});
   await db.addColumn('users', 'phone', {type: 'string'});
   await db.addColumn('reviews', 'rating', {type: 'int'});
-
-
 };
 
 exports._meta = {

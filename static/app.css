@@ -95,12 +95,21 @@
   width: 200px;
 }
 
-.review-top-row {
+.review-business-top-row {
   padding-top: 40px;
+}
+
+.review-business-bottom-row {
+  padding-bottom: 50px;
 }
 
 .review-title {
   padding-top: 40px;
+  color: #EB6E79;
+}
+
+.star-rating{
+  color: #EB6E79;
 }
 
 .accessibility-title {

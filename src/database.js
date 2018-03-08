@@ -1,6 +1,15 @@
 const pgp = require("pg-promise")();
 const databaseConfig = require("../database.json");
+const {snakeCase} = require('./util');
 let db = null;
+
+const CATEGORY_NAMES = [
+  'bodyPositivity',
+  'pocInclusivity',
+  'lgbtqInclusivity',
+  'furnitureSize',
+  'buildingAccessibility',
+];
 
 exports.connect = function(env) {
   db = pgp(databaseConfig[env]);
@@ -49,7 +58,7 @@ exports.getBusinessById = async function(id) {
 };
 
 function businessFromRow(row) {
-  return {
+  const business = {
     id: row.id,
     name: row.name,
     address: row.address,
@@ -58,10 +67,28 @@ function businessFromRow(row) {
     longitude: row.longitude,
     phone: row.phone,
     reviewCount: row.review_count,
-    rating: row.review_count > 0
-      ? Math.round((row.total_rating / row.review_count) * 10) / 10
-      : null
   };
+
+  let combinedRatingCount = 0;
+  let combinedTotalRating = 0;
+
+  for (const categoryName of CATEGORY_NAMES) {
+    const ratingCount = row[snakeCase(categoryName) + '_rating_count'];
+    const totalRating = row[snakeCase(categoryName) + '_rating_total'];
+    combinedRatingCount += ratingCount;
+    combinedTotalRating += totalRating;
+
+    business[`${categoryName}RatingCount`] = ratingCount;
+    business[`${categoryName}AverageRating`] = ratingCount > 0
+      ? totalRating / ratingCount
+      : null;
+  }
+
+  business.overallRating = combinedRatingCount > 0
+    ? combinedTotalRating / combinedRatingCount
+    : null;
+
+  return business;
 }
 
 exports.transact = async function(callback) {
@@ -96,57 +123,82 @@ exports.createBusiness = async function(business) {
 exports.createReview = async function(userId, businessId, review) {
   return this.transact(async () => {
     const [businessRow] = await db.query(
-      'select total_rating, review_count from businesses where id = $1 limit 1',
+      `select
+        review_count,
+        body_positivity_rating_total,
+        body_positivity_rating_count,
+        poc_inclusivity_rating_total,
+        poc_inclusivity_rating_count,
+        lgbtq_inclusivity_rating_total,
+        lgbtq_inclusivity_rating_count,
+        building_accessibility_rating_total,
+        building_accessibility_rating_count,
+        furniture_size_rating_total,
+        furniture_size_rating_count
+       from businesses where id = $1 limit 1`,
       businessId
     );
 
+    businessRow.review_count++;
+    for (const categoryName of CATEGORY_NAMES) {
+      if (Number.isFinite(review[categoryName])) {
+        businessRow[snakeCase(categoryName) + '_rating_count']++;
+        businessRow[snakeCase(categoryName) + '_rating_total'] += review[categoryName];
+      }
+    }
 
     await db.query(
       `
         update businesses
-        set total_rating = $2, review_count = $3
+        set
+          body_positivity_rating_total = $2,
+          body_positivity_rating_count = $3,
+          poc_inclusivity_rating_total = $4,
+          poc_inclusivity_rating_count = $5,
+          lgbtq_inclusivity_rating_total = $6,
+          lgbtq_inclusivity_rating_count = $7,
+          building_accessibility_rating_total = $8,
+          building_accessibility_rating_count = $9,
+          furniture_size_rating_total = $10,
+          furniture_size_rating_count = $11,
+          review_count = $12
+
         where id = $1
       `,
       [
         businessId,
-        businessRow.total_rating + review.rating,
-        businessRow.review_count + 1
+        businessRow.body_positivity_rating_total,
+        businessRow.body_positivity_rating_count,
+        businessRow.poc_inclusivity_rating_total,
+        businessRow.poc_inclusivity_rating_count,
+        businessRow.lgbtq_inclusivity_rating_total,
+        businessRow.lgbtq_inclusivity_rating_count,
+        businessRow.building_accessibility_rating_total,
+        businessRow.building_accessibility_rating_count,
+        businessRow.furniture_size_rating_total,
+        businessRow.furniture_size_rating_count,
+        businessRow.review_count
       ]
     );
 
     const rows = await db.query(
       `insert into reviews
-        (business_id, user_id, content, timestamp, rating, sturdy_seating,
-          armless_chairs, wide_table_spacing, wide_exam_table, bench_seating, wheelchair_accessible,
-          handicap_parking, dedicated_parking, stairs_required, weight_neutral,
-          haes_informed, fat_positive, lgbtq_friendly, trans_friendly, poc_centered)
+        (business_id, user_id, content, timestamp, body_positivity, poc_inclusivity, lgbtq_inclusivity, building_accessibility, furniture_size)
         values
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         returning id`,
       [
         businessId,
         userId,
         review.content,
         new Date(),
-        review.rating,
-        review.sturdySeating,
-        review.armlessChairs,
-        review.wideTableSpacing,
-        review.wideTable,
-        review.benchSeating,
-        review.wheelchair,
-        review.handicapParking,
-        review.dedicatedParking,
-        review.stairsRequired,
-        review.weightNeutral,
-        review.haes,
-        review.fatPositive,
-        review. lgbtq,
-        review.transFriendly,
-        review.pocCentered
+        review.bodyPositivity || null,
+        review.pocInclusivity || null,
+        review.lgbtqInclusivity || null,
+        review.buildingAccessibility || null,
+        review.furnitureSize || null
       ]
     );
-
     return rows[0].id;
   })
 };
@@ -167,23 +219,12 @@ exports.getMostRecentReviews = async function() {
       businessId: row.business_id,
       businessName: row.name,
       businessAddress: row.address,
-      rating: row.rating,
       timestamp: row.timestamp.getTime(),
-      sturdySeating: row.sturdy_seating,
-      armlessChairs: row.armless_chairs,
-      wideTableSpacing: row.wide_table_spacing,
-      wideTable: row.wide_exam_table,
-      benchSeating: row.bench_seating,
-      wheelchair: row.wheelchair_accessible,
-      dedicatedParking: row.dedicated_parking,
-      handicapParking: row.handicap_parking,
-      stairsRequired: row.stairs_required,
-      weightNeutral: row.weight_neutral,
-      haes: row.haes_informed,
-      fatPositive: row.fat_positive,
-      lgbtq: row.lgbtq_friendly,
-      transFriendly: row.trans_friendly,
-      pocCentered: row.poc_centered,
+      bodyPositivity: row.body_positivity,
+      pocInclusivity: row.poc_inclusivity,
+      lgbtqInclusivity: row.lgbtq_inclusivity,
+      buildingAccessibility: row.buildingAccessibility,
+      furnitureSize: row.furniture_size,
       user: {
         id: row.user_id,
         name: row.user_name
@@ -191,7 +232,6 @@ exports.getMostRecentReviews = async function() {
     };
   });
 }
-
 
 exports.updateBusinessScore = async function(businessId, score) {
   const oldScore = (await db.query(
@@ -223,21 +263,11 @@ exports.getBusinessReviewsById = async function(id) {
       content: row.content,
       rating: row.rating,
       timestamp: row.timestamp.getTime(),
-      sturdySeating: row.sturdy_seating,
-      armlessChairs: row.armless_chairs,
-      wideTableSpacing: row.wide_table_spacing,
-      wideTable: row.wide_exam_table,
-      benchSeating: row.bench_seating,
-      wheelchair: row.wheelchair_accessible,
-      dedicatedParking: row.dedicated_parking,
-      handicapParking: row.handicap_parking,
-      stairsRequired: row.stairs_required,
-      weightNeutral: row.weight_neutral,
-      haes: row.haes_informed,
-      fatPositive: row.fat_positive,
-      lgbtq: row.lgbtq_friendly,
-      transFriendly: row.trans_friendly,
-      pocCentered: row.poc_centered,
+      bodyPositivity: row.body_positivity,
+      pocInclusivity: row.poc_inclusivity,
+      lgbtqInclusivity: row.lgbtq_inclusivity,
+      buildingAccessibility: row.buildingAccessibility,
+      furnitureSize: row.furniture_size,
       user: {
         id: row.user_id,
         name: row.name
@@ -249,13 +279,12 @@ exports.getBusinessReviewsById = async function(id) {
 exports.createUser = async function(user) {
   const rows = await db.query(
     `insert into users
-     (name, facebook_id, email, phone) values
-     ($1, $2, $3, $4) returning id`,
+     (name, facebook_id, email) values
+     ($1, $2, $3) returning id`,
     [
       user.name,
       user.facebookId,
       user.email,
-      user.phone,
     ]
   );
   return rows[0].id;
@@ -273,7 +302,6 @@ exports.getUserById = async function(id) {
       name: row.name,
       facebookId: row.facebook_id,
       email: row.email,
-      phone: row.phone
     }
   }
 };
