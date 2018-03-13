@@ -125,6 +125,8 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
       business.lgbtqInclusivityRatingCount = reviewedBusiness.lgbtqInclusivityRatingCount;
       business.furnitureSizeAverageRating = reviewedBusiness.furnitureSizeAverageRating;
       business.furnitureSizeRatingCount =  reviewedBusiness.furnitureSizeRatingCount;
+      business.buildingAccessibilityAverageRating = reviewedBusiness.buildingAccessibilityAverageRating;
+      business.buildingAccessibilityRatingCount = reviewedBusiness.buildingAccessibilityRatingCount;
     }
     const photoReference = business.photos && business.photos[0].photo_reference;
 
@@ -200,7 +202,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
 
 
     const userId = req.signedCookies['userId'];
-    database.createReview(userId, businessId, review)
+    await database.createReview(userId, businessId, review);
     res.redirect(`/businesses/${googleId}`)
   });
 

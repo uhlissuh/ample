@@ -133,7 +133,7 @@ describe("database", () => {
         furnitureSize: 1
       });
 
-      const thirdRating = Math.round(((await database.getBusinessById(businessId)).bodyPositivityAverageRating * 10)) / 10
+      const thirdRating = (await database.getBusinessById(businessId)).bodyPositivityAverageRating
       assert.equal(thirdRating, 3.7)
 
       const reviews = await database.getBusinessReviewsById(businessId);

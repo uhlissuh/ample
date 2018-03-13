@@ -80,12 +80,12 @@ function businessFromRow(row) {
 
     business[`${categoryName}RatingCount`] = ratingCount;
     business[`${categoryName}AverageRating`] = ratingCount > 0
-      ? totalRating / ratingCount
+      ? roundRating(totalRating / ratingCount)
       : null;
   }
 
   business.overallRating = combinedRatingCount > 0
-    ? combinedTotalRating / combinedRatingCount
+    ? roundRating(combinedTotalRating / combinedRatingCount)
     : null;
 
   return business;
@@ -101,6 +101,10 @@ exports.transact = async function(callback) {
     await db.query("ROLLBACK");
     throw err;
   }
+};
+
+function roundRating(rating) {
+  return Math.round(rating * 10) / 10;
 };
 
 exports.createBusiness = async function(business) {

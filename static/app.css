@@ -18,6 +18,24 @@
     height: 550px;
 }
 
+.summary-item {
+  vertical-align: middle;
+  font-size: 40px;
+}
+
+.indicator {
+  display: inline;
+  vertical-align: middle;
+}
+
+.review-count-check-mark {
+  font-family: "Times", "Times New Roman", "serif";
+  font-weight: 500;
+  font-size: 48px;
+  display: inline-block;
+  height: 20px;
+  color: #faa9ca;
+}
 
 .star-rating-radio {
   position: absolute;
@@ -27,12 +45,16 @@
 .star-rating-label {
   width: 30px;
   height: 30px;
-  background-image: url('/static/star-off-big.png');
+  background-image: url('/static/star-no-highlight.png');
   background-repeat: no-repeat;
 }
 
 .star-rating-label.highlighted {
-  background-image: url('/static/star-on-big.png');
+  background-image: url('/static/star-highlight.png');
+}
+
+.star-rating-label.half-highlighted {
+  background-image: url('/static/star-half-highlight.png');
 }
 
 .navigation {
@@ -92,7 +114,11 @@
 .review-button {
   background-color: #EB6E79;
   color: white;
-  width: 200px;
+  /* width: 75%; */
+}
+
+.summary-row {
+  margin-bottom: 40px;
 }
 
 .review-business-top-row {
