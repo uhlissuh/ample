@@ -9,7 +9,7 @@
         <img
           src="<%- business.photoURL -%>"
         />
-        <a href="/businesses/<%=business.placeId%>"><span><%= business.name %></span></a>
+        <a href="/businesses/<%=business.googleId%>"><span><%= business.name %></span></a>
 
         <% if (business.reviewCount > 0) { %>
           <span><%= business.reviewCount %> reviews</span>
