@@ -1,19 +1,21 @@
 <div class="container">
   <div class="row business-header">
 
-    <div class="col-md-8">
+    <div class="col-8 col-md-8 align-self-end">
       <div class="row">
-        <h1 class="dr-name"><%- business.name -%></h1>
-        <p class="business-by-line"> <%- business.formatted_address -%></p>
-        <p class="business-by-line"> <%- business.formatted_phone_number -%></p>
+        <div class='col-md-12'>
+          <h1 class="dr-name"><%- business.name -%></h1>
+          <p class="business-by-line address"> <%- business.formatted_address -%></p>
+          <p class="business-by-line"> <%- business.formatted_phone_number -%></p>
+        </div>
       </div>
-
       <div class="row">
         <% if (reviews.length === 0) { %>
-          <p>Be the first to review!</p>
+          <div class="col-md-6">
+              <p>Be the first to review!</p>
+          </div>
         <% } else { %>
-
-          <div class="col-md-4">
+          <div class="col-4">
             <div>
               <span class="summary-item">
                 <%- business.overallRating -%>
@@ -23,7 +25,7 @@
             <span>Overall Rating</span>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-4">
             <div>
               <span class="summary-item">
                 <%- business.reviewCount -%>
@@ -36,46 +38,43 @@
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-4 col-md-4 align-self-end">
+      <% if (photoURL) { %>
       <img
-      class="img-thumbnail"
+      class="img-thumbnail img-fluid biz-img"
       src="<%- photoURL -%>"
       />
+      <% } else { %>
+      <img
+      class="img-thumbnail img-fluid biz-img"
+      src="/static/placeholder.png"
+      />
+      <% } %>
     </div>
   </div>
 
-  <!-- <div class="row">
-    Overall Score (<%- business.reviewCount -%>):
-    <div id="overall-rating" data-value="<%- business.overallRating -%>">
-    </div>
-    <br>
+  <div class="row border rounded breakdown-section">
+      <div class="col-md-2">
+        body positivity
+      </div>
+      <div class="col-md-2">
+        lgbtq Inclusivity
+      </div>
+      <div class="col-md-2">
+        poc inclusivity
+      </div>
+      <div class="col-md-2">
+        furniture size
+      </div>
+      <div class="col-md-2">
+        building accessibility
+      </div>
+  </div>
 
-    Body Positivity Score (<%- business.bodyPositivityRatingCount -%>):
-    <div id="body-positivity-rating" data-value="<%- business.bodyPositivityAverageRating -%>">
-    </div>
-    <br>
 
-    LQBTQ Inclusivity Score (<%- business.lgbtqInclusivityRatingCount -%>):
-    <div id="lgbtq-inclusivity-rating" data-value="<%- business.lgbtqInclusivityAverageRating -%>">
-    </div>
+  <div class="row reviews-header">
 
-    POC Inclusivity Score (<%- business.pocInclusivityRatingCount -%>):
-    <div id="poc-inclusivity-rating" data-value="<%- business.pocInclusivityAverageRating -%>">
-    </div>
-    <br>
-
-    Building Accessibility Score (<%- business.buildingAccessibilityRatingCount -%>):
-    <div id="building-accessibility-rating" data-value="<%- business.buildingAccessibilityAverageRating -%>">
-    </div>
-    <br>
-
-    Furniture for Larger Bodies (<%- business.furnitureSizeRatingCount -%>):
-    <div id="furniture-size-rating" data-value="<%- business.furnitureSizeAverageRating -%>">
-  </div> -->
-
-  <div class="row">
-
-    <div class="col-md-3">
+    <div class="col-md-2">
       <h2>Reviews</h2>
     </div>
 
@@ -83,7 +82,7 @@
       <a
         class="btn btn-info review-button"
         href="/businesses/<%- googleId -%>/reviews/new"
-        role="button"> Add Your Review </a>
+        role="button"> Add Your Review + </a>
     </div>
   </div>
 
@@ -93,11 +92,13 @@
           <ul class="list-group">
             <% for (const review of reviews) { %>
               <li class="list-group-item">
-                <div class="row reviewer-headline">
-                  <%- review.user.name -%> on <%- review.date -%> says:
-                </div>
                 <div class="row">
-                  <%- review.content -%>
+                  <div class="col-4">
+                    <%- review.user.name -%> on <%- review.date -%> says:
+                  </div>
+                  <div class="col-8">
+                    <%- review.content -%>
+                  </div>
                 </div>
               </li>
             <% } %>
@@ -110,12 +111,12 @@
 
 <%- contentFor('scripts') -%>
 <script>
-new ample.StarRatingView(document.getElementById('body-positivity-rating'))
-new ample.StarRatingView(document.getElementById('lgbtq-inclusivity-rating'))
-new ample.StarRatingView(document.getElementById('poc-inclusivity-rating'))
-new ample.StarRatingView(document.getElementById('building-accessibility-rating'))
-new ample.StarRatingView(document.getElementById('furniture-size-rating'))
-new ample.StarRatingView(document.getElementById('overall-rating'))
+// new ample.StarRatingView(document.getElementById('body-positivity-rating'))
+// new ample.StarRatingView(document.getElementById('lgbtq-inclusivity-rating'))
+// new ample.StarRatingView(document.getElementById('poc-inclusivity-rating'))
+// new ample.StarRatingView(document.getElementById('building-accessibility-rating'))
+// new ample.StarRatingView(document.getElementById('furniture-size-rating'))
+// new ample.StarRatingView(document.getElementById('overall-rating'))
 </script>
 
 <%- contentFor('title') -%>

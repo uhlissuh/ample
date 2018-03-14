@@ -90,7 +90,9 @@
 }
 
 .business-header {
-  padding-top: 60px;
+  margin-top: 30px;
+  height: 330px;
+  margin-bottom: 30px;
 }
 
 
@@ -108,7 +110,7 @@
 }
 
 .reviews-title {
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .review-button {
@@ -157,6 +159,10 @@
   padding-top: 40px;
 }
 
+.reviews-header {
+  margin-top: 20px;
+}
+
 .login-button {
   padding-top: 100px;
 }
@@ -173,4 +179,38 @@
 
 .card-subtitle {
   font-size: 12px;
+}
+
+.biz-img {
+  object-fit: cover;
+  width:300px;
+  height:300px;
+}
+
+
+.address {
+  margin-bottom: 0;
+}
+
+.breakdown-section {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+
+@media screen and (max-width: 400px) {
+  .dr-name {
+    font-family: 'Roboto', sans-serif;
+    color: #A9A9A9;
+    font-size: 20px;
+  }
+
+  .business-by-line {
+    font-size: 12px;
+  }
+
+  .business-header {
+    height: 150px;
+    margin-top: 25px;
+  }
 }
