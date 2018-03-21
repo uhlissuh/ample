@@ -50,15 +50,15 @@
 }
 
 .star-rating-label-small {
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
   background-image: url('/static/star-no-highlight-small.png');
   background-repeat: no-repeat;
 }
 
 .star-rating-label-small.highlighted {
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
   background-image: url('/static/star-highlight-small.png');
   background-repeat: no-repeat;
 }
@@ -70,6 +70,14 @@
 
 .star-rating-label.half-highlighted {
   background-image: url('/static/star-half-highlight-large.png');
+}
+
+.review-star-rating {
+  padding-left: 10px;
+}
+
+.star-box {
+  padding-right: 30px;
 }
 
 .navigation {

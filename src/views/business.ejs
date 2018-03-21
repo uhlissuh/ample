@@ -93,29 +93,38 @@
             <% for (const review of reviews) { %>
               <li class="list-group-item">
                 <div class="row">
-                  <div class="col-3">
+                  <div class="col-2">
                     <span><%- review.user.name -%></span>  says:
                     </br/>
                     <span><%- review.date -%></span>
                   </div>
-                  <div class="col-3">
-                    <label class="star-rating">Body Positivity</label>
-                    <div class="review-star-rating" data-value="<%- review.bodyPositivity -%>" data-size="small">
+                  <div class="col-4 star-box">
+                    <div class="row float-right">
+                      <span class="star-rating">Body Positivity</span>
+                      <div class="review-star-rating" data-value="<%- review.bodyPositivity -%>" data-size="small"></div>
                     </div>
-                    <label class="star-rating">LGBTQ Inclusivity</label>
-                    <div class="review-star-rating" data-value="<%- review.lgbtqInclusivity -%>" data-size="small">
+                    <div class="row float-right">
+                      <label class="star-rating">LGBTQ Inclusivity</label>
+                      <div class="review-star-rating" data-value="<%- review.lgbtqInclusivity -%>" data-size="small">
+                      </div>
                     </div>
-                    <label class="star-rating">POC Inclusivity</label>
-                    <div class="review-star-rating" data-value="<%- review.pocInclusivity -%>" data-size="small">
+                    <div class="row float-right">
+                      <label class="star-rating">POC Inclusivity</label>
+                      <div class="review-star-rating" data-value="<%- review.pocInclusivity -%>" data-size="small">
+                      </div>
                     </div>
-                    <label class="star-rating">Building Accessibility</label>
-                    <div class="review-star-rating" data-value="<%- review.buildingAccessibility -%>" data-size="small">
+                    <div class="row float-right">
+                      <label class="star-rating">Building Accessibility</label>
+                      <div class="review-star-rating" data-value="<%- review.buildingAccessibility -%>" data-size="small">
+                      </div>
                     </div>
-                    <label class="star-rating">Furniture for Large Bodies</label>
-                    <div class="review-star-rating" data-value="<%- review.furnitureSize -%>" data-size="small">
+                    <div class="row float-right">
+                      <label class="star-rating">Furniture for Large Bodies</label>
+                      <div class="review-star-rating" data-value="<%- review.furnitureSize -%>" data-size="small">
+                      </div>
                     </div>
                   </div>
-                  <div class="col-6">
+                  <div class="col-6 review-content-col">
                     <%- review.content -%>
                   </div>
                 </div>
