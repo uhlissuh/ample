@@ -45,16 +45,31 @@
 .star-rating-label {
   width: 30px;
   height: 30px;
-  background-image: url('/static/star-no-highlight.png');
+  background-image: url('/static/star-no-highlight-large.png');
   background-repeat: no-repeat;
 }
 
+.star-rating-label-small {
+  width: 20px;
+  height: 20px;
+  background-image: url('/static/star-no-highlight-small.png');
+  background-repeat: no-repeat;
+}
+
+.star-rating-label-small.highlighted {
+  width: 20px;
+  height: 20px;
+  background-image: url('/static/star-highlight-small.png');
+  background-repeat: no-repeat;
+}
+
+
 .star-rating-label.highlighted {
-  background-image: url('/static/star-highlight.png');
+  background-image: url('/static/star-highlight-large.png');
 }
 
 .star-rating-label.half-highlighted {
-  background-image: url('/static/star-half-highlight.png');
+  background-image: url('/static/star-half-highlight-large.png');
 }
 
 .navigation {

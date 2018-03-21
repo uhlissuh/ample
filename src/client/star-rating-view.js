@@ -3,13 +3,19 @@ module.exports = class StarRatingView {
     this.element = element;
     const inputName = element.dataset.name;
     this.ratingValue = element.dataset.value - 1;
-
+    this.size = element.dataset.size
+    
     this.radioButtons = [];
     this.labels = [];
 
     for (let i = 0; i < 5; i++) {
       const label = document.createElement('label');
-      label.className = 'star-rating-label';
+
+      if (this.size === "small") {
+        label.className = 'star-rating-label-small'
+      } else {
+        label.className = 'star-rating-label';
+      }
 
       element.appendChild(label);
       this.labels.push(label);

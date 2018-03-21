@@ -27,7 +27,6 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
       user = await database.getUserById(userId);
     }
     const recentReviews = await database.getMostRecentReviews();
-    console.log(recentReviews);
 
     res.render('index',
       {
@@ -84,7 +83,6 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const location = req.query.location;
     const businessSearch = new BusinessSearch(googlePlacesClient);
     const searchResults = await businessSearch.findBusinesses(term, location);
-    console.log(searchResults[0]);
     res.render('search_results',
       {
         term: term,
@@ -113,7 +111,9 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     if (reviewedBusiness) {
       reviews = await database.getBusinessReviewsById(reviewedBusiness.id);
       for (review of reviews) {
-        review.date = new Date(review.timestamp);
+        const locale = 'en-US';
+        const date = (new Date(review.timestamp)).toDateString();
+        review.date = date;
       }
       business.overallRating = reviewedBusiness.overallRating;
       business.reviewCount = reviewedBusiness.reviewCount;
@@ -130,6 +130,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     }
     const photoReference = business.photos && business.photos[0].photo_reference;
 
+    console.log(reviews);
     res.render('business',
       {
         googleId: googleId,

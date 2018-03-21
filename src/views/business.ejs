@@ -20,7 +20,7 @@
               <span class="summary-item">
                 <%- business.overallRating -%>
               </span>
-              <img src="/static/star-highlight.png" class="indicator" />
+              <img src="/static/star-highlight-large.png" class="indicator" />
             </div>
             <span>Overall Rating</span>
           </div>
@@ -93,10 +93,29 @@
             <% for (const review of reviews) { %>
               <li class="list-group-item">
                 <div class="row">
-                  <div class="col-4">
-                    <%- review.user.name -%> on <%- review.date -%> says:
+                  <div class="col-3">
+                    <span><%- review.user.name -%></span>  says:
+                    </br/>
+                    <span><%- review.date -%></span>
                   </div>
-                  <div class="col-8">
+                  <div class="col-3">
+                    <label class="star-rating">Body Positivity</label>
+                    <div class="review-star-rating" data-value="<%- review.bodyPositivity -%>" data-size="small">
+                    </div>
+                    <label class="star-rating">LGBTQ Inclusivity</label>
+                    <div class="review-star-rating" data-value="<%- review.lgbtqInclusivity -%>" data-size="small">
+                    </div>
+                    <label class="star-rating">POC Inclusivity</label>
+                    <div class="review-star-rating" data-value="<%- review.pocInclusivity -%>" data-size="small">
+                    </div>
+                    <label class="star-rating">Building Accessibility</label>
+                    <div class="review-star-rating" data-value="<%- review.buildingAccessibility -%>" data-size="small">
+                    </div>
+                    <label class="star-rating">Furniture for Large Bodies</label>
+                    <div class="review-star-rating" data-value="<%- review.furnitureSize -%>" data-size="small">
+                    </div>
+                  </div>
+                  <div class="col-6">
                     <%- review.content -%>
                   </div>
                 </div>
@@ -111,12 +130,10 @@
 
 <%- contentFor('scripts') -%>
 <script>
-// new ample.StarRatingView(document.getElementById('body-positivity-rating'))
-// new ample.StarRatingView(document.getElementById('lgbtq-inclusivity-rating'))
-// new ample.StarRatingView(document.getElementById('poc-inclusivity-rating'))
-// new ample.StarRatingView(document.getElementById('building-accessibility-rating'))
-// new ample.StarRatingView(document.getElementById('furniture-size-rating'))
-// new ample.StarRatingView(document.getElementById('overall-rating'))
+  const starRatingElements = document.getElementsByClassName("review-star-rating");
+  for (const element of starRatingElements) {
+    new ample.StarRatingView(element);
+  }
 </script>
 
 <%- contentFor('title') -%>

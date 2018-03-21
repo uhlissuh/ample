@@ -258,19 +258,22 @@ exports.updateBusinessScore = async function(businessId, score) {
 
 exports.getBusinessReviewsById = async function(id) {
   const rows = await db.query(
-    "select * from reviews, users where business_id = $1 and reviews.user_id = users.id order by reviews.timestamp desc",
+  `select *, users.id as user_id, reviews.id as review_id
+     from reviews, users
+     where reviews.business_id = $1 and reviews.user_id = users.id
+     order by reviews.timestamp desc`,
     [id]
   );
   return rows.map(row => {
     return {
-      id: row.id,
+      review_id: row.review_id,
+      business_id: row.business_id,
       content: row.content,
-      rating: row.rating,
       timestamp: row.timestamp.getTime(),
       bodyPositivity: row.body_positivity,
       pocInclusivity: row.poc_inclusivity,
       lgbtqInclusivity: row.lgbtq_inclusivity,
-      buildingAccessibility: row.buildingAccessibility,
+      buildingAccessibility: row.building_accessibility,
       furnitureSize: row.furniture_size,
       user: {
         id: row.user_id,
