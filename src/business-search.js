@@ -29,7 +29,7 @@ class BusinessSearch {
       return Object.assign({}, {
         googleId: googleBusiness.place_id,
         name: googleBusiness.name,
-        photoURL: photoReference ? this.googlePlacesClient.getPhotoURL(photoReference, 80, 80) : null,
+        photoURL: photoReference ? this.googlePlacesClient.getPhotoURL(photoReference, 300, 300) : null,
         vicinity: googleBusiness.vicinity,
         reviewCount: 0
       }, ratedBusiness);

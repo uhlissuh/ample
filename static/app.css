@@ -43,8 +43,8 @@
 }
 
 .star-rating-label {
-  width: 30px;
-  height: 30px;
+  width: 31px;
+  height: 31px;
   background-image: url('/static/star-no-highlight-large.png');
   background-repeat: no-repeat;
 }
@@ -85,9 +85,6 @@
   border-bottom: 1px solid #D9D9D9;
 }
 
-.search-row {
-}
-
 .ample-logo {
   font-family: 'Lilita One', cursive;
   color: #EB6E79;
@@ -110,6 +107,7 @@
 .go-button {
   background-color: #EB6E79;
   color: white;
+  width: 100%;
 }
 
 .business-header {
@@ -210,9 +208,18 @@
   height:300px;
 }
 
+.biz-img-thumb {
+object-fit: cover;
+  width:80px;
+  height:80px;
+}
 
 .address {
   margin-bottom: 0;
+}
+
+.search-result-title {
+  font-size: 20px;
 }
 
 .breakdown-section {
@@ -220,6 +227,14 @@
   padding-bottom: 20px;
 }
 
+.search-results-title {
+  margin-bottom:20px;
+}
+
+.search-bar {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
 
 @media screen and (max-width: 400px) {
   .dr-name {
@@ -235,5 +250,11 @@
   .business-header {
     height: 150px;
     margin-top: 25px;
+  }
+
+  .biz-img {
+    object-fit: cover;
+    width:175px;
+    height:175px;
   }
 }

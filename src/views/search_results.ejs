@@ -1,22 +1,71 @@
 <div class="container">
-  <p>
-    Search Results for <%- term -%> near <%- location -%>
-  </p>
+  <form class="search-bar" action="/searchforbusinesses" method="GET">
+    <div class="form-row search-row">
+      <div class="col-6">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Find</div>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            id="business-search-term"
+            name="term"
+            placeholder="doctors, Sally's Hair Salon, massage" />
+        </div>
+      </div>
+
+      <div class="col-5">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Near</div>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="location"
+            id="business-location"
+            placeholder="address, city, zip code" />
+        </div>
+      </div>
+      <div class="col-1">
+        <input type="submit" value="Go" class="btn go-button"/>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <h3 class="search-results-title">
+      Search Results for <%- term -%> near <%- location -%>
+    </h3>
+  </div>
 
   <ul class="list-group">
     <% for (const business of businesses) { %>
-      <li class="row list-group-item">
-        <img
-          src="<%- business.photoURL -%>"
-        />
-        <a href="/businesses/<%=business.googleId%>"><span><%= business.name %></span></a>
+      <li class="list-group-item">
+        <div class="row align-items-center">
+          <div class="col-2">
+            <img
+              class="biz-img-thumb img-fluid"
+              src="<%- business.photoURL -%>"
+            />
+          </div>
+          <div class="col-7">
+            <a href="/businesses/<%=business.googleId%>"><span class="search-result-title dr-name"><%= business.name %></span></a> </br>
+            <span><%- business.vicinity -%></span>
+          </div>
+          <div class="col-3">
+            <% if (business.reviewCount > 0) { %>
+              <!-- <span><%= business.reviewCount %> reviews</span> -->
+              <div class="float-right">
+                <span class="summary-item"><%= business.overallRating%></span>
+                <img src="/static/star-highlight-large.png" class="indicator" />
+              </div>
 
-        <% if (business.reviewCount > 0) { %>
-          <span><%= business.reviewCount %> reviews</span>
-          <span class="float-right business-rating"><%= business.rating %></span>
-        <% } else { %>
-          <span>Be the first to review</span>
-        <% } %>
+            <% } else { %>
+              <span class="float-right">Be the first to review</span>
+            <% } %>
+          </div>
+        </div>
       </li>
     <% } %>
   </ol>

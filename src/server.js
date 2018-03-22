@@ -83,6 +83,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const location = req.query.location;
     const businessSearch = new BusinessSearch(googlePlacesClient);
     const searchResults = await businessSearch.findBusinesses(term, location);
+    console.log(searchResults);
     res.render('search_results',
       {
         term: term,
@@ -134,7 +135,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     res.render('business',
       {
         googleId: googleId,
-        photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 400, 300),
+        photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 700, 700),
         reviews: reviews,
         user: user,
         business: business
