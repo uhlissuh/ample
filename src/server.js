@@ -31,7 +31,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     res.render('index',
       {
         user: user,
-        recentReviews: recentReviews
+        recentReviews: recentReviews ? recentReviews : null
       }
     )
   });
@@ -83,7 +83,9 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const location = req.query.location;
     const businessSearch = new BusinessSearch(googlePlacesClient);
     const searchResults = await businessSearch.findBusinesses(term, location);
+
     console.log(searchResults);
+    
     res.render('search_results',
       {
         term: term,
