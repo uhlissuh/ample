@@ -236,6 +236,26 @@ object-fit: cover;
   margin-bottom: 30px;
 }
 
+.card {
+  height: 200px;
+  margin-bottom: 15px;
+}
+
+.card-title {
+  color: #A9A9A9;
+}
+
+.review-count {
+  display: inline;
+  vertical-align: top;
+}
+
+.business-overall-rating {
+  display: inline;
+  vertical-align: top;
+}
+
+
 @media screen and (max-width: 400px) {
   .dr-name {
     font-family: 'Roboto', sans-serif;
@@ -257,4 +277,37 @@ object-fit: cover;
     width:175px;
     height:175px;
   }
+
+  .biz-img-thumb {
+    width:75px;
+    height:75px;
+  }
+
+  .main-background {
+    height: 350px;
+  }
+
+  .search-results-title {
+    margin-bottom:20px;
+    font-size: 20px;
+  }
+
+  .logo-row {
+    padding-top: 25px;
+  }
+
+  .ample-logo {
+    margin-bottom: 5px;
+  }
+
+  .tag-line {
+    font-size: 16px;
+    padding-top: 5px;
+  }
+
+  .cards {
+    padding-top: 35px;
+  }
+
+
 }

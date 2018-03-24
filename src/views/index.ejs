@@ -11,7 +11,7 @@
     </div>
     <form action="/searchforbusinesses" method="GET">
       <div class="form-row search-row">
-        <div class="col-6">
+        <div class="col-12 col-lg-6">
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">Find</div>
@@ -25,7 +25,7 @@
           </div>
         </div>
 
-        <div class="col-5">
+        <div class="col-10 col-lg-5">
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">Near</div>
@@ -38,7 +38,7 @@
               placeholder="address, city, zip code" />
           </div>
         </div>
-        <div class="col-1">
+        <div class="col-2 col-lg-1">
           <input type="submit" value="Go" class="btn go-button"/>
         </div>
       </div>
@@ -55,7 +55,7 @@
 <div class="container cards">
   <div class="row">
     <div class="col-md-4">
-      <div class="card" style="width: 18rem;">
+      <div class="card">
         <div class="card-body">
           <h5 class="card-title"><%- recentReviews[0].businessName -%></h5>
           <h6 class="card-subtitle mb-2 text-muted">reviewed by <%- recentReviews[0].user.name -%></h6>
@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class="col-md-4">
-      <div class="card" style="width: 18rem;">
+      <div class="card">
         <div class="card-body">
           <h5 class="card-title"><%- recentReviews[1].businessName -%></h5>
           <h6 class="card-subtitle mb-2 text-muted">reviewed by <%- recentReviews[1].user.name -%></h6>
@@ -73,7 +73,7 @@
       </div>
     </div>
     <div class="col-md-4">
-      <div class="card" style="width: 18rem;">
+      <div class="card">
         <div class="card-body">
           <h5 class="card-title"><%- recentReviews[2].businessName -%></h5>
           <h6 class="card-subtitle mb-2 text-muted">reviewed by <%- recentReviews[2].user.name -%></h6>

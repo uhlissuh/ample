@@ -1,7 +1,7 @@
 <div class="container">
   <form class="search-bar" action="/searchforbusinesses" method="GET">
     <div class="form-row search-row">
-      <div class="col-6">
+      <div class="col-12 col-lg-6">
         <div class="input-group mb-2">
           <div class="input-group-prepend">
             <div class="input-group-text">Find</div>
@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      <div class="col-5">
+      <div class="col-10 col-lg-5">
         <div class="input-group mb-2">
           <div class="input-group-prepend">
             <div class="input-group-text">Near</div>
@@ -28,15 +28,17 @@
             placeholder="address, city, zip code" />
         </div>
       </div>
-      <div class="col-1">
+      <div class="col-2 col-lg-1">
         <input type="submit" value="Go" class="btn go-button"/>
       </div>
     </div>
   </form>
   <div class="row">
-    <h3 class="search-results-title">
-      Search Results for <%- term -%> near <%- location -%>
-    </h3>
+    <div class="col-12">
+      <h3 class="search-results-title">
+        Search Results for <%- term -%> near <%- location -%> :
+      </h3>
+    </div>
   </div>
 
   <ul class="list-group">
@@ -56,9 +58,9 @@
           <div class="col-3">
             <% if (business.reviewCount > 0) { %>
               <!-- <span><%= business.reviewCount %> reviews</span> -->
-              <div class="float-right">
-                <span class="summary-item"><%= business.overallRating%></span>
-                <img src="/static/star-highlight-large.png" class="indicator" />
+              <div class="float-right ">
+                <div class="business-overall-rating" data-value= "<%=business.overallRating %>" data-name="business-overall-rating" data-size="small"></div>
+                <span class="review-count">(<%= business.reviewCount %>)</span>
               </div>
 
             <% } else { %>
@@ -69,14 +71,15 @@
       </li>
     <% } %>
   </ol>
-
 </div>
 
 <%- contentFor('scripts') -%>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+<script>
+const starRatingElements = document.getElementsByClassName("business-overall-rating");
+for (const element of starRatingElements) {
+  new ample.StarRatingView(element);
+}
+</script>
 
 <%- contentFor('title') -%>
 Ample | Search Results
