@@ -5,10 +5,12 @@ const cookieParser = require('cookie-parser');
 const database = require("./database");
 const apiServer = require('./api-server');
 const BusinessSearch = require("./business-search");
+const catchErrors = require('./catch-errors');
 
 module.exports =
 function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
   const app = express();
+  catchErrors(app);
 
   app.set('view engine', 'ejs')
   app.set('views', 'src/views')
@@ -208,6 +210,15 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const userId = req.signedCookies['userId'];
     await database.createReview(userId, businessId, review);
     res.redirect(`/businesses/${googleId}`)
+  });
+
+  app.use(async (error, req, res, next) => {
+    const userId = req.signedCookies.userId;
+    const user = userId && await database.getUserById(userId);
+
+    console.error('Caught Error');
+    console.error(error.stack);
+    res.render('error', {user, error});
   });
 
   return app;
