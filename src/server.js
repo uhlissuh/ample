@@ -86,7 +86,6 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const businessSearch = new BusinessSearch(googlePlacesClient);
     const searchResults = await businessSearch.findBusinesses(term, location);
 
-    console.log(searchResults);
 
     res.render('search_results',
       {
@@ -135,7 +134,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     }
     const photoReference = business.photos && business.photos[0].photo_reference;
 
-    console.log(reviews);
+
     res.render('business',
       {
         googleId: googleId,
@@ -170,6 +169,19 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         reviewerId: req.signedCookies["userId"],
         user: user
       })
+    }
+  });
+
+  app.get('/businesses/:googleId/reviews/:reviewId/edit', async function(req, res) {
+    const userId = req.signedCookies['userId'];
+    const user = await database.getUserById(userId);
+    const review = await database.getReviewById(req.params.reviewId);
+    const business = await database.getBusinessByGoogleId(req.params.googleId);
+
+    if (review.user.id === parseInt(userId)) {
+      res.render('edit_review', {user, review, business});
+    } else {
+      throw new Error();
     }
   });
 

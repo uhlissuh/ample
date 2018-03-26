@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="row">
+    <h2>Edit Your Review</h2>
+  </div>
+  <div class="row review-business-top-row">
+    <%- business.name -%>
+    <br />
+    <%- business.address -%>
+    <br />
+    <%- business.phone -%>
+  </div>
+
+  <div class="row">
+    <form class="main-form" method="PUT" action="/businesses/<%- business.googleId -%>/reviews/<% review.reviewId %>/edit"
+      <div class="form-group">
+        <div class="row">
+          <div class="col-12">
+            <label class="star-rating" for="body-positivity-rating">Body Positivity Rating</label>
+            <div id="body-positivity-rating" data-name="body-positivity-rating"></div>
+            <label class="star-rating" for="lgbtq-inclusivity-rating">LGBTQ Inclusivity Rating</label>
+            <div id="lgbtq-inclusivity-rating" data-name="lgbtq-inclusivity-rating"></div>
+            <label class="star-rating" for="poc-inclusivity-rating">P.O.C Inclusivity Rating</label>
+            <div id="poc-inclusivity-rating" data-name="poc-inclusivity-rating"></div>
+            <label class="star-rating" for="building-accessibility-rating">Building and Space Accessibility Rating</label>
+            <div id="building-accessibility-rating" data-name="building-accessibility-rating"></div>
+            <label class="star-rating" for="furniture-size-rating">Furniture for Larger Bodies</label>
+            <div id="furniture-size-rating" data-name="furniture-size-rating"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <textarea class="form-control" name="content" rows="8"><%- review.content -%></textarea>
+          </div>
+        </div>
+        <div class="row review-submit-row">
+          <div class="col-12">
+            <button type="submit" class="btn review-submit-button" >Update Review</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- contentFor('scripts') -%>
+<script>
+new ample.StarRatingView(document.getElementById('body-positivity-rating'))
+new ample.StarRatingView(document.getElementById('lgbtq-inclusivity-rating'))
+new ample.StarRatingView(document.getElementById('poc-inclusivity-rating'))
+new ample.StarRatingView(document.getElementById('building-accessibility-rating'))
+new ample.StarRatingView(document.getElementById('furniture-size-rating'))
+
+</script>
+
+
+
+<%- contentFor('title') -%>
+Ample | Edit Review

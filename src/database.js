@@ -283,6 +283,32 @@ exports.getBusinessReviewsById = async function(id) {
   });
 };
 
+exports.getReviewById = async function(review_id) {
+  const row = await db.query(
+    `select * from reviews
+      where id = $1 limit 1`,
+      [review_id]
+  );
+
+  return row.map(row => {
+    return {
+      reviewId: row.id,
+      businessId: row.business_id,
+      content: row.content,
+      timestamp: row.timestamp.getTime(),
+      bodyPositivity: row.body_positivity,
+      pocInclusivity: row.poc_inclusivity,
+      lgbtqInclusivity: row.lgbtq_inclusivity,
+      buildingAccessibility: row.building_accessibility,
+      furnitureSize: row.furniture_size,
+      user: {
+        id: row.user_id,
+        name: row.name
+      },
+    };
+  })[0];
+}
+
 exports.createUser = async function(user) {
   const rows = await db.query(
     `insert into users

@@ -97,6 +97,10 @@
                     <span><%- review.user.name -%></span>  says:
                     </br/>
                     <span><%- review.date -%></span>
+                    </br>
+                    <% if (user.id = review.user.id) { %>
+                    <a href="/businesses/<%- googleId -%>/reviews/<%- review.review_id -%>/edit">edit review</a>
+                    <% } %>
                   </div>
                   <div class="col-4 star-box">
                     <div class="row float-right">

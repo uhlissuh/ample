@@ -184,8 +184,20 @@
   margin-top: 20px;
 }
 
+.be-first-words {
+  color: #EB6E79;
+}
+
 .login-button {
   padding-top: 100px;
+}
+
+a {
+  color: #FDA972;
+}
+
+a:hover {
+  color: #FDA972;
 }
 
 .reviewer-headline {
