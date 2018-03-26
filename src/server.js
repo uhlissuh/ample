@@ -12,8 +12,8 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
   const app = express();
   catchErrors(app);
 
-  app.set('view engine', 'ejs')
-  app.set('views', 'src/views')
+  app.set('view engine', 'ejs');
+  app.set('views', 'src/views');
 
   app.use(expressLayout);
   app.use('/static', express.static('static'));
@@ -87,7 +87,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const searchResults = await businessSearch.findBusinesses(term, location);
 
     console.log(searchResults);
-    
+
     res.render('search_results',
       {
         term: term,

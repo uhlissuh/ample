@@ -255,6 +255,14 @@ object-fit: cover;
   vertical-align: top;
 }
 
+.business-listing-title {
+  font-size: 20px;
+  color: #A9A9A9;
+}
+
+.score-grouping {
+  float: right;
+}
 
 @media screen and (max-width: 400px) {
   .dr-name {
@@ -279,8 +287,8 @@ object-fit: cover;
   }
 
   .biz-img-thumb {
-    width:75px;
-    height:75px;
+    width:65px;
+    height:65px;
   }
 
   .main-background {
@@ -289,8 +297,33 @@ object-fit: cover;
 
   .search-results-title {
     margin-bottom:20px;
-    font-size: 20px;
+    font-size: 16px;
   }
+
+  .business-listing-title {
+    font-size: 16px;
+    color: #A9A9A9
+  }
+
+  .business-address-tag-line {
+    font-size: 13px;
+  }
+
+  .image-column {
+    padding-right: 0px;
+    padding-top: 7px;
+  }
+
+  .search-results-business-info {
+    padding-left: 5px;
+    padding-top: 0px;
+  }
+
+  .list-group-item {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
 
   .logo-row {
     padding-top: 25px;
@@ -309,5 +342,9 @@ object-fit: cover;
     padding-top: 35px;
   }
 
+  .score-grouping {
+    float: left;
+    margin-top: 5px;
+  }
 
 }
