@@ -168,6 +168,81 @@ describe("database", () => {
     });
   })
 
+  describe(".updateReview", () => {
+    let userId, businessId
+
+    beforeEach(async () => {
+      userId = await database.createUser({
+        facebookId: '567',
+        name: 'Bob Carlson',
+        email: 'bob@example.com'
+      });
+
+      const otherUserId = await database.createUser({
+        facebookId: '890',
+        name: 'Rob Carlson',
+        email: 'rob@example.com'
+      });
+
+      businessId = await database.createBusiness({
+        googleId: "dr-brain",
+        name: 'Dr Brain',
+        address: '123 Main St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      });
+
+      await database.createReview(otherUserId, businessId, {
+        content: "Meh.",
+        bodyPositivity: 3,
+        lgbtqInclusivity: 3,
+      });
+
+      reviewId = await database.createReview(userId, businessId, {
+        content: "I love this person deeply.",
+        bodyPositivity: 4,
+        buildingAccessibility: 4,
+        furnitureSize: 4
+      });
+    });
+
+    it("updates an existing review and updates the business review information", async() => {
+      let business = await database.getBusinessById(businessId);
+      assert.equal(business.bodyPositivityRatingCount, 2);
+      assert.equal(business.bodyPositivityAverageRating, 3.5);
+      assert.equal(business.lgbtqInclusivityRatingCount, 1);
+      assert.equal(business.lgbtqInclusivityAverageRating, 3);
+      assert.equal(business.furnitureSizeRatingCount, 1);
+      assert.equal(business.furnitureSizeAverageRating, 4);
+
+      await database.updateReview(reviewId, {
+        content: "I actually love this person more than I even thought was possible.",
+        bodyPositivity: 5,
+        lgbtqInclusivity: 1,
+      });
+
+      const updatedReview = await database.getReviewById(reviewId);
+      business = await database.getBusinessById(businessId);
+
+      assert.equal(updatedReview.content, 'I actually love this person more than I even thought was possible.')
+      assert.equal(updatedReview.bodyPositivity, 5);
+      assert.equal(updatedReview.lgbtqInclusivity, 1);
+      assert.equal(updatedReview.pocInclusivity, null);
+      assert.equal(updatedReview.buildingAccessibility, null);
+      assert.equal(updatedReview.furnitureSize, null);
+
+      assert.equal(business.bodyPositivityRatingCount, 2);
+      assert.equal(business.bodyPositivityAverageRating, 4);
+      assert.equal(business.lgbtqInclusivityRatingCount, 2);
+      assert.equal(business.lgbtqInclusivityAverageRating, 2);
+      assert.equal(business.furnitureSizeRatingCount, 0);
+      assert.equal(business.furnitureSizeAverageRating, null);
+      assert.equal(business.buildingAccessibilityRatingCount, 0);
+      assert.equal(business.buildingAccessibilityAverageRating, null);
+    });
+  });
+
   describe(".createUser", () => {
     it("allows the user to be retrieved afterwards", async () => {
       const id = await database.createUser({

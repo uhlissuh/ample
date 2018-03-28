@@ -91,6 +91,10 @@ function businessFromRow(row) {
   return business;
 }
 
+async function getFullBusinessById(id) {
+  return (await db.query('select * from businesses where id = $1', [id]))[0];
+}
+
 exports.transact = async function(callback) {
   try {
     await db.query("BEGIN");
@@ -124,24 +128,45 @@ exports.createBusiness = async function(business) {
   return rows[0].id;
 };
 
+async function updateBusinessRatings(businessId, businessRow) {
+  await db.query(
+    `
+      update businesses
+      set
+        body_positivity_rating_total = $2,
+        body_positivity_rating_count = $3,
+        poc_inclusivity_rating_total = $4,
+        poc_inclusivity_rating_count = $5,
+        lgbtq_inclusivity_rating_total = $6,
+        lgbtq_inclusivity_rating_count = $7,
+        building_accessibility_rating_total = $8,
+        building_accessibility_rating_count = $9,
+        furniture_size_rating_total = $10,
+        furniture_size_rating_count = $11,
+        review_count = $12
+
+      where id = $1
+    `,
+    [
+      businessId,
+      businessRow.body_positivity_rating_total,
+      businessRow.body_positivity_rating_count,
+      businessRow.poc_inclusivity_rating_total,
+      businessRow.poc_inclusivity_rating_count,
+      businessRow.lgbtq_inclusivity_rating_total,
+      businessRow.lgbtq_inclusivity_rating_count,
+      businessRow.building_accessibility_rating_total,
+      businessRow.building_accessibility_rating_count,
+      businessRow.furniture_size_rating_total,
+      businessRow.furniture_size_rating_count,
+      businessRow.review_count
+    ]
+  )
+}
+
 exports.createReview = async function(userId, businessId, review) {
   return this.transact(async () => {
-    const [businessRow] = await db.query(
-      `select
-        review_count,
-        body_positivity_rating_total,
-        body_positivity_rating_count,
-        poc_inclusivity_rating_total,
-        poc_inclusivity_rating_count,
-        lgbtq_inclusivity_rating_total,
-        lgbtq_inclusivity_rating_count,
-        building_accessibility_rating_total,
-        building_accessibility_rating_count,
-        furniture_size_rating_total,
-        furniture_size_rating_count
-       from businesses where id = $1 limit 1`,
-      businessId
-    );
+    const businessRow = await getFullBusinessById(businessId);
 
     businessRow.review_count++;
     for (const categoryName of CATEGORY_NAMES) {
@@ -151,39 +176,7 @@ exports.createReview = async function(userId, businessId, review) {
       }
     }
 
-    await db.query(
-      `
-        update businesses
-        set
-          body_positivity_rating_total = $2,
-          body_positivity_rating_count = $3,
-          poc_inclusivity_rating_total = $4,
-          poc_inclusivity_rating_count = $5,
-          lgbtq_inclusivity_rating_total = $6,
-          lgbtq_inclusivity_rating_count = $7,
-          building_accessibility_rating_total = $8,
-          building_accessibility_rating_count = $9,
-          furniture_size_rating_total = $10,
-          furniture_size_rating_count = $11,
-          review_count = $12
-
-        where id = $1
-      `,
-      [
-        businessId,
-        businessRow.body_positivity_rating_total,
-        businessRow.body_positivity_rating_count,
-        businessRow.poc_inclusivity_rating_total,
-        businessRow.poc_inclusivity_rating_count,
-        businessRow.lgbtq_inclusivity_rating_total,
-        businessRow.lgbtq_inclusivity_rating_count,
-        businessRow.building_accessibility_rating_total,
-        businessRow.building_accessibility_rating_count,
-        businessRow.furniture_size_rating_total,
-        businessRow.furniture_size_rating_count,
-        businessRow.review_count
-      ]
-    );
+    await updateBusinessRatings(businessId, businessRow);
 
     const rows = await db.query(
       `insert into reviews
@@ -206,6 +199,49 @@ exports.createReview = async function(userId, businessId, review) {
     return rows[0].id;
   })
 };
+
+exports.updateReview = async function(reviewId, newReview) {
+  await this.transact(async () => {
+    const oldReview = await this.getReviewById(reviewId);
+
+    const business = await getFullBusinessById(oldReview.businessId);
+    for (const categoryName of CATEGORY_NAMES) {
+      if (Number.isFinite(oldReview[categoryName])) {
+        business[snakeCase(categoryName) + '_rating_count']--;
+        business[snakeCase(categoryName) + '_rating_total'] -= oldReview[categoryName];
+      }
+
+      if (Number.isFinite(newReview[categoryName])) {
+        business[snakeCase(categoryName) + '_rating_count']++;
+        business[snakeCase(categoryName) + '_rating_total'] += newReview[categoryName];
+      }
+    }
+
+    await updateBusinessRatings(business.id, business);
+
+    await db.query(`
+      update reviews
+        set content = $1,
+        body_positivity = $2,
+        lgbtq_inclusivity = $3,
+        poc_inclusivity = $4,
+        building_accessibility = $5,
+        furniture_size = $6,
+        timestamp = $7
+      where
+        id = $8
+    `, [
+      newReview.content,
+      newReview.bodyPositivity,
+      newReview.lgbtqInclusivity,
+      newReview.pocInclusivity,
+      newReview.buildingAccessibility,
+      newReview.furnitureSize,
+      new Date(),
+      reviewId
+    ]);
+  });
+}
 
 exports.getMostRecentReviews = async function() {
   const rows = await db.query(
@@ -307,7 +343,9 @@ exports.getReviewById = async function(review_id) {
       },
     };
   })[0];
-}
+};
+
+
 
 exports.createUser = async function(user) {
   const rows = await db.query(
