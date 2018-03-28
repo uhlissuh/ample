@@ -1,10 +1,15 @@
 module.exports = class StarRatingView {
-  constructor(element) {
+  constructor(element, interactive) {
     this.element = element;
     const inputName = element.dataset.name;
-    this.ratingValue = element.dataset.value - 1;
+    if (element.dataset.value != null) {
+      this.ratingValue = parseInt(element.dataset.value) - 1;
+    } else {
+      this.ratingValue = null;
+    }
+
     this.size = element.dataset.size
-    
+
     this.radioButtons = [];
     this.labels = [];
 
@@ -20,7 +25,7 @@ module.exports = class StarRatingView {
       element.appendChild(label);
       this.labels.push(label);
 
-      if (!this.ratingValue) {
+      if (interactive) {
         const id = `star-rating-${inputName}-${i + 1}`
         label.setAttribute('for', id);
 
@@ -31,30 +36,33 @@ module.exports = class StarRatingView {
         radioButton.className = 'star-rating-radio';
         radioButton.id = id;
 
+        if (i === this.ratingValue) {
+          radioButton.checked = true;
+        }
+
         element.appendChild(radioButton);
         this.radioButtons.push(radioButton);
       }
     }
 
-    if (!this.ratingValue) {
-      element.addEventListener('mouseover', this.handleMouseOver.bind(this));
-      element.addEventListener('mouseout', this.handleMouseOut.bind(this));
-    }
-
-    if (this.ratingValue) {
+    if (interactive) {
+      element.addEventListener('mouseover', this.highlightThroughHoveredIndex.bind(this));
+      element.addEventListener('mouseout', this.highlightThroughSelectedIndex.bind(this));
+      this.highlightThroughSelectedIndex();
+    } else {
       this.highlightThroughIndex(this.ratingValue);
     }
   }
 
 
-  handleMouseOver(event) {
+  highlightThroughHoveredIndex(event) {
     const labelIndex = this.labels.indexOf(event.target);
     if (labelIndex >= 0) {
       this.highlightThroughIndex(labelIndex);
     }
   }
 
-  handleMouseOut(event) {
+  highlightThroughSelectedIndex() {
     const selectedIndex = this.radioButtons.findIndex(button => button.checked);
     this.highlightThroughIndex(selectedIndex);
   }

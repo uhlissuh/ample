@@ -39,12 +39,15 @@
 
 <%- contentFor('scripts') -%>
 <script>
-new ample.StarRatingView(document.getElementById('body-positivity-rating'))
-new ample.StarRatingView(document.getElementById('lgbtq-inclusivity-rating'))
-new ample.StarRatingView(document.getElementById('poc-inclusivity-rating'))
-new ample.StarRatingView(document.getElementById('building-accessibility-rating'))
-new ample.StarRatingView(document.getElementById('furniture-size-rating'))
-
+for (const elementId of [
+  'body-positivity-rating',
+  'lgbtq-inclusivity-rating',
+  'poc-inclusivity-rating',
+  'building-accessibility-rating',
+  'furniture-size-rating'
+]) {
+  new ample.StarRatingView(document.getElementById(elementId), true);
+}
 </script>
 
 <%- contentFor('title') -%>
