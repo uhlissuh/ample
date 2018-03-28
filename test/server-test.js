@@ -53,13 +53,9 @@ describe("server", () => {
       });
 
       it("sets a cookie", async () => {
-        const response = await request.post({
-          uri: `http://localhost:${port}/login`,
-          jar: jar,
-          form: {
-            'access-token': 'the-access-token'
-          }
-        });
+        const response = await post('login', {
+          'access-token': 'the-access-token'
+        })
 
         const userId = getLoggedInUser();
 
@@ -75,13 +71,9 @@ describe("server", () => {
       });
 
       it("redirects to the given referer URL", async () => {
-        const response = await request.post({
-          uri: `http://localhost:${port}/login`,
-          jar: jar,
-          form: {
-            'access-token': 'the-access-token',
-            'referer': '/businesses/123/reviews/new'
-          }
+        const response = await post('login', {
+          'access-token': 'the-access-token',
+          'referer': '/businesses/123/reviews/new'
         });
 
         assert.equal(response.statusCode, 302);
@@ -92,10 +84,7 @@ describe("server", () => {
 
   describe("review business", () => {
     it("redirects to the login page if the user isn't logged in", async () => {
-      const response = await request({
-        uri: `http://localhost:${port}/businesses/567/reviews/new`,
-        jar: jar
-      });
+      const response = await get('businesses/567/reviews/new')
 
       assert.equal(response.statusCode, 302);
       assert.equal(response.headers.location, '/login?referer=/businesses/567/reviews/new')
@@ -113,15 +102,56 @@ describe("server", () => {
         }
       }
 
-      const response = await request({
-        uri: `http://localhost:${port}/businesses/567/reviews/new`,
-        jar: jar
-      });
+      const response = await get('businesses/567/reviews/new');
 
       assert.equal(response.statusCode, 200);
       assert(response.body.includes('the-business'));
     });
   });
+
+  describe("update review", () => {
+    it("updates the review's text and the business's ratings", async () => {
+      logIn('123');
+
+      googlePlacesClient.getBusinessById = async function (id) {
+        assert.equal(id, '567');
+        return {
+          name: 'the-business',
+          formatted_address: '123 Example St',
+          geometry: {
+            location: {
+              lat: 42,
+              lng: -122
+            }
+          }
+        }
+      };
+
+      const createReviewResponse = await post('businesses/567/reviews', {
+        'content': 'I like this business.',
+        'body-positivity-rating': '5',
+        'lgbtq-inclusivity-rating': '3'
+      });
+
+      assert.equal(createReviewResponse.statusCode, 302);
+      assert.equal(createReviewResponse.headers.location, '/businesses/567');
+    });
+  });
+
+  function get(url) {
+    return request({
+      uri: `http://localhost:${port}/${url}`,
+      jar: jar,
+    });
+  }
+
+  function post(url, formData) {
+    return request.post({
+      uri: `http://localhost:${port}/${url}`,
+      jar: jar,
+      form: formData
+    });
+  }
 
   function getLoggedInUser() {
     const cookies = jar.getCookies(`http://localhost:${port}`);
