@@ -11,7 +11,7 @@
   </div>
 
   <div class="row">
-    <form class="main-form" method="PUT" action="/businesses/<%- business.googleId -%>/reviews/<% review.reviewId %>/edit"
+    <form class="main-form" method="POST" action="/businesses/<%- business.googleId -%>/reviews/<%- review.reviewId -%>"
       <div class="form-group">
         <div class="row">
           <div class="col-12">

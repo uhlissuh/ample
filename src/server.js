@@ -185,6 +185,19 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     }
   });
 
+  app.post('/businesses/:googleId/reviews/:reviewId', async function(req, res) {
+    await database.updateReview(req.params.reviewId, {
+      content: req.body.content,
+      bodyPositivity: parseInt(req.body["body-positivity-rating"]),
+      pocInclusivity: parseInt(req.body["poc-inclusivity-rating"]),
+      lgbtqInclusivity: parseInt(req.body["lgbtq-inclusivity-rating"]),
+      buildingAccessibility: parseInt(req.body["building-accessibility-rating"]),
+      furnitureSize: parseInt(req.body["furniture-size-rating"])
+    });
+
+    res.redirect(`/businesses/${req.params.googleId}`);
+  });
+
   app.post('/businesses/:googleId/reviews', async function(req, res) {
     const googleId = req.params.googleId;
     let business = await cache.get(googleId);

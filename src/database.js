@@ -232,11 +232,11 @@ exports.updateReview = async function(reviewId, newReview) {
         id = $8
     `, [
       newReview.content,
-      newReview.bodyPositivity,
-      newReview.lgbtqInclusivity,
-      newReview.pocInclusivity,
-      newReview.buildingAccessibility,
-      newReview.furnitureSize,
+      newReview.bodyPositivity || null,
+      newReview.lgbtqInclusivity || null,
+      newReview.pocInclusivity || null,
+      newReview.buildingAccessibility || null,
+      newReview.furnitureSize || null,
       new Date(),
       reviewId
     ]);
@@ -291,6 +291,10 @@ exports.updateBusinessScore = async function(businessId, score) {
     ]);
   }
 };
+
+exports.query = function() {
+  return db.query.apply(db, arguments);
+}
 
 exports.getBusinessReviewsById = async function(id) {
   const rows = await db.query(

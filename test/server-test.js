@@ -25,7 +25,7 @@ const server = require('../src/server')(
 );
 
 describe("server", () => {
-  let port, jar
+  let port, jar, userId
 
   before(done => {
     const listener = server.listen(err => {
@@ -37,6 +37,12 @@ describe("server", () => {
   beforeEach(async () => {
     await database.clear();
     jar = request.jar();
+
+    userId = await database.createUser({
+      name: 'Mike Dupont',
+      facebookId: 'mike-id',
+      email: 'mike@example.com'
+    })
   });
 
   describe("login", () => {
@@ -91,7 +97,7 @@ describe("server", () => {
     });
 
     it("shows the review form if the user is logged in", async () => {
-      logIn('123');
+      logIn(userId);
 
       googlePlacesClient.getBusinessById = async function (id) {
         assert.equal(id, '567');
@@ -111,7 +117,7 @@ describe("server", () => {
 
   describe("update review", () => {
     it("updates the review's text and the business's ratings", async () => {
-      logIn('123');
+      logIn(userId);
 
       googlePlacesClient.getBusinessById = async function (id) {
         assert.equal(id, '567');
@@ -135,6 +141,20 @@ describe("server", () => {
 
       assert.equal(createReviewResponse.statusCode, 302);
       assert.equal(createReviewResponse.headers.location, '/businesses/567');
+
+      const business = await database.getBusinessByGoogleId('567');
+      const reviews = await database.getBusinessReviewsById(business.id)
+      const updateReviewResponse = await post(`businesses/567/reviews/${reviews[0].review_id}`, {
+        'content': 'I like this business. A lot.',
+        'body-positivity-rating': '5',
+        'lgbtq-inclusivity-rating': '4'
+      });
+
+      assert.equal(updateReviewResponse.statusCode, 302);
+      assert.equal(updateReviewResponse.headers.location, '/businesses/567');
+
+      let getBusinessResponse = await get('businesses/567');
+      assert(getBusinessResponse.body.includes('I like this business. A lot.'));
     });
   });
 
@@ -160,7 +180,7 @@ describe("server", () => {
   }
 
   function logIn(userId) {
-    const signedUserId = cookieSignature.sign(userId, cookieSigningSecret);
+    const signedUserId = cookieSignature.sign(String(userId), cookieSigningSecret);
     jar.setCookie(`userId=s:${signedUserId}; path=/;`, `http://localhost:${port}`)
   }
 });
