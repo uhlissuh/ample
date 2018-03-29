@@ -349,7 +349,18 @@ exports.getReviewById = async function(review_id) {
   })[0];
 };
 
-
+exports.getBusinessRatingBreakdown = async function(businessId) {
+  const [row] = await db.query(RATING_BREAKDOWN_QUERY, [ businessId ]);
+  const result = {};
+  for (const categoryName of CATEGORY_NAMES) {
+    const dbCategoryName = snakeCase(categoryName);
+    result[categoryName] = {};
+    for (const ratingValue of [1, 2, 3, 4, 5]) {
+      result[categoryName][ratingValue] = row[`${dbCategoryName}_${ratingValue}_count`];
+    }
+  }
+  return result;
+}
 
 exports.createUser = async function(user) {
   const rows = await db.query(
@@ -398,3 +409,21 @@ exports.findOrCreateUser = async function(user) {
   );
   return row[0].id;
 }
+
+const RATING_BREAKDOWN_QUERY_COLUMNS = [];
+
+for (const categoryName of CATEGORY_NAMES) {
+  const dbCategoryName = snakeCase(categoryName);
+  for (const ratingValue of [1, 2, 3, 4, 5]) {
+    RATING_BREAKDOWN_QUERY_COLUMNS.push(
+      `count(*) filter (where ${dbCategoryName} = ${ratingValue}) as ${dbCategoryName}_${ratingValue}_count`
+    );
+  }
+}
+
+const RATING_BREAKDOWN_QUERY = `
+  select
+    ${RATING_BREAKDOWN_QUERY_COLUMNS.join(',\n')}
+  from
+    reviews where business_id = $1
+`;

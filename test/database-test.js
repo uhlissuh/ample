@@ -168,6 +168,80 @@ describe("database", () => {
     });
   })
 
+  describe(".getBusinessRatingBreakdown", () => {
+    it("returns the number of users who gave the business each possible rating in each category", async () => {
+      const userId1 = await database.createUser({
+        facebookId: '1',
+        name: 'Bob Carlson',
+        email: 'bob@example.com'
+      });
+
+      const userId2 = await database.createUser({
+        facebookId: '2',
+        name: 'Rob Carlson',
+        email: 'rob@example.com'
+      });
+
+      const userId3 = await database.createUser({
+        facebookId: '3',
+        name: 'Lob Carlson',
+        email: 'lob@example.com'
+      });
+
+      const businessId = await database.createBusiness({
+        googleId: "dr-brain",
+        name: 'Dr Brain',
+        address: '123 Main St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      });
+
+      let breakdown = await database.getBusinessRatingBreakdown(businessId);
+      assert.deepEqual(breakdown.bodyPositivity, {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0
+      });
+
+      await database.createReview(userId1, businessId, {
+        content: "Cool.",
+        bodyPositivity: 4,
+        pocInclusivity: 3,
+      });
+
+      await database.createReview(userId2, businessId, {
+        content: "Not as cool.",
+        bodyPositivity: 4,
+        pocInclusivity: 2,
+      });
+
+      await database.createReview(userId3, businessId, {
+        content: "Really cool.",
+        bodyPositivity: 5,
+        pocInclusivity: 2,
+      });
+
+      breakdown = await database.getBusinessRatingBreakdown(businessId);
+      assert.deepEqual(breakdown.bodyPositivity, {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 2,
+        5: 1
+      });
+      assert.deepEqual(breakdown.pocInclusivity, {
+        1: 0,
+        2: 2,
+        3: 1,
+        4: 0,
+        5: 0
+      });
+    });
+  });
+
   describe(".updateReview", () => {
     let userId, businessId
 
