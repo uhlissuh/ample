@@ -51,32 +51,81 @@
           Score Breakdown:
         </div>
         <div class="col-12 col-lg-2">
-          body positivity
+          <a
+            id="rating-breakdown-bodyPositivity-link"
+            class="rating-breakdown-link"
+            href="#">
+            Body Positivity
+          </a>
         </div>
         <div class="col-12 col-lg-2">
-          lgbtq Inclusivity
+          <a
+            id="rating-breakdown-lgbtqInclusivity-link"
+            class="rating-breakdown-link"
+            href="#">
+            LGBTQ Inclusivity
+          </a>
         </div>
         <div class="col-12 col-lg-2">
-          poc inclusivity
+          <a
+            id="rating-breakdown-pocInclusivity-link"
+            class="rating-breakdown-link"
+            href="#">
+            POC Inclusivity
+          </a>
         </div>
         <div class="col-12 col-lg-2">
-          furniture size
+          <a
+            id="rating-breakdown-furnitureSize-link"
+            class="rating-breakdown-link"
+            href="#">
+            Furniture Size
+          </a>
         </div>
         <div class="col-12 col-lg-2">
-          building accessibility
+          <a
+            id="rating-breakdown-buildingAccessibility-link"
+            class="rating-breakdown-link"
+            href="#">
+            Building Accessibility
+          </a>
         </div>
     </div>
 
-    <% for (const starCount of [5, 4, 3, 2, 1]) { %>
-      <div class="row breakdown-star-row">
-        <div class="review-star-rating" data-size="small" data-value="<%- starCount -%>"></div>
+
+    <% for (const categoryName in ratingBreakdown) { %>
+      <div class="row rating-breakdown" id="rating-breakdown-<%- categoryName -%>" style="display: none;">
+        <div class="col-12 col-md-4">
+          <% for (const ratingValue of [5, 4, 3, 2, 1]) { %>
+            <div class="row">
+              <div class="col-3">
+                <%- ratingValue %>
+                <img src="/static/star-highlight-small.png" class="indicator" />
+              </div>
+
+              <div class="col-6">
+                <div class="percentage-bar-background">
+                  <%
+                    const percentage =
+                      ratingBreakdown[categoryName][ratingValue] /
+                      ratingBreakdown[categoryName].total * 100;
+                  %>
+                  <div class="percentage-bar" style="width: <%- percentage -%>%;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-1">
+                <span>(<%- ratingBreakdown[categoryName][ratingValue] -%>)</span>
+              </div>
+            </div>
+          <% } %>
+        </div>
       </div>
     <% } %>
   <% } %>
 
-
   <div class="row reviews-header">
-
     <div class="col-4 col-lg-2">
       <h3 class="review">Reviews</h3>
     </div>
@@ -101,7 +150,7 @@
                   <span class="reviewed-by"><%- review.date -%></span>
                 </div>
                 <div class="col-12 col-lg-2 order-12">
-                  <% if (user.id = review.user.id) { %>
+                  <% if (user.id === review.user.id) { %>
                   <a href="/businesses/<%- googleId -%>/reviews/<%- review.review_id -%>/edit">edit review</a>
                   <% } %>
                 </div>
@@ -149,6 +198,32 @@
   const starRatingElements = document.getElementsByClassName("review-star-rating");
   for (const element of starRatingElements) {
     new ample.StarRatingView(element, false);
+  }
+
+  window.addEventListener('hashchange', showRatingBreakdownForHash);
+
+  showRatingBreakdownForHash();
+
+  function showRatingBreakdownForHash(event) {
+    for (const ratingBreakdownDiv of document.getElementsByClassName('rating-breakdown')) {
+      ratingBreakdownDiv.style.display = 'none';
+    }
+    for (const ratingBreakdownLink of document.getElementsByClassName('rating-breakdown-link')) {
+      ratingBreakdownLink.classList.remove('highlighted');
+      ratingBreakdownLink.href = "#" + ratingBreakdownLink.id.replace(/-link$/, '');
+    }
+
+    const ratingBreakdownId = location.hash.slice(1);
+    const selectedRatingBreakdownDiv = document.getElementById(ratingBreakdownId);
+    if (selectedRatingBreakdownDiv) {
+      selectedRatingBreakdownDiv.style.display = 'block';
+    }
+
+    const selectedRatingBreakdownLink = document.getElementById(ratingBreakdownId + '-link');
+    if (selectedRatingBreakdownLink) {
+      selectedRatingBreakdownLink.classList.add('highlighted');
+      selectedRatingBreakdownLink.href = '#';
+    }
   }
 </script>
 

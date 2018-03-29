@@ -111,6 +111,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
       await cache.set(googleId, business, 3600);
     }
 
+    let ratingBreakdown = {};
     let reviews = [];
     if (reviewedBusiness) {
       reviews = await database.getBusinessReviewsById(reviewedBusiness.id);
@@ -119,6 +120,8 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         const date = (new Date(review.timestamp)).toDateString();
         review.date = date;
       }
+
+      ratingBreakdown = await database.getBusinessRatingBreakdown(reviewedBusiness.id);
       business.overallRating = reviewedBusiness.overallRating;
       business.reviewCount = reviewedBusiness.reviewCount;
       business.bodyPositivityAverageRating = reviewedBusiness.bodyPositivityAverageRating;
@@ -137,11 +140,12 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
 
     res.render('business',
       {
-        googleId: googleId,
+        googleId,
         photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 900, 900),
-        reviews: reviews,
-        user: user,
-        business: business
+        reviews,
+        ratingBreakdown,
+        user,
+        business
       }
     );
   });

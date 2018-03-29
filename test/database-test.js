@@ -203,7 +203,8 @@ describe("database", () => {
         2: 0,
         3: 0,
         4: 0,
-        5: 0
+        5: 0,
+        total: 0
       });
 
       await database.createReview(userId1, businessId, {
@@ -230,14 +231,16 @@ describe("database", () => {
         2: 0,
         3: 0,
         4: 2,
-        5: 1
+        5: 1,
+        total: 3
       });
       assert.deepEqual(breakdown.pocInclusivity, {
         1: 0,
         2: 2,
         3: 1,
         4: 0,
-        5: 0
+        5: 0,
+        total: 3
       });
     });
   });

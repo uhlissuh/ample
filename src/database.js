@@ -355,9 +355,14 @@ exports.getBusinessRatingBreakdown = async function(businessId) {
   for (const categoryName of CATEGORY_NAMES) {
     const dbCategoryName = snakeCase(categoryName);
     result[categoryName] = {};
+
+    let totalRatingCount = 0;
     for (const ratingValue of [1, 2, 3, 4, 5]) {
-      result[categoryName][ratingValue] = row[`${dbCategoryName}_${ratingValue}_count`];
+      const ratingCount = parseInt(row[`${dbCategoryName}_${ratingValue}_count`]);
+      result[categoryName][ratingValue] = ratingCount;
+      totalRatingCount += ratingCount;
     }
+    result[categoryName].total = totalRatingCount;
   }
   return result;
 }

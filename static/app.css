@@ -281,8 +281,22 @@ a:hover {
   float: right;
 }
 
+.rating-breakdown-link.highlighted {
+  background-color: red;
+}
+
 .reviewed-by {
   color: #A9A9A9;
+}
+
+.percentage-bar-background {
+  background-color: #f9d9d9;
+  height: 20px;
+}
+
+.percentage-bar {
+  background-color: #EB6E79;
+  height: 100%;
 }
 
 @media screen and (max-width: 800px) {
