@@ -78,6 +78,7 @@
 
 .star-box {
   padding-right: 30px;
+  margin-top: 10px;
 }
 
 .navigation {
@@ -112,10 +113,8 @@
 
 .business-header {
   margin-top: 30px;
-  height: 330px;
   margin-bottom: 30px;
 }
-
 
 .cards {
   padding-top: 50px;
@@ -128,16 +127,16 @@
 
 .business-by-line {
   font-size: 20px;
+  margin-bottom: 0px;
 }
 
-.reviews-title {
+.reviews-body {
   padding-top: 10px;
 }
 
 .review-button {
   background-color: #EB6E79;
   color: white;
-  /* width: 75%; */
 }
 
 .summary-row {
@@ -184,6 +183,10 @@
   margin-top: 20px;
 }
 
+.review {
+  font-family: 'Roboto', sans-serif;
+}
+
 .be-first-words {
   color: #EB6E79;
 }
@@ -221,7 +224,7 @@ a:hover {
 }
 
 .biz-img-thumb {
-object-fit: cover;
+  object-fit: cover;
   width:80px;
   height:80px;
 }
@@ -235,8 +238,10 @@ object-fit: cover;
 }
 
 .breakdown-section {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-top: .5px solid #d3d3d3;
+  border-bottom: .5px solid #d3d3d3;
 }
 
 .search-results-title {
@@ -276,31 +281,39 @@ object-fit: cover;
   float: right;
 }
 
-@media screen and (max-width: 400px) {
+.reviewed-by {
+  color: #A9A9A9;
+}
+
+@media screen and (max-width: 800px) {
   .dr-name {
-    font-family: 'Roboto', sans-serif;
-    color: #A9A9A9;
     font-size: 20px;
+    margin-top:15px;
   }
 
   .business-by-line {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .business-header {
-    height: 150px;
-    margin-top: 25px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+
   }
 
   .biz-img {
-    object-fit: cover;
-    width:175px;
-    height:175px;
+    /* object-fit: cover; */
+    width:100%;
+    height: 275px;
   }
 
   .biz-img-thumb {
     width:65px;
     height:65px;
+  }
+
+  .biz-image-col {
+    padding: 0px;
   }
 
   .main-background {
@@ -359,4 +372,12 @@ object-fit: cover;
     margin-top: 5px;
   }
 
+  .score-row {
+    border-top: .5px solid #d3d3d3;
+    margin-top: 10px;
+  }
+
+  .rating-doodad {
+    text-align: center;
+  }
 }

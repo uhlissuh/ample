@@ -1,137 +1,140 @@
 <div class="container">
   <div class="row business-header">
 
-    <div class="col-8 col-md-8 align-self-end order-12">
-      <div class="row">
-        <div class='col-md-12'>
-          <h1 class="dr-name"><%- business.name -%></h1>
-          <p class="business-by-line address"> <%- business.formatted_address -%></p>
-          <p class="business-by-line"> <%- business.formatted_phone_number -%></p>
-        </div>
-      </div>
-      <div class="row">
-        <% if (reviews.length === 0) { %>
-          <div class="col-md-6">
-              <p>Be the first to review!</p>
-          </div>
-        <% } else { %>
-          <div class="col-4">
-            <div>
-              <span class="summary-item">
-                <%- business.overallRating -%>
-              </span>
-              <img src="/static/star-highlight-large.png" class="indicator" />
-            </div>
+    <div class="col-12 col-lg-8 align-self-end order-12">
+
+        <h1 class="dr-name"><%- business.name -%></h1>
+        <p class="business-by-line address"> <%- business.formatted_address -%></p>
+        <p class="business-by-line"> <%- business.formatted_phone_number -%></p>
+
+      <div class="row score-row">
+        <% if (reviews.length != 0) { %>
+          <div class="col-6 rating-doodad">
+            <span class="summary-item">
+              <%- business.overallRating -%>
+            </span>
+            <img src="/static/star-highlight-large.png" class="indicator" />
+            <br />
             <span>Overall Rating</span>
           </div>
 
-          <div class="col-4">
-            <div>
-              <span class="summary-item">
-                <%- business.reviewCount -%>
-              </span>
-              <img src="/static/check-small.png" class="indicator" />
-            </div>
+          <div class="col-6 rating-doodad">
+            <span class="summary-item">
+              <%- business.reviewCount -%>
+            </span>
+            <img src="/static/checkmark.png" class="indicator" />
+            <br />
             <span>Total reviews</span>
           </div>
         <% } %>
       </div>
     </div>
 
-    <div class="col-md-4 align-self-end order-1 order-md-12">
+    <div class="col-12 col-lg-4 align-self-end order-1 order-lg-12 biz-image-col">
       <% if (photoURL) { %>
       <img
-      class="img-thumbnail img-fluid biz-img"
+      class="img-fluid biz-img"
       src="<%- photoURL -%>"
       />
       <% } else { %>
       <img
-      class="img-thumbnail img-fluid biz-img"
-      src="/static/no-image-yet-big.png"
+      class="img-fluid biz-img"
+      src="/static/placeholder-wide.png"
       />
       <% } %>
     </div>
   </div>
 
-  <div class="row border rounded breakdown-section">
-      <div class="col-md-2">
-        body positivity
+  <% if (reviews.length != 0) { %>
+    <div class="row border-top border-bottom breakdown-section">
+        <div class="col-12 col-lg-2">
+          Score Breakdown:
+        </div>
+        <div class="col-12 col-lg-2">
+          body positivity
+        </div>
+        <div class="col-12 col-lg-2">
+          lgbtq Inclusivity
+        </div>
+        <div class="col-12 col-lg-2">
+          poc inclusivity
+        </div>
+        <div class="col-12 col-lg-2">
+          furniture size
+        </div>
+        <div class="col-12 col-lg-2">
+          building accessibility
+        </div>
+    </div>
+
+    <% for (const starCount of [5, 4, 3, 2, 1]) { %>
+      <div class="row breakdown-star-row">
+        <div class="review-star-rating" data-size="small" data-value="<%- starCount -%>"></div>
       </div>
-      <div class="col-md-2">
-        lgbtq Inclusivity
-      </div>
-      <div class="col-md-2">
-        poc inclusivity
-      </div>
-      <div class="col-md-2">
-        furniture size
-      </div>
-      <div class="col-md-2">
-        building accessibility
-      </div>
-  </div>
+    <% } %>
+  <% } %>
 
 
   <div class="row reviews-header">
 
-    <div class="col-md-2">
-      <h2>Reviews</h2>
+    <div class="col-4 col-lg-2">
+      <h3 class="review">Reviews</h3>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-6">
       <a
         class="btn btn-info review-button"
         href="/businesses/<%- googleId -%>/reviews/new"
-        role="button"> Add Your Review + </a>
+        role="button">Add Your Review</a>
     </div>
   </div>
 
-  <div class="row reviews-title">
-    <div class="col-md-12">
-      <% if (reviews.length != 0) { %>
-          <ul class="list-group">
-            <% for (const review of reviews) { %>
-              <li class="list-group-item">
-                <div class="row">
-                  <div class="col-2">
-                    <span><%- review.user.name -%></span>  says:
-                    </br/>
-                    <span><%- review.date -%></span>
-                    </br>
-                    <% if (user.id = review.user.id) { %>
-                    <a href="/businesses/<%- googleId -%>/reviews/<%- review.review_id -%>/edit">edit review</a>
-                    <% } %>
+  <div class="row reviews-body">
+    <div class="col-12">
+    <% if (reviews.length != 0) { %>
+        <ul class="list-group list-group-flush">
+          <% for (const review of reviews) { %>
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-2 order-1">
+                  <span class="reviewed-by">Reviewed by <%- review.user.name -%></span>
+                  <span class="reviewed-by"><%- review.date -%></span>
+                </div>
+                <div class="col-12 col-lg-2 order-12">
+                  <% if (user.id = review.user.id) { %>
+                  <a href="/businesses/<%- googleId -%>/reviews/<%- review.review_id -%>/edit">edit review</a>
+                  <% } %>
+                </div>
+                <div class="col-12 col-md-6  col-lg-4 star-box order-2">
+                  <div class="row float-right">
+                    <span class="star-rating">Body Positivity</span>
+                    <div class="review-star-rating" data-value="<%- review.bodyPositivity -%>" data-size="small"></div>
                   </div>
-                  <div class="col-4 star-box">
-                    <div class="row float-right">
-                      <span class="star-rating">Body Positivity</span>
-                      <div class="review-star-rating" data-value="<%- review.bodyPositivity -%>" data-size="small"></div>
-                    </div>
-                    <div class="row float-right">
-                      <label class="star-rating">LGBTQ Inclusivity</label>
-                      <div class="review-star-rating" data-value="<%- review.lgbtqInclusivity -%>" data-size="small">
-                      </div>
-                    </div>
-                    <div class="row float-right">
-                      <label class="star-rating">POC Inclusivity</label>
-                      <div class="review-star-rating" data-value="<%- review.pocInclusivity -%>" data-size="small">
-                      </div>
-                    </div>
-                    <div class="row float-right">
-                      <label class="star-rating">Building Accessibility</label>
-                      <div class="review-star-rating" data-value="<%- review.buildingAccessibility -%>" data-size="small">
-                      </div>
-                    </div>
-                    <div class="row float-right">
-                      <label class="star-rating">Furniture for Large Bodies</label>
-                      <div class="review-star-rating" data-value="<%- review.furnitureSize -%>" data-size="small">
-                      </div>
+                  <div class="row float-right">
+                    <label class="star-rating">LGBTQ Inclusivity</label>
+                    <div class="review-star-rating" data-value="<%- review.lgbtqInclusivity -%>" data-size="small">
                     </div>
                   </div>
-                  <div class="col-6 review-content-col">
-                    <%- review.content -%>
+                  <div class="row float-right">
+                    <label class="star-rating">POC Inclusivity</label>
+                    <div class="review-star-rating" data-value="<%- review.pocInclusivity -%>" data-size="small">
+                    </div>
+                  </div>
+                  <div class="row float-right">
+                    <label class="star-rating">Building Accessibility</label>
+                    <div class="review-star-rating" data-value="<%- review.buildingAccessibility -%>" data-size="small">
+                    </div>
+                  </div>
+                  <div class="row float-right">
+                    <label class="star-rating">Furniture for Large Bodies</label>
+                    <div class="review-star-rating" data-value="<%- review.furnitureSize -%>" data-size="small">
+                    </div>
                   </div>
                 </div>
+                <div class="col-12 col-lg-6 review-content-col order-3">
+                  <%- review.content -%>
+                </div>
+              </div>
               </li>
             <% } %>
           </ul>

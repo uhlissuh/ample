@@ -138,7 +138,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     res.render('business',
       {
         googleId: googleId,
-        photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 700, 700),
+        photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 900, 900),
         reviews: reviews,
         user: user,
         business: business
