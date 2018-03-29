@@ -43,11 +43,21 @@
 }
 
 .star-rating-label {
-  width: 31px;
-  height: 31px;
+  width: 35px;
+  height: 35px;
   background-image: url('/static/star-no-highlight-large.png');
   background-repeat: no-repeat;
 }
+
+
+.star-rating-label.highlighted {
+  background-image: url('/static/star-highlight-large.png');
+}
+
+.star-rating-label.half-highlighted {
+  background-image: url('/static/star-half-highlight-large.png');
+}
+
 
 .star-rating-label-small {
   width: 21px;
@@ -63,14 +73,10 @@
   background-repeat: no-repeat;
 }
 
-
-.star-rating-label.highlighted {
-  background-image: url('/static/star-highlight-large.png');
+.star-rating-label-small.half-highlighted {
+  background-image: url('/static/star-half-highlight-small.png');
 }
 
-.star-rating-label.half-highlighted {
-  background-image: url('/static/star-half-highlight-large.png');
-}
 
 .review-star-rating {
   padding-left: 10px;
@@ -122,6 +128,7 @@
 
 .dr-name {
   font-family: 'Roboto', sans-serif;
+  font-size: 20px;
   color: #A9A9A9;
 }
 
@@ -144,7 +151,10 @@
 }
 
 .review-business-top-row {
-  padding-top: 40px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border-bottom: .5px solid #d3d3d3;
+  padding-bottom: 10px;
 }
 
 .review-business-bottom-row {
@@ -152,8 +162,10 @@
 }
 
 .review-title {
-  padding-top: 40px;
-  color: #EB6E79;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: black;
+  font-family: 'Roboto', sans-serif;
 }
 
 .star-rating{
@@ -299,9 +311,13 @@ a:hover {
   height: 100%;
 }
 
+.main-form {
+  width: 100%;
+}
+
 @media screen and (max-width: 800px) {
   .dr-name {
-    font-size: 20px;
+    font-size: 25px;
     margin-top:15px;
   }
 
@@ -313,6 +329,10 @@ a:hover {
     margin-top: 0px;
     margin-bottom: 5px;
 
+  }
+
+  .star-div {
+    margin-bottom: 10px;
   }
 
   .biz-img {
@@ -394,4 +414,25 @@ a:hover {
   .rating-doodad {
     text-align: center;
   }
+
+
+  .star-rating-label {
+    width: 42px;
+    height: 42px;
+    background-image: url('/static/star-no-highlight-large-phone.png');
+    background-repeat: no-repeat;
+  }
+
+  label.star-rating {
+    font-size: 20px;
+  }
+
+  .star-rating-label.highlighted {
+    background-image: url('/static/star-highlight-large-phone.png');
+  }
+
+  .star-rating-label.half-highlighted {
+    background-image: url('/static/star-half-highlight-large-phone.png');
+  }
+
 }
