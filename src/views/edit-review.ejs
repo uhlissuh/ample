@@ -1,0 +1,82 @@
+<div class= "container">
+
+  <div class="row review-business-top-row">
+    <div class="col-12 col-lg-6">
+      <span class="dr-name"><%- business.name -%></span>
+      <br />
+      <%- business.address -%>
+      <br />
+      <%- business.phone -%>
+    </div>
+  </div>
+  <div class="row review-title">
+    <div class="col-12">
+      <h2>Edit Your Review</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form class="main-form" method="POST" action="/businesses/<%- business.googleId -%>/reviews/<%- review.reviewId -%>">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-12">
+              <label class="star-rating" for="body-positivity-rating">Body Positivity Rating</label>
+              <div
+                id="body-positivity-rating"
+                data-name="body-positivity-rating"
+                data-value="<%- review.bodyPositivity %>"></div>
+              <label class="star-rating" for="lgbtq-inclusivity-rating">LGBTQ Inclusivity Rating</label>
+              <div
+                id="lgbtq-inclusivity-rating"
+                data-name="lgbtq-inclusivity-rating"
+                data-value="<%- review.lgbtqInclusivity %>"></div>
+              <label class="star-rating" for="poc-inclusivity-rating">P.O.C Inclusivity Rating</label>
+              <div
+                id="poc-inclusivity-rating"
+                data-name="poc-inclusivity-rating"
+                data-value="<%- review.pocInclusivity %>"></div>
+              <label class="star-rating" for="building-accessibility-rating">Building and Space Accessibility Rating</label>
+              <div
+                id="building-accessibility-rating"
+                data-name="building-accessibility-rating"
+                data-value="<%- review.buildingAccessibility %>"></div>
+              <label class="star-rating" for="furniture-size-rating">Furniture for Fat Bodies</label>
+              <div
+                id="furniture-size-rating"
+                data-name="furniture-size-rating"
+                data-value="<%- review.furnitureSize %>"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-lg-9">
+              <textarea class="form-control" name="content" rows="8"><%- review.content -%></textarea>
+            </div>
+          </div>
+          <div class="row review-submit-row">
+            <div class="col-12 col-lg-9">
+              <button type="submit" class="btn review-submit-button" >Update Review</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<%- contentFor('scripts') -%>
+<script>
+for (const elementId of [
+  'body-positivity-rating',
+  'lgbtq-inclusivity-rating',
+  'poc-inclusivity-rating',
+  'building-accessibility-rating',
+  'furniture-size-rating'
+]) {
+  new ample.StarRatingView(document.getElementById(elementId), true);
+}
+</script>
+
+<%- contentFor('title') -%>
+Ample | Edit Review
