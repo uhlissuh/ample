@@ -338,6 +338,60 @@ describe("database", () => {
     });
   });
 
+  describe(".getProfileInformationForUser", () => {
+    it("gets reviews the user has made", async () => {
+      const id = await database.createUser({
+        facebookId: '5',
+        name: 'John Smith',
+        email: 'john@example.com',
+      });
+
+      const businessId1 = await database.createBusiness({
+        googleId: "dr-brain",
+        name: 'Dr Brain',
+        address: '123 Main St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      });
+
+      const businessId2 = await database.createBusiness({
+        googleId: "dr-coffee",
+        name: 'Dr coffee',
+        address: '123 South St',
+        phone: '333-555-5555',
+        latitude: 37.346923217936834,
+        longitude: -122.3456739746094
+      });
+
+      const review1 = await database.createReview(id, businessId1, {
+        content: "Cool.",
+        bodyPositivity: 4,
+        pocInclusivity: 3,
+      });
+
+      const review2 = await database.createReview(id, businessId2, {
+        content: "BAD.",
+        bodyPositivity: 1,
+        pocInclusivity: 1,
+      });
+
+
+      const profileInfo = await database.getProfileInformationForUser(id);
+
+      profileInfo.reviews.sort();
+      const reviewsContent = [];
+      const reviewsBodyPositivity = []
+      for (review of profileInfo.reviews) {
+        reviewsContent.push(review.content);
+        reviewsBodyPositivity.push(review.bodyPositivity);
+      }
+
+      assert.deepEqual(reviewsContent, ['Cool.', "BAD."]);
+      assert.deepEqual(reviewsBodyPositivity, [4, 1]);
+    });
+  });
+
   describe(".findOrCreateUser", () => {
     it("creates a user when none exists with the given facebook id", async () => {
       const id = await database.findOrCreateUser({
@@ -377,5 +431,4 @@ describe("database", () => {
       });
     });
   });
-
 });

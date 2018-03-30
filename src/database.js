@@ -304,24 +304,26 @@ exports.getBusinessReviewsById = async function(id) {
      order by reviews.timestamp desc`,
     [id]
   );
-  return rows.map(row => {
-    return {
-      review_id: row.review_id,
-      business_id: row.business_id,
-      content: row.content,
-      timestamp: row.timestamp.getTime(),
-      bodyPositivity: row.body_positivity,
-      pocInclusivity: row.poc_inclusivity,
-      lgbtqInclusivity: row.lgbtq_inclusivity,
-      buildingAccessibility: row.building_accessibility,
-      furnitureSize: row.furniture_size,
-      user: {
-        id: row.user_id,
-        name: row.name
-      },
-    };
-  });
+  return rows.map(reviewFromRow);
 };
+
+function reviewFromRow(row) {
+  return {
+    review_id: row.review_id,
+    business_id: row.business_id,
+    content: row.content,
+    timestamp: row.timestamp.getTime(),
+    bodyPositivity: row.body_positivity,
+    pocInclusivity: row.poc_inclusivity,
+    lgbtqInclusivity: row.lgbtq_inclusivity,
+    buildingAccessibility: row.building_accessibility,
+    furnitureSize: row.furniture_size,
+    user: {
+      id: row.user_id,
+      name: row.name
+    },
+  };
+}
 
 exports.getReviewById = async function(review_id) {
   const row = await db.query(
@@ -413,6 +415,16 @@ exports.findOrCreateUser = async function(user) {
     ]
   );
   return row[0].id;
+}
+
+exports.getProfileInformationForUser = async function(userId) {
+  const reviewRows = await db.query(`
+    select * from reviews where user_id = $1
+  `, [userId]);
+
+  console.log(reviewRows);
+
+  return {reviews: reviewRows.map(reviewFromRow)};
 }
 
 const RATING_BREAKDOWN_QUERY_COLUMNS = [];
