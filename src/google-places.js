@@ -1,20 +1,20 @@
 const GOOGLE_URL = 'https://maps.googleapis.com/maps/api'
-const {GOOGLE_API_KEY} = process.env
 
 module.exports =
 class GooglePlacesClient {
-  constructor(request) {
+  constructor(apiKey, request) {
+    this.apiKey = apiKey;
     this.request = request || require('request-promise');
   }
 
   getPhotoURL(photoReference, maxWidth, maxHeight) {
-    return `${GOOGLE_URL}/place/photo?key=${GOOGLE_API_KEY}&maxwidth=${maxWidth}&maxheight=${maxHeight}&photoreference=${photoReference}`
+    return `${GOOGLE_URL}/place/photo?key=${this.apiKey}&maxwidth=${maxWidth}&maxheight=${maxHeight}&photoreference=${photoReference}`
   }
 
   async getBusinessesNearCoordinates(term, latitude, longitude) {
     const response = await this.makeRequest(
       `place/nearbysearch/json?` +
-      `key=${GOOGLE_API_KEY}&` +
+      `key=${this.apiKey}&` +
       `location=${latitude},${longitude}&` +
       `radius=50000&` +
       `keyword=${encodeURIComponent(term)}`
@@ -24,21 +24,21 @@ class GooglePlacesClient {
 
   async getBusinessById(id) {
     const response = await this.makeRequest(
-      `place/details/json?key=${GOOGLE_API_KEY}&placeid=${id}`
+      `place/details/json?key=${this.apiKey}&placeid=${id}`
     );
     return response.result;
   }
 
   async getCoordinatesForLocationName(locationName) {
     const response = await this.makeRequest(
-      `geocode/json?key=${GOOGLE_API_KEY}&address=${encodeURIComponent(locationName)}`
+      `geocode/json?key=${this.apiKey}&address=${encodeURIComponent(locationName)}`
     );
     return response.results[0].geometry.location;
   }
 
   async autocompletePlaceName(input) {
     const response = await this.makeRequest(
-      `place/autocomplete/json?key=${GOOGLE_API_KEY}&types=geocode&input=${encodeURIComponent(input)}`
+      `place/autocomplete/json?key=${this.apiKey}&types=geocode&input=${encodeURIComponent(input)}`
     );
     return response.predictions.map(prediction => prediction.description)
   }

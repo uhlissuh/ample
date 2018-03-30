@@ -19,8 +19,10 @@ database.connect("dev");
 const app = server(
   COOKIE_SIGNING_SECRET,
   new FacebookClient(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET),
-  new GooglePlacesClient(),
   memcached
+  new GooglePlacesClient(
+    GOOGLE_API_KEY
+  ),
 );
 
 app.listen(PORT, err => {

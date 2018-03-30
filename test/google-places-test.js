@@ -4,7 +4,7 @@ const assert = require('assert');
 describe("google places", () => {
   describe(".autocompletePlaceName", () => {
     it("autocompletes the place name using the google places API", async () => {
-      const client = new GooglePlacesClient(async () => {
+      const client = new GooglePlacesClient('', async () => {
         return require('./fixtures/google-places-autocomplete-response.json');
       });
 
