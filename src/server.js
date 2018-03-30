@@ -6,6 +6,15 @@ const database = require("./database");
 const apiServer = require('./api-server');
 const BusinessSearch = require("./business-search");
 const catchErrors = require('./catch-errors');
+const pluralize = require('pluralize');
+
+const CATEGORY_DESCRIPTIONS = {
+  bodyPositivity: 'Body Positivity',
+  buildingAccessibility: 'Building Accessibility',
+  lgbtqInclusivity: 'LGBTQ Inclusivity',
+  furnitureSize: 'Fat-Friendly Furniture',
+  pocInclusivity: 'POC Inclusivity'
+};
 
 module.exports =
 function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
@@ -148,6 +157,8 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         ratingBreakdown,
         user,
         isMobile,
+        pluralize,
+        CATEGORY_DESCRIPTIONS,
         business
       }
     );
@@ -186,7 +197,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const business = await database.getBusinessByGoogleId(req.params.googleId);
 
     if (review.user.id === parseInt(userId)) {
-      res.render('edit_review', {user, review, business});
+      res.render('edit-review', {user, review, business});
     } else {
       throw new Error();
     }

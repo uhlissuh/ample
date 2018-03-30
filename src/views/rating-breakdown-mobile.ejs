@@ -1,0 +1,47 @@
+<div id="breakdown-accordion">
+  <% for (const categoryName in ratingBreakdown) { %>
+    <div class="breakdown-section">
+      <div>
+        <a
+          class="rating-breakdown-link"
+          data-toggle="collapse"
+          data-target="#rating-breakdown-<%- categoryName -%>"
+          href="#">
+          <%- CATEGORY_DESCRIPTIONS[categoryName] %>
+        </a>
+      </div>
+
+      <div
+        id="rating-breakdown-<%- categoryName -%>"
+        data-parent="#breakdown-accordion"
+        class="row rating-breakdown collapse">
+        <div class="card-body">
+          <% for (const ratingValue of [5, 4, 3, 2, 1]) { %>
+            <div class="row">
+              <div class="col-3 text-right">
+                <%- ratingValue %>
+                <img src="/static/star-highlight-small.png" class="indicator" />
+              </div>
+
+              <div class="col-6">
+                <div class="percentage-bar-background">
+                  <div
+                    class="percentage-bar"
+                    style="width: <%- ratingBreakdown[categoryName][ratingValue].percentage -%>%;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <span class="small">
+                  <% const {count} = ratingBreakdown[categoryName][ratingValue]; %>
+                  <%- pluralize('rating', count, true) -%>
+                </span>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>

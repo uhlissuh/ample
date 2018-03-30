@@ -199,11 +199,11 @@ describe("database", () => {
 
       let breakdown = await database.getBusinessRatingBreakdown(businessId);
       assert.deepEqual(breakdown.bodyPositivity, {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0,
+        1: {count: 0, percentage: null},
+        2: {count: 0, percentage: null},
+        3: {count: 0, percentage: null},
+        4: {count: 0, percentage: null},
+        5: {count: 0, percentage: null},
         total: 0
       });
 
@@ -227,19 +227,19 @@ describe("database", () => {
 
       breakdown = await database.getBusinessRatingBreakdown(businessId);
       assert.deepEqual(breakdown.bodyPositivity, {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 2,
-        5: 1,
+        1: {count: 0, percentage: 0},
+        2: {count: 0, percentage: 0},
+        3: {count: 0, percentage: 0},
+        4: {count: 2, percentage: 67},
+        5: {count: 1, percentage: 33},
         total: 3
       });
       assert.deepEqual(breakdown.pocInclusivity, {
-        1: 0,
-        2: 2,
-        3: 1,
-        4: 0,
-        5: 0,
+        1: {count: 0, percentage: 0},
+        2: {count: 2, percentage: 67},
+        3: {count: 1, percentage: 33},
+        4: {count: 0, percentage: 0},
+        5: {count: 0, percentage: 0},
         total: 3
       });
     });

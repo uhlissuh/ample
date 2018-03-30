@@ -5,10 +5,10 @@ let db = null;
 
 const CATEGORY_NAMES = [
   'bodyPositivity',
-  'pocInclusivity',
-  'lgbtqInclusivity',
   'furnitureSize',
   'buildingAccessibility',
+  'pocInclusivity',
+  'lgbtqInclusivity',
 ];
 
 exports.connect = function(env) {
@@ -361,10 +361,19 @@ exports.getBusinessRatingBreakdown = async function(businessId) {
     let totalRatingCount = 0;
     for (const ratingValue of [1, 2, 3, 4, 5]) {
       const ratingCount = parseInt(row[`${dbCategoryName}_${ratingValue}_count`]);
-      result[categoryName][ratingValue] = ratingCount;
+      result[categoryName][ratingValue] = {count: ratingCount, percentage: null};
       totalRatingCount += ratingCount;
     }
     result[categoryName].total = totalRatingCount;
+
+    if (totalRatingCount > 0) {
+      for (const ratingValue of [1, 2, 3, 4, 5]) {
+        result[categoryName][ratingValue].percentage = Math.round(
+          result[categoryName][ratingValue].count /
+          totalRatingCount * 100
+        );
+      }
+    }
   }
   return result;
 }
