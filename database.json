@@ -12,5 +12,6 @@
     "password": "",
     "host": "localhost",
     "database": "ample_test"
-  }
+  },
+  "production": {"ENV": "DATABASE_URL"}
 }
