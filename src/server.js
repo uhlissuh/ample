@@ -10,10 +10,10 @@ const pluralize = require('pluralize');
 
 const CATEGORY_DESCRIPTIONS = {
   bodyPositivity: 'Body Positivity',
-  buildingAccessibility: 'Building Accessibility',
-  lgbtqInclusivity: 'LGBTQ Inclusivity',
   furnitureSize: 'Fat-Friendly Furniture',
-  pocInclusivity: 'POC Inclusivity'
+  buildingAccessibility: 'Building Accessibility',
+  pocInclusivity: 'POC Inclusivity',
+  lgbtqInclusivity: 'LGBTQ Inclusivity',
 };
 
 module.exports =

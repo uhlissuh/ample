@@ -153,6 +153,7 @@
 .review-button {
   background-color: #EB6E79;
   color: white;
+  width: 100%;
 }
 
 .summary-row {
@@ -221,7 +222,7 @@ a {
 }
 
 a:hover {
-  color: #FDA972;
+  color: #CC5C4A;
 }
 
 .reviewer-headline {
@@ -262,6 +263,11 @@ a:hover {
   padding-top: 15px;
   padding-bottom: 15px;
   border-bottom: .5px solid #d3d3d3;
+}
+
+.link-highlighted {
+  color: #CC5C4A;
+  text-decoration: underline;
 }
 
 .search-results-title {
@@ -343,7 +349,6 @@ a:hover {
     margin-bottom: 5px;
     border-bottom: 0px;
     padding-bottom: 0px;
-
   }
 
   .star-div {
