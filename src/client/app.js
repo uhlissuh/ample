@@ -1,3 +1,4 @@
 ample = {
-  StarRatingView: require('./star-rating-view')
-}
+  StarRatingView: require('./star-rating-view'),
+  collapseNoAnimate: require('./collapse-no-animate')
+};
