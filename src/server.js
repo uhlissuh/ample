@@ -98,6 +98,8 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
   });
 
   app.get('/businesses/:googleId', async function(req, res) {
+    const isMobile = req.headers.host.startsWith('mobile.');
+
     let user = null;
     const userId = req.signedCookies['userId'];
     if (userId) {
@@ -145,6 +147,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         reviews,
         ratingBreakdown,
         user,
+        isMobile,
         business
       }
     );
