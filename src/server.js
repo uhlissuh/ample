@@ -115,8 +115,9 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
       user = await database.getUserById(req.signedCookies['userId'])
     }
     const googleId = req.params.googleId;
-    let business = await cache.get(googleId);
     const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
+
+    let business = await cache.get(googleId);
     if (!business) {
       business = await googlePlacesClient.getBusinessById(googleId);
       await cache.set(googleId, business, 3600);
@@ -127,7 +128,6 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     if (reviewedBusiness) {
       reviews = await database.getBusinessReviewsById(reviewedBusiness.id);
       for (review of reviews) {
-        const locale = 'en-US';
         const date = (new Date(review.timestamp)).toDateString();
         review.date = date;
       }

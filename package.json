@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "server for Ample app",
   "main": "server.js",
+  "engines": {
+    "node": "^8.11"
+  },
   "dependencies": {
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-beta.3",
@@ -14,7 +17,7 @@
     "express": "^4.15.3",
     "express-ejs-layouts": "^2.3.1",
     "fb": "^2.0.0",
-    "memcached": "^2.2.2",
+    "memjs": "^1.2.0",
     "pg-promise": "^5.9.5",
     "pluralize": "^7.0.0",
     "request": "^2.81.0",

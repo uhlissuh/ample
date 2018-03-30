@@ -1,2 +1,3 @@
 const database = require('../src/database');
-database.connect("test");
+const databaseConfig = require("../database.json");
+database.connect(databaseConfig.test);
