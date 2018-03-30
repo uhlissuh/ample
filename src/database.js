@@ -431,8 +431,6 @@ exports.getProfileInformationForUser = async function(userId) {
     select * from reviews where user_id = $1
   `, [userId]);
 
-  console.log(reviewRows);
-
   return {reviews: reviewRows.map(reviewFromRow)};
 }
 
