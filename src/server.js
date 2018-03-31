@@ -7,6 +7,7 @@ const apiServer = require('./api-server');
 const BusinessSearch = require("./business-search");
 const catchErrors = require('./catch-errors');
 const pluralize = require('pluralize');
+const sslRedirect = require('heroku-ssl-redirect');
 
 const CATEGORY_DESCRIPTIONS = {
   bodyPositivity: 'Body Positivity',
@@ -30,6 +31,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
   app.use(bodyParser.urlencoded());
   app.use(bodyParser.json());
   app.use(cookieParser(cookieSigningSecret));
+  app.use(sslRedirect(['production'], 301));
 
   app.get('/', async (req, res) => {
     const userId = req.signedCookies["userId"];
