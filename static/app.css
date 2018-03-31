@@ -280,12 +280,19 @@ a:hover {
 }
 
 .recent-review-card {
-  height: 200px;
   margin-bottom: 15px;
 }
 
 .card-title {
   color: #A9A9A9;
+}
+
+.card-text {
+  height: 150px;
+}
+
+.card-top {
+  height: 80px;
 }
 
 .review-count {
@@ -335,6 +342,19 @@ a:hover {
 }
 
 @media screen and (max-width: 800px) {
+
+  .recent-review-card {
+    margin-bottom: 15px;
+  }
+
+  .card-text {
+    height: 120px;
+  }
+
+  .card-top {
+    height: 80px;
+  }
+
   .dr-name {
     font-size: 25px;
     margin-top:15px;
