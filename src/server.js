@@ -261,6 +261,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
 
     console.error('Caught Error');
     console.error(error.stack);
+    res.status(500);
     res.render('error', {user, error});
   });
 
