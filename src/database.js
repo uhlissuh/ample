@@ -360,7 +360,7 @@ exports.getBusinessRatingBreakdown = async function(businessId) {
     let totalRatingCount = 0;
     for (const ratingValue of [1, 2, 3, 4, 5]) {
       const ratingCount = parseInt(row[`${dbCategoryName}_${ratingValue}_count`]);
-      result[categoryName][ratingValue] = {count: ratingCount, percentage: null};
+      result[categoryName][ratingValue] = {count: ratingCount, percentage: 0};
       totalRatingCount += ratingCount;
     }
     result[categoryName].total = totalRatingCount;

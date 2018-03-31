@@ -3,7 +3,7 @@ module.exports = class StarRatingView {
     this.element = element;
     const inputName = element.dataset.name;
     if (element.dataset.value != null) {
-      this.ratingValue = parseInt(element.dataset.value) - 1;
+      this.ratingValue = parseFloat(element.dataset.value) - 1;
     } else {
       this.ratingValue = null;
     }
