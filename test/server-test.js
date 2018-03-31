@@ -155,6 +155,11 @@ describe("server", () => {
 
       let getBusinessResponse = await get('businesses/567');
       assert(getBusinessResponse.body.includes('I like this business. A lot.'));
+
+      // Can still view the business if not logged in.
+      logOut();
+      getBusinessResponse = await get('businesses/567');
+      assert(getBusinessResponse.body.includes('I like this business. A lot.'));
     });
   });
 
@@ -182,5 +187,9 @@ describe("server", () => {
   function logIn(userId) {
     const signedUserId = cookieSignature.sign(String(userId), cookieSigningSecret);
     jar.setCookie(`userId=s:${signedUserId}; path=/;`, `http://localhost:${port}`)
+  }
+
+  function logOut() {
+    jar.setCookie(`userId=; path=/;`, `http://localhost:${port}`)
   }
 });
