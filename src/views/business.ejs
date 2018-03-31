@@ -88,8 +88,8 @@
                 <div class="col-12 col-md-6  col-lg-4 star-box order-2">
                   <% for (const categoryName in CATEGORY_DESCRIPTIONS) { %>
                     <div class="row float-right">
-                      <label class="star-rating"><%- CATEGORY_DESCRIPTIONS[categoryName] -%></label>
-                      <div class="review-star-rating" data-value="<%- review[categoryName] -%>" data-size="small"></div>
+                      <label class="star-rating-label"><%- CATEGORY_DESCRIPTIONS[categoryName] -%></label>
+                      <div class="star-rating" data-value="<%- review[categoryName] -%>" data-size="small"></div>
                     </div>
                   <% } %>
                 </div>
@@ -108,11 +108,7 @@
 
 <%- contentFor('scripts') -%>
 <script>
-  const starRatingElements = document.getElementsByClassName("review-star-rating");
-  for (const element of starRatingElements) {
-    new ample.StarRatingView(element, false);
-  }
-
+  ample.setUpStarRatings();
   ample.collapseNoAnimate();
 </script>
 

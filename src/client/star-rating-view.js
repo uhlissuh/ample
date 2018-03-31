@@ -1,5 +1,12 @@
-module.exports = class StarRatingView {
-  constructor(element, interactive) {
+module.exports =
+function setUpStarRatings() {
+  for (const starRatingElement of document.getElementsByClassName('star-rating')) {
+    new StarRatingView(starRatingElement);
+  }
+}
+
+class StarRatingView {
+  constructor(element) {
     this.element = element;
     const inputName = element.dataset.name;
     if (element.dataset.value != null) {
@@ -17,23 +24,23 @@ module.exports = class StarRatingView {
       const label = document.createElement('label');
 
       if (this.size === "small") {
-        label.className = 'star-rating-label-small'
+        label.className = 'star-rating--star-small'
       } else {
-        label.className = 'star-rating-label';
+        label.className = 'star-rating--star';
       }
 
       element.appendChild(label);
       this.labels.push(label);
 
-      if (interactive) {
-        const id = `star-rating-${inputName}-${i + 1}`
+      if (inputName != null) {
+        const id = `star-rating--${inputName}-${i + 1}`
         label.setAttribute('for', id);
 
         const radioButton = document.createElement('input');
         radioButton.type = 'radio';
         radioButton.name = inputName;
         radioButton.value = i + 1;
-        radioButton.className = 'star-rating-radio';
+        radioButton.className = 'star-rating--radio';
         radioButton.id = id;
 
         if (i === this.ratingValue) {
@@ -45,7 +52,7 @@ module.exports = class StarRatingView {
       }
     }
 
-    if (interactive) {
+    if (inputName != null) {
       element.addEventListener('mouseover', this.highlightThroughHoveredIndex.bind(this));
       element.addEventListener('mouseout', this.highlightThroughSelectedIndex.bind(this));
       this.highlightThroughSelectedIndex();

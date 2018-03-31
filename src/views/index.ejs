@@ -80,6 +80,8 @@
 
 <%- contentFor('scripts') -%>
 <script>
+ample.setUpStarRatings();
+
 for (const card of document.getElementsByClassName('card-text')) {
   ample.clamp(card, {clamp: 'auto'});
 }

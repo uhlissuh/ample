@@ -69,7 +69,7 @@
               <div class="col-12 col-lg-4 ">
                 <% if (business.reviewCount > 0) { %>
                   <div class="score-grouping">
-                    <div class="business-overall-rating" data-value= "<%=business.overallRating %>" data-name="business-overall-rating" data-size="small"></div>
+                    <div class="star-rating" data-value= "<%=business.overallRating %>" data-size="small"></div>
                     <span class="review-count">(<%= business.reviewCount %>)</span>
                   </div>
 
@@ -90,10 +90,7 @@
 
 <%- contentFor('scripts') -%>
 <script>
-const starRatingElements = document.getElementsByClassName("business-overall-rating");
-for (const element of starRatingElements) {
-  new ample.StarRatingView(element);
-}
+ample.setUpStarRatings();
 </script>
 
 <%- contentFor('title') -%>

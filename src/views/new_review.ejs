@@ -9,58 +9,51 @@
       <%- formatted_phone_number -%>
     </div>
   </div>
+
   <div class="row review-title">
     <div class="col-12">
       <img src="/static/write-review.png" />
     </div>
   </div>
+
   <div class="row">
     <div class="col-12">
       <form class="main-form" method="POST" action="/businesses/<%- googleId -%>/reviews">
-        <div class="form-group">
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <label class="star-rating" for="body-positivity-rating">Body Positivity Rating</label>
-              <div class="star-div" id="body-positivity-rating" data-name="body-positivity-rating"></div>
-              <label class="star-rating" for="lgbtq-inclusivity-rating">LGBTQ Inclusivity Rating</label>
-              <div class="star-div" id="lgbtq-inclusivity-rating" data-name="lgbtq-inclusivity-rating"></div>
-              <label class="star-rating" for="poc-inclusivity-rating">P.O.C Inclusivity Rating</label>
-              <div class="star-div" id="poc-inclusivity-rating" data-name="poc-inclusivity-rating"></div>
-              <label class="star-rating" for="building-accessibility-rating">Building and Space Accessibility Rating</label>
-              <div class="star-div" id="building-accessibility-rating" data-name="building-accessibility-rating"></div>
-              <label class="star-rating" for="furniture-size-rating">Furniture Suitable for Fat Bodies</label>
-              <div class="star-div" id="furniture-size-rating" data-name="furniture-size-rating"></div>
-            </div>
+        <div class="row form-group">
+          <div class="col-12 col-lg-6">
+            <label class="star-rating-label" for="body-positivity-rating">Body Positivity Rating</label>
+            <div class="star-rating" id="body-positivity-rating" data-name="body-positivity-rating"></div>
+            <label class="star-rating-label" for="lgbtq-inclusivity-rating">LGBTQ Inclusivity Rating</label>
+            <div class="star-rating" id="lgbtq-inclusivity-rating" data-name="lgbtq-inclusivity-rating"></div>
+            <label class="star-rating-label" for="poc-inclusivity-rating">P.O.C Inclusivity Rating</label>
+            <div class="star-rating" id="poc-inclusivity-rating" data-name="poc-inclusivity-rating"></div>
+            <label class="star-rating-label" for="building-accessibility-rating">Building and Space Accessibility Rating</label>
+            <div class="star-rating" id="building-accessibility-rating" data-name="building-accessibility-rating"></div>
+            <label class="star-rating-label" for="furniture-size-rating">Furniture Suitable for Fat Bodies</label>
+            <div class="star-rating" id="furniture-size-rating" data-name="furniture-size-rating"></div>
           </div>
-          <div class="row">
-            <div class="col-12 col-lg-9">
-              <textarea class="form-control" name="content" rows="8" placeholder="Clarify your rating with a review!"></textarea>
-            </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-12 col-lg-9">
+            <textarea class="form-control" name="content" rows="8" placeholder="Clarify your rating with a review!"></textarea>
           </div>
-          <div class="row review-submit-row">
-            <div class="col-12 col-lg-9">
-              <button type="submit" class="btn review-submit-button" >Submit Review</button>
-            </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-12 col-lg-9">
+            <button type="submit" class="btn review-submit-button" >Submit Review</button>
           </div>
         </div>
 
       </form>
     </div>
-
   </div>
 </div>
 
 <%- contentFor('scripts') -%>
 <script>
-for (const elementId of [
-  'body-positivity-rating',
-  'lgbtq-inclusivity-rating',
-  'poc-inclusivity-rating',
-  'building-accessibility-rating',
-  'furniture-size-rating'
-]) {
-  new ample.StarRatingView(document.getElementById(elementId), true);
-}
+ample.setUpStarRatings();
 </script>
 
 <%- contentFor('title') -%>

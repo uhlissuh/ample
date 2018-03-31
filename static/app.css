@@ -45,49 +45,54 @@
   color: #faa9ca;
 }
 
-.star-rating-radio {
+.star-rating {
+  height: 35px;
+  width: 175px;
+}
+
+.star-rating[data-size="small"] {
+  height: 21px;
+  width: 105px;
+}
+
+.star-rating--radio {
   position: absolute;
   visibility: hidden;
 }
 
-.star-rating-label {
-  width: 35px;
+.star-rating--star {
   height: 35px;
+  width: 35px;
   background-image: url('/static/star-no-highlight-large.png');
   background-repeat: no-repeat;
 }
 
-
-.star-rating-label.highlighted {
+.star-rating--star.highlighted {
   background-image: url('/static/star-highlight-large.png');
 }
 
-.star-rating-label.half-highlighted {
+.star-rating--star.half-highlighted {
   background-image: url('/static/star-half-highlight-large.png');
 }
 
-
-.star-rating-label-small {
+.star-rating--star-small {
   width: 21px;
   height: 21px;
   background-image: url('/static/star-no-highlight-small.png');
   background-repeat: no-repeat;
 }
 
-.star-rating-label-small.highlighted {
-  width: 21px;
-  height: 21px;
+.star-rating--star-small.highlighted {
   background-image: url('/static/star-highlight-small.png');
   background-repeat: no-repeat;
 }
 
-.star-rating-label-small.half-highlighted {
+.star-rating--star-small.half-highlighted {
   background-image: url('/static/star-half-highlight-small.png');
 }
 
-
-.review-star-rating {
-  padding-left: 10px;
+.star-box .star-rating-label {
+  padding-right: 10px;
 }
 
 .star-box {
@@ -178,7 +183,7 @@
   font-family: 'Roboto', sans-serif;
 }
 
-.star-rating{
+.star-rating-label {
   color: #EB6E79;
 }
 
@@ -195,10 +200,6 @@
   background-color: #EB6E79;
   color: white;
   width:100%;
-}
-
-.review-submit-row {
-  padding-top: 40px;
 }
 
 .reviews-header {
@@ -371,7 +372,7 @@ a:hover {
     padding-bottom: 0px;
   }
 
-  .star-div {
+  .star-rating-section {
     margin-bottom: 10px;
   }
 
@@ -457,20 +458,23 @@ a:hover {
     text-align: center;
   }
 
+  .star-rating {
+    height: 42px;
+    width: 210px;
+  }
 
-  .star-rating-label {
+  .star-rating--star {
     width: 42px;
     height: 42px;
     background-image: url('/static/star-no-highlight-large-phone.png');
     background-repeat: no-repeat;
   }
 
-  .star-rating-label.highlighted {
+  .star-rating--star.highlighted {
     background-image: url('/static/star-highlight-large-phone.png');
   }
 
-  .star-rating-label.half-highlighted {
+  .star-rating--star.half-highlighted {
     background-image: url('/static/star-half-highlight-large-phone.png');
   }
-
 }
