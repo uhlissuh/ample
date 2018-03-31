@@ -144,7 +144,7 @@ describe("server", () => {
 
       const business = await database.getBusinessByGoogleId('567');
       const reviews = await database.getBusinessReviewsById(business.id)
-      const updateReviewResponse = await post(`businesses/567/reviews/${reviews[0].review_id}`, {
+      const updateReviewResponse = await post(`businesses/567/reviews/${reviews[0].id}`, {
         'content': 'I like this business. A lot.',
         'body-positivity-rating': '5',
         'lgbtq-inclusivity-rating': '4'

@@ -243,18 +243,26 @@ exports.updateReview = async function(reviewId, newReview) {
 }
 
 exports.getMostRecentReviews = async function() {
-  const rows = await db.query(
-    `select *, users.name as user_name
-    from reviews, users, businesses
-    where reviews.user_id = users.id and
-    reviews.business_id = businesses.id
-    order by reviews.timestamp
-    desc limit 3`
+  const rows = await db.query(`
+    select
+      *,
+      users.name as user_name,
+      reviews.id as review_id
+    from
+      reviews, users, businesses
+    where
+      reviews.user_id = users.id and
+      reviews.business_id = businesses.id
+    order by
+      reviews.timestamp
+      desc
+    limit 3`
   );
   return rows.map(row => {
     return {
-      id: row.id,
+      id: row.review_id,
       content: row.content,
+      businessGoogleId: row.google_id,
       businessId: row.business_id,
       businessName: row.name,
       businessAddress: row.address,
@@ -308,7 +316,7 @@ exports.getBusinessReviewsById = async function(id) {
 
 function reviewFromRow(row) {
   return {
-    review_id: row.review_id,
+    id: row.review_id,
     business_id: row.business_id,
     content: row.content,
     timestamp: row.timestamp.getTime(),

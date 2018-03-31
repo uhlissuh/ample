@@ -62,13 +62,15 @@
 
       <div class="col-md-4">
         <div class="card recent-review-card">
-          <div class="card-body">
-            <div class="card-top">
-              <h5 class="card-title"><%- review.businessName -%></h5>
-              <h6 class="card-subtitle mb-2 text-muted">reviewed by <%- review.user.name -%></h6>
+          <a href="/businesses/<%- review.businessGoogleId -%>">
+            <div class="card-body">
+              <div class="card-top">
+                <h5 class="card-title"><%- review.businessName -%></h5>
+                <h6 class="card-subtitle mb-2 text-muted">reviewed by <%- review.user.name -%></h6>
+              </div>
+              <p class="card-text"><%- review.content -%></p>
             </div>
-            <p class="card-text"><%- review.content -%></p>
-          </div>
+          </a>
         </div>
       </div>
 

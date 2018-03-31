@@ -74,7 +74,7 @@
     <% if (reviews.length != 0) { %>
         <ul class="list-group list-group-flush">
           <% for (const review of reviews) { %>
-            <li class="list-group-item">
+            <li class="list-group-item" id="review-<%- review.id -%>">
               <div class="row">
                 <div class="col-12 col-md-6 col-lg-2 order-1">
                   <span class="reviewed-by">Reviewed by <%- review.user.name -%></span>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-12 col-lg-2 order-12">
                   <% if (user && user.id === review.user.id) { %>
-                  <a href="/businesses/<%- googleId -%>/reviews/<%- review.review_id -%>/edit">edit review</a>
+                  <a href="/businesses/<%- googleId -%>/reviews/<%- review.id -%>/edit">edit review</a>
                   <% } %>
                 </div>
                 <div class="col-12 col-md-6  col-lg-4 star-box order-2">
