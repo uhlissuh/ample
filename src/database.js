@@ -14,7 +14,9 @@ const CRITERIA_NAMES = [
 let CATEGORY_IDS_BY_TITLE, CATEGORY_TITLES_BY_ID, CHILD_CATEGORIES_BY_PARENT_CATEGORY;
 
 exports.connect = async function(environment) {
-  db = pgp(databaseConfig[environment]);
+  let config = databaseConfig[environment];
+  if (config.ENV) config = process.env[config.ENV];
+  db = pgp(config);
 
   CATEGORY_IDS_BY_TITLE = {};
   CATEGORY_TITLES_BY_ID = {};
