@@ -1,0 +1,430 @@
+[
+  {
+    "title": "Gyms",
+    "parent": "Fitness"
+  },
+  {
+    "title": "Fitness",
+    "parent": null
+  },
+  {
+    "title": "Yoga",
+    "parent": "Fitness"
+  },
+  {
+    "title": "Personal Trainers",
+    "parent": "Fitness"
+  },
+  {
+    "title": "Pilates",
+    "parent": "Fitness"
+  },
+  {
+    "title": "Wellness",
+    "parent": null
+  },
+  {
+    "title": "Acupuncture",
+    "parent": "Wellness"
+  },
+  {
+    "title": "Reiki",
+    "parent": "Wellness"
+  },
+  {
+    "title": "Massage",
+    "parent": "Wellness"
+  },
+  {
+    "title": "Meditation",
+    "parent": "Wellness"
+  },
+  {
+    "title": "Alternative Medicine",
+    "parent": "Wellness"
+  },
+  {
+    "title": "Dentists",
+    "parent": null
+  },
+  {
+    "title": "Oral Surgeons",
+    "parent": "Dentists"
+  },
+  {
+    "title": "Orthodontists",
+    "parent": "Dentists"
+  },
+  {
+    "title": "Pediatric Dentists",
+    "parent": "Dentists"
+  },
+  {
+    "title": "Periodontists",
+    "parent": "Dentists"
+  },
+  {
+    "title": "Diagnostic Imaging",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Laboratory Testing",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Doctors",
+    "parent": null
+  },
+  {
+    "title": "Sleep Specialists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Allergists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Anesthesiologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Audiologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Cardiologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Cosmetic Surgeons",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Dermatologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Ear, Nose & Throat",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Emergency Medicine",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Endocrinologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Family Practice",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Fertility",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Gastroenterologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Geneticists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Gerontologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Infectious Disease Specialists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Internal Medicine",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Naturopaths",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Neurologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Nephrologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Neuropathologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Obstetricians & Gynecologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Oncologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Orthopedists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Osteopathic Physicians",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Otologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Pain Management",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Pathologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Pediatricians",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Podiatrists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Proctologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Psychiatrists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Pulmonologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Surgeons",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Urologists",
+    "parent": "Doctors"
+  },
+  {
+    "title": "Health Services",
+    "parent": null
+  },
+  {
+    "title": "Doulas",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Midwives",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Counseling & Mental Health",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Life Coaching",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Chiropractors",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Dieticans & Nutritionists",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Cannabis Referrals",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Physical Therapy",
+    "parent": "Health Services"
+  },
+  {
+    "title": "Arts & Entertainment",
+    "parent": null
+  },
+  {
+    "title": "Movie Theaters",
+    "parent": "Arts & Entertainment"
+  },
+  {
+    "title": "Festivals",
+    "parent": "Arts & Entertainment"
+  },
+  {
+    "title": "Museums",
+    "parent": "Arts & Entertainment"
+  },
+  {
+    "title": "Music Venue",
+    "parent": "Arts & Entertainment"
+  },
+  {
+    "title": "Performing Arts",
+    "parent": "Arts & Entertainment"
+  },
+  {
+    "title": "Stadiums and Arenas",
+    "parent": "Arts & Entertainment"
+  },
+  {
+    "title": "Wineries",
+    "parent": "Arts & Entertainment"
+  },
+  {
+    "title": "Beauty",
+    "parent": null
+  },
+  {
+    "title": "Hair Salons",
+    "parent": "Beauty"
+  },
+  {
+    "title": "Makeup Artists",
+    "parent": "Beauty"
+  },
+  {
+    "title": "Nail Salons",
+    "parent": "Beauty"
+  },
+  {
+    "title": "Tattoo",
+    "parent": "Beauty"
+  },
+  {
+    "title": "Piercing",
+    "parent": "Beauty"
+  },
+  {
+    "title": "Hair Removal",
+    "parent": "Beauty"
+  },
+  {
+    "title": "Skin Care",
+    "parent": "Beauty"
+  },
+  {
+    "title": "Professional Services",
+    "parent": null
+  },
+  {
+    "title": "Child Care",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Party & Event Planning",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Wedding Services",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Photographers",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Venues & Event Spaces",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Tax Services",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Home Repair",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Home Cleaning",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Landscaping",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Interior Design",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Real Estate",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Accountants",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Lawyers",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Web Design",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Bookkeepers",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Marketing",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Marketing",
+    "parent": "Professional Services"
+  },
+  {
+    "title": "Shopping",
+    "parent": null
+  },
+  {
+    "title": "Restaurants",
+    "parent": null
+  },
+  {
+    "title": "Bars",
+    "parent": null
+  },
+  {
+    "title": "Hotels & Travel",
+    "parent": null
+  },
+  {
+    "title": "Airlines",
+    "parent": "Hotels & Travel"
+  },
+  {
+    "title": "Hotels",
+    "parent": "Hotels & Travel"
+  },
+  {
+    "title": "Retreats",
+    "parent": "Hotels & Travel"
+  },
+  {
+    "title": "Tours",
+    "parent": "Hotels & Travel"
+  },
+  {
+    "title": "Buses",
+    "parent": "Hotels & Travel"
+  },
+  {
+    "title": "Vacation Rentals",
+    "parent": "Hotels & Travel"
+  }
+]
