@@ -137,7 +137,7 @@ describe("server", () => {
         'content': 'I like this business.',
         'body-positivity-rating': '5',
         'lgbtq-inclusivity-rating': '3',
-        'category-parent': 'Doctors'
+        'parent-category': 'Doctors'
       });
 
       assert.equal(createReviewResponse.statusCode, 302);
@@ -149,7 +149,7 @@ describe("server", () => {
         'content': 'I like this business. A lot.',
         'body-positivity-rating': '5',
         'lgbtq-inclusivity-rating': '4',
-        'category-parent': 'Doctors'
+        'parent-category': 'Doctors'
       });
 
       assert.equal(updateReviewResponse.statusCode, 302);

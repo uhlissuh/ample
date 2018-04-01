@@ -35,13 +35,31 @@
         </div>
 
         <div class="row form-group">
-          <div class="col-12 col-lg-9">
+          <div class="col-12 col-lg-10">
             <textarea class="form-control" name="content" rows="8" placeholder="Clarify your rating with a review!"></textarea>
           </div>
         </div>
 
         <div class="row form-group">
-          <div class="col-12 col-lg-9">
+          <div class="col-12 col-lg-5">
+            <small for="parent-category">Help us to know what kind of business this is.</small>
+            <select id="parent-category-select" class="form-control" name="parent-category">
+              <option disabled selected="selected">Select a category</option>
+              <% for (const category in childCategoriesByParentCategory) { %>
+                <option value="<%- category -%>"><%- category -%></option>
+              <% } %>
+            </select>
+          </div>
+
+          <div class="col-12 col-lg-5">
+            <small for="parent-category">Be more specific if you want.</small>
+            <select id="child-category-select" class="form-control" name="child-category">
+            </select>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-12 col-lg-10">
             <button type="submit" class="btn review-submit-button" >Submit Review</button>
           </div>
         </div>
@@ -53,6 +71,23 @@
 
 <%- contentFor('scripts') -%>
 <script>
+const childCategoriesByParentCategory = <%- JSON.stringify(childCategoriesByParentCategory) %>;
+
+const parentCategorySelect = document.getElementById('parent-category-select');
+const childCategorySelect = document.getElementById('child-category-select');
+parentCategorySelect.addEventListener('change', (event) => {
+  const parentCategory = parentCategorySelect.value;
+  const childCategories = childCategoriesByParentCategory[parentCategory];
+  childCategorySelect.innerHTML = '<option></option>';
+
+  for (const childCategory of childCategories) {
+    const option = document.createElement('option');
+    option.innerText = childCategory;
+    option.value = childCategory;
+    childCategorySelect.appendChild(option);
+  }
+});
+
 ample.setUpStarRatings();
 </script>
 

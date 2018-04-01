@@ -11,18 +11,33 @@ const CRITERIA_NAMES = [
   'lgbtqInclusivity',
 ];
 
-let CATEGORY_IDS_BY_TITLE, CATEGORY_TITLES_BY_ID;
+let CATEGORY_IDS_BY_TITLE, CATEGORY_TITLES_BY_ID, CHILD_CATEGORIES_BY_PARENT_CATEGORY;
 
 exports.connect = async function(environment) {
   db = pgp(databaseConfig[environment]);
 
   CATEGORY_IDS_BY_TITLE = {};
   CATEGORY_TITLES_BY_ID = {};
+  CHILD_CATEGORIES_BY_PARENT_CATEGORY = {};
   const rows = await db.query('select * from categories');
   for (const row of rows) {
     CATEGORY_IDS_BY_TITLE[row.title] = row.id;
     CATEGORY_TITLES_BY_ID[row.id] = row.title;
+    if (row.parent_id == null) {
+      CHILD_CATEGORIES_BY_PARENT_CATEGORY[row.title] = [];
+    }
   }
+
+  for (const row of rows) {
+    if (row.parent_id) {
+      const parentTitle = CATEGORY_TITLES_BY_ID[row.parent_id];
+      CHILD_CATEGORIES_BY_PARENT_CATEGORY[parentTitle].push(row.title);
+    }
+  }
+
+  Object.freeze(CHILD_CATEGORIES_BY_PARENT_CATEGORY);
+  Object.freeze(CATEGORY_IDS_BY_TITLE);
+  Object.freeze(CATEGORY_TITLES_BY_ID);
 };
 
 exports.clear = async function() {
@@ -102,21 +117,9 @@ function businessFromRow(row) {
   return business;
 }
 
-async function getFullBusinessById(id) {
-  return (await db.query('select * from businesses where id = $1', [id]))[0];
+async function getFullBusinessById(tx, id) {
+  return (await tx.query('select * from businesses where id = $1', [id]))[0];
 }
-
-exports.transact = async function(callback) {
-  try {
-    await db.query("BEGIN");
-    const result = await callback();
-    await db.query("COMMIT");
-    return result;
-  } catch (err) {
-    await db.query("ROLLBACK");
-    throw err;
-  }
-};
 
 function roundRating(rating) {
   return Math.round(rating * 10) / 10;
@@ -139,8 +142,8 @@ exports.createBusiness = async function(business) {
   return rows[0].id;
 };
 
-async function updateBusinessAfterReview(businessId, businessRow) {
-  await db.query(
+async function updateBusinessAfterReview(tx, businessId, businessRow) {
+  await tx.query(
     `
       update businesses
       set
@@ -186,9 +189,13 @@ function getCategoryTitle(id) {
   return CATEGORY_TITLES_BY_ID[id];
 }
 
+exports.getChildCategoriesByParentCategory = async function() {
+  return CHILD_CATEGORIES_BY_PARENT_CATEGORY;
+};
+
 exports.createReview = async function(userId, businessId, review) {
-  return this.transact(async () => {
-    const businessRow = await getFullBusinessById(businessId);
+  return this.tx(async tx => {
+    const businessRow = await getFullBusinessById(tx, businessId);
 
     businessRow.review_count++;
     for (const criteriaName of CRITERIA_NAMES) {
@@ -206,9 +213,9 @@ exports.createReview = async function(userId, businessId, review) {
     }
     businessRow.category_ids.sort((a, b) => a - b);
 
-    await updateBusinessAfterReview(businessId, businessRow);
+    await updateBusinessAfterReview(tx, businessId, businessRow);
 
-    const rows = await db.query(
+    const rows = await tx.query(
       `insert into reviews
         (business_id, user_id, content, timestamp, body_positivity, poc_inclusivity, lgbtq_inclusivity, building_accessibility, furniture_size)
         values
@@ -231,10 +238,10 @@ exports.createReview = async function(userId, businessId, review) {
 };
 
 exports.updateReview = async function(reviewId, newReview) {
-  await this.transact(async () => {
+  await this.tx(async tx => {
     const oldReview = await this.getReviewById(reviewId);
 
-    const business = await getFullBusinessById(oldReview.businessId);
+    const business = await getFullBusinessById(tx, oldReview.businessId);
     for (const criteriaName of CRITERIA_NAMES) {
       if (Number.isFinite(oldReview[criteriaName])) {
         business[snakeCase(criteriaName) + '_rating_count']--;
@@ -255,7 +262,7 @@ exports.updateReview = async function(reviewId, newReview) {
     }
     business.category_ids.sort((a, b) => a - b);
 
-    await updateBusinessAfterReview(business.id, business);
+    await updateBusinessAfterReview(tx, business.id, business);
 
     await db.query(`
       update reviews
@@ -338,9 +345,9 @@ exports.updateBusinessScore = async function(businessId, score) {
   }
 };
 
-exports.query = function() {
-  return db.query.apply(db, arguments);
-}
+exports.query = function() { return db.query.apply(db, arguments); }
+
+exports.tx = function() { return db.tx.apply(db, arguments); };
 
 exports.getBusinessReviewsById = async function(id) {
   const rows = await db.query(

@@ -187,6 +187,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         photos: business.photos,
         rating: business.rating,
         reviewerId: req.signedCookies["userId"],
+        childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
         user: user
       })
     }
@@ -247,7 +248,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
       lgbtqInclusivity: parseInt(body["lgbtq-inclusivity-rating"]),
       buildingAccessibility: parseInt(body["building-accessibility-rating"]),
       furnitureSize: parseInt(body["furniture-size-rating"]),
-      categories: [body['category-parent']]
+      categories: [body['parent-category']]
     };
 
     if (body['category-child']) {

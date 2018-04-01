@@ -11,11 +11,11 @@ if (environment == null) {
 
 database.connect(environment);
 
-database.transact(async () => {
+database.tx(async tx => {
   const idsByTitle = {};
 
   for (const category of categories) {
-    const [row] = await database.query(`
+    const [row] = await tx.query(`
       insert into categories
         (title) values
         ($1)
@@ -32,7 +32,7 @@ database.transact(async () => {
       throw new Error(`No such category: ${category.parent}`);
     }
 
-    await database.query(`
+    await tx.query(`
       update categories
       set parent_id = $2
       where id = $1
