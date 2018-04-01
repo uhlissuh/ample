@@ -35,7 +35,7 @@
     "test": "mocha",
     "start": "node src/start.js",
     "start-dev": "concurrently -k \"npm run start\" \"webpack --watch --mode=development\"",
-    "heroku-postbuild": "db-migrate up --env production && webpack --mode=production"
+    "heroku-postbuild": "db-migrate up --env production && webpack --mode=production && script/insert-categories.js production"
   },
   "author": "",
   "license": "ISC"
