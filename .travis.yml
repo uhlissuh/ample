@@ -7,6 +7,7 @@ before_script:
   - psql -U postgres -c 'create database ample_test;'
   - psql -U postgres -d ample_test -c 'create extension postgis;'
   - ./node_modules/.bin/db-migrate up --env test
+  - ./script/insert-categories.js test
 
 services:
   - postgresql
