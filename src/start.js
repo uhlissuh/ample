@@ -5,11 +5,10 @@ const server = require('./server');
 const Memcached = require("./memcached")
 
 if (process.env.NODE_ENV === 'production') {
-  database.connect(process.env.DATABASE_URL);
+  database.connect('production');
 } else {
   require('dotenv').config();
-  const databaseConfig = require("../database.json");
-  database.connect(databaseConfig.dev);
+  database.connect('dev');
 }
 
 const {

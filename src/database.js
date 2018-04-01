@@ -1,5 +1,6 @@
 const pgp = require("pg-promise")();
 const {snakeCase} = require('./util');
+const databaseConfig = require("../database.json");
 let db = null;
 
 const CATEGORY_NAMES = [
@@ -10,8 +11,8 @@ const CATEGORY_NAMES = [
   'lgbtqInclusivity',
 ];
 
-exports.connect = function(config) {
-  db = pgp(config);
+exports.connect = function(environment) {
+  db = pgp(databaseConfig[environment]);
 };
 
 exports.clear = async function() {
