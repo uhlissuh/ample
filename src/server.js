@@ -31,7 +31,10 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
   app.use(bodyParser.urlencoded());
   app.use(bodyParser.json());
   app.use(cookieParser(cookieSigningSecret));
-  app.use(sslRedirect(['production'], 301));
+
+  if (!process.env.STAGING) {
+    app.use(sslRedirect(['production'], 301));
+  }
 
   app.get('/', async (req, res) => {
     const userId = req.signedCookies["userId"];
