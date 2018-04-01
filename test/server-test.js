@@ -136,7 +136,8 @@ describe("server", () => {
       const createReviewResponse = await post('businesses/567/reviews', {
         'content': 'I like this business.',
         'body-positivity-rating': '5',
-        'lgbtq-inclusivity-rating': '3'
+        'lgbtq-inclusivity-rating': '3',
+        'category-parent': 'Doctors'
       });
 
       assert.equal(createReviewResponse.statusCode, 302);
@@ -147,7 +148,8 @@ describe("server", () => {
       const updateReviewResponse = await post(`businesses/567/reviews/${reviews[0].id}`, {
         'content': 'I like this business. A lot.',
         'body-positivity-rating': '5',
-        'lgbtq-inclusivity-rating': '4'
+        'lgbtq-inclusivity-rating': '4',
+        'category-parent': 'Doctors'
       });
 
       assert.equal(updateReviewResponse.statusCode, 302);

@@ -1,2 +1,5 @@
 const database = require('../src/database');
-database.connect('test');
+
+before(async () => {
+  await database.connect('test');
+});

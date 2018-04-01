@@ -11,8 +11,18 @@ const CRITERIA_NAMES = [
   'lgbtqInclusivity',
 ];
 
-exports.connect = function(environment) {
+let CATEGORY_IDS_BY_TITLE, CATEGORY_TITLES_BY_ID;
+
+exports.connect = async function(environment) {
   db = pgp(databaseConfig[environment]);
+
+  CATEGORY_IDS_BY_TITLE = {};
+  CATEGORY_TITLES_BY_ID = {};
+  const rows = await db.query('select * from categories');
+  for (const row of rows) {
+    CATEGORY_IDS_BY_TITLE[row.title] = row.id;
+    CATEGORY_TITLES_BY_ID[row.id] = row.title;
+  }
 };
 
 exports.clear = async function() {
@@ -67,6 +77,7 @@ function businessFromRow(row) {
     longitude: row.longitude,
     phone: row.phone,
     reviewCount: row.review_count,
+    categories: row.category_ids.map(getCategoryTitle)
   };
 
   let combinedRatingCount = 0;
@@ -128,7 +139,7 @@ exports.createBusiness = async function(business) {
   return rows[0].id;
 };
 
-async function updateBusinessRatings(businessId, businessRow) {
+async function updateBusinessAfterReview(businessId, businessRow) {
   await db.query(
     `
       update businesses
@@ -143,8 +154,8 @@ async function updateBusinessRatings(businessId, businessRow) {
         building_accessibility_rating_count = $9,
         furniture_size_rating_total = $10,
         furniture_size_rating_count = $11,
-        review_count = $12
-
+        review_count = $12,
+        category_ids = $13
       where id = $1
     `,
     [
@@ -159,9 +170,20 @@ async function updateBusinessRatings(businessId, businessRow) {
       businessRow.building_accessibility_rating_count,
       businessRow.furniture_size_rating_total,
       businessRow.furniture_size_rating_count,
-      businessRow.review_count
+      businessRow.review_count,
+      businessRow.category_ids
     ]
   )
+}
+
+function getCategoryId(title) {
+  const result = CATEGORY_IDS_BY_TITLE[title];
+  if (!result) throw new Error(`Invalid category '${title}'`);
+  return result;
+}
+
+function getCategoryTitle(id) {
+  return CATEGORY_TITLES_BY_ID[id];
 }
 
 exports.createReview = async function(userId, businessId, review) {
@@ -176,7 +198,15 @@ exports.createReview = async function(userId, businessId, review) {
       }
     }
 
-    await updateBusinessRatings(businessId, businessRow);
+    const categoryIds = review.categories.map(getCategoryId);
+    for (const categoryId of categoryIds) {
+      if (!businessRow.category_ids.includes(categoryId)) {
+        businessRow.category_ids.push(categoryId);
+      }
+    }
+    businessRow.category_ids.sort((a, b) => a - b);
+
+    await updateBusinessAfterReview(businessId, businessRow);
 
     const rows = await db.query(
       `insert into reviews
@@ -217,7 +247,15 @@ exports.updateReview = async function(reviewId, newReview) {
       }
     }
 
-    await updateBusinessRatings(business.id, business);
+    const categoryIds = newReview.categories.map(getCategoryId);
+    for (const categoryId of categoryIds) {
+      if (!business.category_ids.includes(categoryId)) {
+        business.category_ids.push(categoryId);
+      }
+    }
+    business.category_ids.sort((a, b) => a - b);
+
+    await updateBusinessAfterReview(business.id, business);
 
     await db.query(`
       update reviews

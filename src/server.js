@@ -206,15 +206,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
   });
 
   app.post('/businesses/:googleId/reviews/:reviewId', async function(req, res) {
-    await database.updateReview(req.params.reviewId, {
-      content: req.body.content,
-      bodyPositivity: parseInt(req.body["body-positivity-rating"]),
-      pocInclusivity: parseInt(req.body["poc-inclusivity-rating"]),
-      lgbtqInclusivity: parseInt(req.body["lgbtq-inclusivity-rating"]),
-      buildingAccessibility: parseInt(req.body["building-accessibility-rating"]),
-      furnitureSize: parseInt(req.body["furniture-size-rating"])
-    });
-
+    await database.updateReview(req.params.reviewId, reviewFromRequest(req.body));
     res.redirect(`/businesses/${req.params.googleId}`);
   });
 
@@ -242,20 +234,28 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
       })
     }
 
-    const review = {
-      content: req.body.content,
-      bodyPositivity: parseInt(req.body["body-positivity-rating"]),
-      pocInclusivity: parseInt(req.body["poc-inclusivity-rating"]),
-      lgbtqInclusivity: parseInt(req.body["lgbtq-inclusivity-rating"]),
-      buildingAccessibility: parseInt(req.body["building-accessibility-rating"]),
-      furnitureSize: parseInt(req.body["furniture-size-rating"])
-    }
-
-
     const userId = req.signedCookies['userId'];
-    await database.createReview(userId, businessId, review);
+    await database.createReview(userId, businessId, reviewFromRequest(req.body));
     res.redirect(`/businesses/${googleId}`)
   });
+
+  function reviewFromRequest(body) {
+    const review = {
+      content: body.content,
+      bodyPositivity: parseInt(body["body-positivity-rating"]),
+      pocInclusivity: parseInt(body["poc-inclusivity-rating"]),
+      lgbtqInclusivity: parseInt(body["lgbtq-inclusivity-rating"]),
+      buildingAccessibility: parseInt(body["building-accessibility-rating"]),
+      furnitureSize: parseInt(body["furniture-size-rating"]),
+      categories: [body['category-parent']]
+    };
+
+    if (body['category-child']) {
+      review.categories.push(body['category-child']);
+    }
+
+    return review;
+  }
 
   app.use(async (error, req, res, next) => {
     const userId = req.signedCookies.userId;

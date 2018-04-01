@@ -118,7 +118,8 @@ describe("BusinessSearch", () => {
       pocInclusivity: 1,
       lgbtqInclusivity: 1,
       buildingAccessibility: 2,
-      furnitureSize: 2
+      furnitureSize: 2,
+      categories: ['Beauty']
     });
     await database.createReview(userId, businessId2, {
       content: 'awesome stylist.',
@@ -126,7 +127,8 @@ describe("BusinessSearch", () => {
       pocInclusivity: 4,
       lgbtqInclusivity: 5,
       buildingAccessibility: 5,
-      furnitureSize: 4
+      furnitureSize: 4,
+      categories: ['Beauty']
     });
 
     const search = new BusinessSearch(googlePlacesClient);

@@ -16,11 +16,13 @@ exports.up = async function(db) {
   });
 
   await db.addColumn('reviews', 'category_ids', {
-    type: 'integer[]'
+    type: 'integer[]',
+    defaultValue: new String("'{}'")
   });
 
   await db.addColumn('businesses', 'category_ids', {
-    type: 'integer[]'
+    type: 'integer[]',
+    defaultValue: new String("'{}'")
   });
 };
 
