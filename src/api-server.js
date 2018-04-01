@@ -7,16 +7,6 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.get('/allcategorytitles', async function(req, res) {
-  const data = await database.getAllCategoryTitles();
-  res.end(JSON.stringify(data));
-})
-
-app.get('/:categoryName/allsubcategories', async function(req, res) {
-  const data = await database.getSubcategoriesForCategory(req.params.categoryName);
-  res.end(JSON.stringify(data));
-})
-
 app.get('/reviews/:id', async function(req, res) {
   const reviews = await database.getBusinessReviewsById(req.params.id);
   res.end(JSON.stringify(reviews));
@@ -51,7 +41,6 @@ app.post('/businesses/postreview', async function(req, res) {
         phoneNumber: googleBusiness.phone,
         latitude: googleBusiness.coordinates.latitude,
         longitude: googleBusiness.coordinates.longitude,
-        categories: googleBusiness.categories
       };
 
       business.id = await database.createBusiness(business);

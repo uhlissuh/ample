@@ -9,7 +9,7 @@ const catchErrors = require('./catch-errors');
 const pluralize = require('pluralize');
 const sslRedirect = require('heroku-ssl-redirect');
 
-const CATEGORY_DESCRIPTIONS = {
+const CRITERIA_DESCRIPTIONS = {
   bodyPositivity: 'Body Positivity',
   furnitureSize: 'Fat-Friendly Furniture',
   buildingAccessibility: 'Building Accessibility',
@@ -160,7 +160,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         user,
         isMobile,
         pluralize,
-        CATEGORY_DESCRIPTIONS,
+        CRITERIA_DESCRIPTIONS,
         business
       }
     );

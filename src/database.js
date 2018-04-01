@@ -3,7 +3,7 @@ const {snakeCase} = require('./util');
 const databaseConfig = require("../database.json");
 let db = null;
 
-const CATEGORY_NAMES = [
+const CRITERIA_NAMES = [
   'bodyPositivity',
   'furnitureSize',
   'buildingAccessibility',
@@ -72,14 +72,14 @@ function businessFromRow(row) {
   let combinedRatingCount = 0;
   let combinedTotalRating = 0;
 
-  for (const categoryName of CATEGORY_NAMES) {
-    const ratingCount = row[snakeCase(categoryName) + '_rating_count'];
-    const totalRating = row[snakeCase(categoryName) + '_rating_total'];
+  for (const criteriaName of CRITERIA_NAMES) {
+    const ratingCount = row[snakeCase(criteriaName) + '_rating_count'];
+    const totalRating = row[snakeCase(criteriaName) + '_rating_total'];
     combinedRatingCount += ratingCount;
     combinedTotalRating += totalRating;
 
-    business[`${categoryName}RatingCount`] = ratingCount;
-    business[`${categoryName}AverageRating`] = ratingCount > 0
+    business[`${criteriaName}RatingCount`] = ratingCount;
+    business[`${criteriaName}AverageRating`] = ratingCount > 0
       ? roundRating(totalRating / ratingCount)
       : null;
   }
@@ -169,10 +169,10 @@ exports.createReview = async function(userId, businessId, review) {
     const businessRow = await getFullBusinessById(businessId);
 
     businessRow.review_count++;
-    for (const categoryName of CATEGORY_NAMES) {
-      if (Number.isFinite(review[categoryName])) {
-        businessRow[snakeCase(categoryName) + '_rating_count']++;
-        businessRow[snakeCase(categoryName) + '_rating_total'] += review[categoryName];
+    for (const criteriaName of CRITERIA_NAMES) {
+      if (Number.isFinite(review[criteriaName])) {
+        businessRow[snakeCase(criteriaName) + '_rating_count']++;
+        businessRow[snakeCase(criteriaName) + '_rating_total'] += review[criteriaName];
       }
     }
 
@@ -205,15 +205,15 @@ exports.updateReview = async function(reviewId, newReview) {
     const oldReview = await this.getReviewById(reviewId);
 
     const business = await getFullBusinessById(oldReview.businessId);
-    for (const categoryName of CATEGORY_NAMES) {
-      if (Number.isFinite(oldReview[categoryName])) {
-        business[snakeCase(categoryName) + '_rating_count']--;
-        business[snakeCase(categoryName) + '_rating_total'] -= oldReview[categoryName];
+    for (const criteriaName of CRITERIA_NAMES) {
+      if (Number.isFinite(oldReview[criteriaName])) {
+        business[snakeCase(criteriaName) + '_rating_count']--;
+        business[snakeCase(criteriaName) + '_rating_total'] -= oldReview[criteriaName];
       }
 
-      if (Number.isFinite(newReview[categoryName])) {
-        business[snakeCase(categoryName) + '_rating_count']++;
-        business[snakeCase(categoryName) + '_rating_total'] += newReview[categoryName];
+      if (Number.isFinite(newReview[criteriaName])) {
+        business[snakeCase(criteriaName) + '_rating_count']++;
+        business[snakeCase(criteriaName) + '_rating_total'] += newReview[criteriaName];
       }
     }
 
@@ -362,22 +362,22 @@ exports.getReviewById = async function(review_id) {
 exports.getBusinessRatingBreakdown = async function(businessId) {
   const [row] = await db.query(RATING_BREAKDOWN_QUERY, [ businessId ]);
   const result = {};
-  for (const categoryName of CATEGORY_NAMES) {
-    const dbCategoryName = snakeCase(categoryName);
-    result[categoryName] = {};
+  for (const criteriaName of CRITERIA_NAMES) {
+    const dbCriteriaName = snakeCase(criteriaName);
+    result[criteriaName] = {};
 
     let totalRatingCount = 0;
     for (const ratingValue of [1, 2, 3, 4, 5]) {
-      const ratingCount = parseInt(row[`${dbCategoryName}_${ratingValue}_count`]);
-      result[categoryName][ratingValue] = {count: ratingCount, percentage: 0};
+      const ratingCount = parseInt(row[`${dbCriteriaName}_${ratingValue}_count`]);
+      result[criteriaName][ratingValue] = {count: ratingCount, percentage: 0};
       totalRatingCount += ratingCount;
     }
-    result[categoryName].total = totalRatingCount;
+    result[criteriaName].total = totalRatingCount;
 
     if (totalRatingCount > 0) {
       for (const ratingValue of [1, 2, 3, 4, 5]) {
-        result[categoryName][ratingValue].percentage = Math.round(
-          result[categoryName][ratingValue].count /
+        result[criteriaName][ratingValue].percentage = Math.round(
+          result[criteriaName][ratingValue].count /
           totalRatingCount * 100
         );
       }
@@ -444,11 +444,11 @@ exports.getProfileInformationForUser = async function(userId) {
 
 const RATING_BREAKDOWN_QUERY_COLUMNS = [];
 
-for (const categoryName of CATEGORY_NAMES) {
-  const dbCategoryName = snakeCase(categoryName);
+for (const criteriaName of CRITERIA_NAMES) {
+  const dbCriteriaName = snakeCase(criteriaName);
   for (const ratingValue of [1, 2, 3, 4, 5]) {
     RATING_BREAKDOWN_QUERY_COLUMNS.push(
-      `count(*) filter (where ${dbCategoryName} = ${ratingValue}) as ${dbCategoryName}_${ratingValue}_count`
+      `count(*) filter (where ${dbCriteriaName} = ${ratingValue}) as ${dbCriteriaName}_${ratingValue}_count`
     );
   }
 }

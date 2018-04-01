@@ -3,14 +3,14 @@
     Score Breakdown:
   </div>
 
-  <% for (const categoryName in ratingBreakdown) { %>
+  <% for (const criteriaName in ratingBreakdown) { %>
     <div class="col-12 col-lg-2">
       <a
         class="rating-breakdown-link"
         data-toggle="collapse-no-animate"
-        data-target="#rating-breakdown-<%- categoryName -%>"
+        data-target="#rating-breakdown-<%- criteriaName -%>"
         href="#">
-        <%- CATEGORY_DESCRIPTIONS[categoryName] %>
+        <%- CRITERIA_DESCRIPTIONS[criteriaName] %>
       </a>
     </div>
   <% } %>
@@ -19,11 +19,11 @@
 <div id="rating-breakdowns">
   <% let i = 0; %>
   <% let offsets = [1, 3, 5, 7, 8]; %>
-  <% for (const categoryName in ratingBreakdown) { %>
+  <% for (const criteriaName in ratingBreakdown) { %>
     <div
       class="row collapse-no-animate breakdown-section"
       data-parent="#rating-breakdowns"
-      id="rating-breakdown-<%- categoryName -%>">
+      id="rating-breakdown-<%- criteriaName -%>">
       <div class="col-12 col-lg-4 offset-lg-<%- offsets[i] %>">
         <% for (const ratingValue of [5, 4, 3, 2, 1]) { %>
           <div class="row">
@@ -36,14 +36,14 @@
               <div class="percentage-bar-background">
                 <div
                   class="percentage-bar"
-                  style="width: <%- ratingBreakdown[categoryName][ratingValue].percentage -%>%;">
+                  style="width: <%- ratingBreakdown[criteriaName][ratingValue].percentage -%>%;">
                 </div>
               </div>
             </div>
 
             <div class="col-3">
               <span class="small">
-                <% const {count} = ratingBreakdown[categoryName][ratingValue]; %>
+                <% const {count} = ratingBreakdown[criteriaName][ratingValue]; %>
                 <%- pluralize('vote', count, true) -%>
               </span>
             </div>

@@ -169,7 +169,7 @@ describe("database", () => {
   })
 
   describe(".getBusinessRatingBreakdown", () => {
-    it("returns the number of users who gave the business each possible rating in each category", async () => {
+    it("returns the number of users who gave the business each possible rating in each criteria", async () => {
       const userId1 = await database.createUser({
         facebookId: '1',
         name: 'Bob Carlson',
