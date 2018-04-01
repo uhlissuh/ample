@@ -16,8 +16,9 @@ class GooglePlacesClient {
       `place/nearbysearch/json?` +
       `key=${this.apiKey}&` +
       `location=${latitude},${longitude}&` +
-      `radius=50000&` +
+      `rankby=distance&` +
       `keyword=${encodeURIComponent(term)}`
+
     );
     return response.results;
   }
