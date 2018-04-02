@@ -60,6 +60,18 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     });
   });
 
+
+    app.get('/ourvision', async (req, res) => {
+      let user = null;
+      if (req.signedCookies['userId']) {
+        user = await database.getUserById(req.signedCookies['userId']);
+      }
+
+      res.render('our_vision', {
+        user: user,
+      });
+    });
+
   app.post('/login', async (req, res) => {
     const accessToken = req.body['access-token']
     const response = await facebookClient.getUserInfo(accessToken);

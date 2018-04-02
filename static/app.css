@@ -342,7 +342,24 @@ a:hover {
   display: block;
 }
 
+.top-our-vision {
+  margin-top: 30px;
+}
+
+.founder-img {
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.about-us-title {
+  margin-bottom: 30px;
+  margin-top: 15px;
+}
+
 @media screen and (max-width: 800px) {
+  .founder-img-second {
+    padding-top: 15px;
+  }
 
   .recent-review-card {
     margin-bottom: 15px;
