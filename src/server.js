@@ -218,7 +218,12 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     const business = await database.getBusinessByGoogleId(req.params.googleId);
 
     if (review.user.id === parseInt(userId)) {
-      res.render('edit-review', {user, review, business});
+      res.render('edit-review', {
+        user,
+        review,
+        business,
+        childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
+      });
     } else {
       throw new Error();
     }
@@ -269,8 +274,8 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
       categories: [body['parent-category']]
     };
 
-    if (body['category-child']) {
-      review.categories.push(body['category-child']);
+    if (body['child-category']) {
+      review.categories.push(body['child-category']);
     }
 
     return review;

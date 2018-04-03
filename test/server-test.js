@@ -144,7 +144,11 @@ describe("server", () => {
       assert.equal(createReviewResponse.headers.location, '/businesses/567');
 
       const business = await database.getBusinessByGoogleId('567');
-      const reviews = await database.getBusinessReviewsById(business.id)
+      const reviews = await database.getBusinessReviewsById(business.id);
+
+      assert.deepEqual(business.categories, ['Doctors']);
+      assert.deepEqual(reviews[0].categories, ['Doctors']);
+
       const updateReviewResponse = await post(`businesses/567/reviews/${reviews[0].id}`, {
         'content': 'I like this business. A lot.',
         'body-positivity-rating': '5',

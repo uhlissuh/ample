@@ -18,7 +18,7 @@
 
   <div class="row">
     <div class="col-12">
-      <form class="main-form" method="POST" action="/businesses/<%- business.googleId -%>/reviews/<%- review.reviewId -%>">
+      <form class="main-form" method="POST" action="/businesses/<%- business.googleId -%>/reviews/<%- review.id -%>">
         <div class="row form-group">
           <div class="col-12">
             <label class="star-rating-label" for="body-positivity-rating">Body Positivity Rating</label>
@@ -55,8 +55,23 @@
         </div>
 
         <div class="row form-group">
-          <div class="col-12 col-lg-9">
+          <div class="col-12 col-lg-10">
             <textarea class="form-control" name="content" rows="8"><%- review.content -%></textarea>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-12 col-lg-5">
+            <small for="parent-category">Help us to know what kind of business this is.</small>
+            <select id="parent-category-select" class="form-control" name="parent-category">
+              <option disabled>Select a category</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-lg-5">
+            <small for="parent-category">Some subcategories...</small>
+            <select id="child-category-select" class="form-control" name="child-category">
+            </select>
           </div>
         </div>
 
@@ -73,6 +88,41 @@
 
 <%- contentFor('scripts') -%>
 <script>
+const childCategoriesByParentCategory = <%- JSON.stringify(childCategoriesByParentCategory) %>;
+const initialCategories = <%- JSON.stringify(review.categories) %>;
+
+const parentCategorySelect = document.getElementById('parent-category-select');
+const childCategorySelect = document.getElementById('child-category-select');
+
+for (const parentCategory in childCategoriesByParentCategory) {
+  const option = document.createElement('option');
+  option.value = parentCategory;
+  option.innerText = parentCategory;
+  if (parentCategory === initialCategories[0]) {
+    option.selected = 'selected';
+  }
+  parentCategorySelect.appendChild(option);
+}
+
+parentCategorySelect.addEventListener('change', () => populateChildCategories());
+populateChildCategories(initialCategories[1]);
+
+function populateChildCategories(selectedChildCategory) {
+  const parentCategory = parentCategorySelect.value;
+  const childCategories = childCategoriesByParentCategory[parentCategory];
+  childCategorySelect.innerHTML = '<option></option>';
+
+  for (const childCategory of childCategories) {
+    const option = document.createElement('option');
+    if (childCategory === selectedChildCategory) {
+      option.selected = 'selected';
+    }
+    option.value = childCategory;
+    option.innerText = childCategory;
+    childCategorySelect.appendChild(option);
+  }
+}
+
 ample.setUpStarRatings();
 </script>
 
