@@ -8,6 +8,7 @@ const BusinessSearch = require("./business-search");
 const catchErrors = require('./catch-errors');
 const pluralize = require('pluralize');
 const sslRedirect = require('heroku-ssl-redirect');
+const GeoIP = require('geoip-lite');
 
 const CRITERIA_DESCRIPTIONS = {
   fat: 'Body Positivity',
@@ -108,11 +109,29 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     if (userId) {
       user = await database.getUserById(req.signedCookies['userId'])
     }
+
     const term = req.query.term;
     const location = req.query.location;
     const businessSearch = new BusinessSearch(googlePlacesClient);
-    const searchResults = await businessSearch.findBusinesses(term, location);
 
+    let searchResults
+    if (location.toLowerCase() === 'current location') {
+      const ip = req.headers['x-forwarded-for'];
+      const lookup = GeoIP.lookup(ip);
+      let lat, lng
+      if (lookup) {
+        lat = lookup.ll[0];
+        lng = lookup.ll[1];
+      } else {
+
+        // Default to portland, for now.
+        lat = 45.5442;
+        lng = -122.6431;
+      }
+      searchResults = await businessSearch.findBusinessesForLocation(term, lat, lng);
+    } else {
+      searchResults = await businessSearch.findBusinesses(term, location);
+    }
 
     res.render('search_results',
       {
@@ -277,15 +296,15 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     return review;
   }
 
-  app.use(async (error, req, res, next) => {
-    const userId = req.signedCookies.userId;
-    const user = userId && await database.getUserById(userId);
-
-    console.error('Caught Error');
-    console.error(error.stack);
-    res.status(500);
-    res.render('error', {user, error});
-  });
+  // app.use(async (error, req, res, next) => {
+  //   const userId = req.signedCookies.userId;
+  //   const user = userId && await database.getUserById(userId);
+  //
+  //   console.error('Caught Error');
+  //   console.error(error.stack);
+  //   res.status(500);
+  //   res.render('error', {user, error});
+  // });
 
   return app;
 }

@@ -8,6 +8,10 @@ class BusinessSearch {
 
   async findBusinesses(term, locationName) {
     const {lat, lng} = await this.googlePlacesClient.getCoordinatesForLocationName(locationName);
+    return this.findBusinessesForLocation(term, lat, lng);
+  }
+
+  async findBusinessesForLocation(term, lat, lng) {
     const googleBusinesses = await this.googlePlacesClient.getBusinessesNearCoordinates(
       term,
       lat,

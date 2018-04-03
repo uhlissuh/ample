@@ -24,6 +24,8 @@ const server = require('../src/server')(
   cache
 );
 
+const GOOGLE_PLACES_SEARCH_RESPONSE = require('./fixtures/google-place-search-response.json');
+
 describe("server", () => {
   let port, jar, userId
 
@@ -85,6 +87,27 @@ describe("server", () => {
         assert.equal(response.statusCode, 302);
         assert.equal(response.headers.location, '/businesses/123/reviews/new')
       });
+    });
+  });
+
+  describe("search for businesses", () => {
+    it("can search based on the user's current location", async () => {
+      googlePlacesClient.getBusinessesNearCoordinates = async function(term, lat, lng) {
+        assert.equal(lat, 45.5442);
+        assert.equal(lng, -122.6431);
+        assert.equal(term, 'coffee');
+        return GOOGLE_PLACES_SEARCH_RESPONSE.results;
+      };
+
+      googlePlacesClient.getPhotoURL = function() {
+        return 'the-url';
+      }
+
+      const response = await get('searchforbusinesses?location=Current%20Location&term=coffee', {
+        'x-forwarded-for': '71.238.71.20'
+      });
+
+      assert.equal(response.statusCode, 200);
     });
   });
 
@@ -171,10 +194,11 @@ describe("server", () => {
     });
   });
 
-  function get(url) {
+  function get(url, headers) {
     return request({
       uri: `http://localhost:${port}/${url}`,
       jar: jar,
+      headers
     });
   }
 
