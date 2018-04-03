@@ -135,8 +135,8 @@ describe("server", () => {
 
       const createReviewResponse = await post('businesses/567/reviews', {
         'content': 'I like this business.',
-        'body-positivity-rating': '5',
-        'lgbtq-inclusivity-rating': '3',
+        'fat-rating': '5',
+        'trans-rating': '3',
         'parent-category': 'Doctors'
       });
 
@@ -148,6 +148,8 @@ describe("server", () => {
 
       assert.deepEqual(business.categories, ['Doctors']);
       assert.deepEqual(reviews[0].categories, ['Doctors']);
+      assert.equal(reviews[0].fatRating, 5);
+      assert.equal(reviews[0].transRating, 3);
 
       const updateReviewResponse = await post(`businesses/567/reviews/${reviews[0].id}`, {
         'content': 'I like this business. A lot.',

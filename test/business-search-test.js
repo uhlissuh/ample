@@ -114,20 +114,16 @@ describe("BusinessSearch", () => {
 
     await database.createReview(userId, businessId1, {
       content: 'mediocre stylist.',
-      bodyPositivity: 2,
-      pocInclusivity: 1,
-      lgbtqInclusivity: 1,
-      buildingAccessibility: 2,
-      furnitureSize: 2,
+      fatRating: 2,
+      transRating: 1,
+      disabledRating: 2,
       categories: ['Beauty']
     });
     await database.createReview(userId, businessId2, {
       content: 'awesome stylist.',
-      bodyPositivity: 4,
-      pocInclusivity: 4,
-      lgbtqInclusivity: 5,
-      buildingAccessibility: 5,
-      furnitureSize: 4,
+      fatRating: 4,
+      transRating: 5,
+      disabledRating: 5,
       categories: ['Beauty']
     });
 

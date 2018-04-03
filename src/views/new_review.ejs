@@ -21,16 +21,11 @@
       <form class="main-form" method="POST" action="/businesses/<%- googleId -%>/reviews">
         <div class="row form-group">
           <div class="col-12 col-lg-6">
-            <label class="star-rating-label" for="body-positivity-rating">Body Positivity Rating</label>
-            <div class="star-rating" id="body-positivity-rating" data-name="body-positivity-rating"></div>
-            <label class="star-rating-label" for="lgbtq-inclusivity-rating">LGBTQ Inclusivity Rating</label>
-            <div class="star-rating" id="lgbtq-inclusivity-rating" data-name="lgbtq-inclusivity-rating"></div>
-            <label class="star-rating-label" for="poc-inclusivity-rating">P.O.C Inclusivity Rating</label>
-            <div class="star-rating" id="poc-inclusivity-rating" data-name="poc-inclusivity-rating"></div>
-            <label class="star-rating-label" for="building-accessibility-rating">Building and Space Accessibility Rating</label>
-            <div class="star-rating" id="building-accessibility-rating" data-name="building-accessibility-rating"></div>
-            <label class="star-rating-label" for="furniture-size-rating">Furniture Suitable for Fat Bodies</label>
-            <div class="star-rating" id="furniture-size-rating" data-name="furniture-size-rating"></div>
+            <% for (const criteria in CRITERIA_DESCRIPTIONS) { %>
+              <% const ratingName = `${criteria}-rating`; %>
+              <label class="star-rating-label" for="<%- ratingName -%>"><%- CRITERIA_DESCRIPTIONS[criteria] -%> Rating</label>
+              <div class="star-rating" id="<%- ratingName -%>" data-name="<%- ratingName -%>"></div>
+            <% } %>
           </div>
         </div>
 

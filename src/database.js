@@ -1,14 +1,11 @@
 const pgp = require("pg-promise")();
-const {snakeCase} = require('./util');
 const databaseConfig = require("../database.json");
 let db = null;
 
 const CRITERIA_NAMES = [
-  'bodyPositivity',
-  'furnitureSize',
-  'buildingAccessibility',
-  'pocInclusivity',
-  'lgbtqInclusivity',
+  'fat',
+  'trans',
+  'disabled',
 ];
 
 let CATEGORY_IDS_BY_TITLE, CATEGORY_TITLES_BY_ID, CHILD_CATEGORIES_BY_PARENT_CATEGORY;
@@ -101,8 +98,8 @@ function businessFromRow(row) {
   let combinedTotalRating = 0;
 
   for (const criteriaName of CRITERIA_NAMES) {
-    const ratingCount = row[snakeCase(criteriaName) + '_rating_count'];
-    const totalRating = row[snakeCase(criteriaName) + '_rating_total'];
+    const ratingCount = row[criteriaName + '_rating_count'];
+    const totalRating = row[criteriaName + '_rating_total'];
     combinedRatingCount += ratingCount;
     combinedTotalRating += totalRating;
 
@@ -149,32 +146,24 @@ async function updateBusinessAfterReview(tx, businessId, businessRow) {
     `
       update businesses
       set
-        body_positivity_rating_total = $2,
-        body_positivity_rating_count = $3,
-        poc_inclusivity_rating_total = $4,
-        poc_inclusivity_rating_count = $5,
-        lgbtq_inclusivity_rating_total = $6,
-        lgbtq_inclusivity_rating_count = $7,
-        building_accessibility_rating_total = $8,
-        building_accessibility_rating_count = $9,
-        furniture_size_rating_total = $10,
-        furniture_size_rating_count = $11,
-        review_count = $12,
-        category_ids = $13
+        fat_rating_total = $2,
+        fat_rating_count = $3,
+        trans_rating_total = $4,
+        trans_rating_count = $5,
+        disabled_rating_total = $6,
+        disabled_rating_count = $7,
+        review_count = $8,
+        category_ids = $9
       where id = $1
     `,
     [
       businessId,
-      businessRow.body_positivity_rating_total,
-      businessRow.body_positivity_rating_count,
-      businessRow.poc_inclusivity_rating_total,
-      businessRow.poc_inclusivity_rating_count,
-      businessRow.lgbtq_inclusivity_rating_total,
-      businessRow.lgbtq_inclusivity_rating_count,
-      businessRow.building_accessibility_rating_total,
-      businessRow.building_accessibility_rating_count,
-      businessRow.furniture_size_rating_total,
-      businessRow.furniture_size_rating_count,
+      businessRow.fat_rating_total,
+      businessRow.fat_rating_count,
+      businessRow.trans_rating_total,
+      businessRow.trans_rating_count,
+      businessRow.disabled_rating_total,
+      businessRow.disabled_rating_count,
       businessRow.review_count,
       businessRow.category_ids
     ]
@@ -205,9 +194,9 @@ exports.createReview = async function(userId, businessId, review) {
 
     businessRow.review_count++;
     for (const criteriaName of CRITERIA_NAMES) {
-      if (Number.isFinite(review[criteriaName])) {
-        businessRow[snakeCase(criteriaName) + '_rating_count']++;
-        businessRow[snakeCase(criteriaName) + '_rating_total'] += review[criteriaName];
+      if (Number.isFinite(review[criteriaName + 'Rating'])) {
+        businessRow[criteriaName + '_rating_count']++;
+        businessRow[criteriaName + '_rating_total'] += review[criteriaName + 'Rating'];
       }
     }
 
@@ -224,13 +213,12 @@ exports.createReview = async function(userId, businessId, review) {
     const rows = await tx.query(
       `insert into reviews
         (
-          business_id, user_id, content, timestamp, body_positivity,
-          poc_inclusivity, lgbtq_inclusivity, building_accessibility,
-          furniture_size, category_ids
+          business_id, user_id, content, timestamp, category_ids,
+          fat_rating, trans_rating, disabled_rating
         )
         values
         (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+          $1, $2, $3, $4, $5, $6, $7, $8
         )
         returning id`,
       [
@@ -238,12 +226,10 @@ exports.createReview = async function(userId, businessId, review) {
         userId,
         review.content,
         new Date(),
-        review.bodyPositivity || null,
-        review.pocInclusivity || null,
-        review.lgbtqInclusivity || null,
-        review.buildingAccessibility || null,
-        review.furnitureSize || null,
-        categoryIds
+        categoryIds,
+        review.fatRating || null,
+        review.transRating || null,
+        review.disabledRating || null,
       ]
     );
     return rows[0].id;
@@ -256,14 +242,14 @@ exports.updateReview = async function(reviewId, newReview) {
 
     const business = await getFullBusinessById(tx, oldReview.businessId);
     for (const criteriaName of CRITERIA_NAMES) {
-      if (Number.isFinite(oldReview[criteriaName])) {
-        business[snakeCase(criteriaName) + '_rating_count']--;
-        business[snakeCase(criteriaName) + '_rating_total'] -= oldReview[criteriaName];
+      if (Number.isFinite(oldReview[criteriaName + 'Rating'])) {
+        business[criteriaName + '_rating_count']--;
+        business[criteriaName + '_rating_total'] -= oldReview[criteriaName + 'Rating'];
       }
 
-      if (Number.isFinite(newReview[criteriaName])) {
-        business[snakeCase(criteriaName) + '_rating_count']++;
-        business[snakeCase(criteriaName) + '_rating_total'] += newReview[criteriaName];
+      if (Number.isFinite(newReview[criteriaName + 'Rating'])) {
+        business[criteriaName + '_rating_count']++;
+        business[criteriaName + '_rating_total'] += newReview[criteriaName + 'Rating'];
       }
     }
 
@@ -280,22 +266,18 @@ exports.updateReview = async function(reviewId, newReview) {
     await db.query(`
       update reviews
         set content = $1,
-        body_positivity = $2,
-        lgbtq_inclusivity = $3,
-        poc_inclusivity = $4,
-        building_accessibility = $5,
-        furniture_size = $6,
-        timestamp = $7,
-        category_ids = $8
+        fat_rating = $2,
+        trans_rating = $3,
+        disabled_rating = $4,
+        timestamp = $5,
+        category_ids = $6
       where
-        id = $9
+        id = $7
     `, [
       newReview.content,
-      newReview.bodyPositivity || null,
-      newReview.lgbtqInclusivity || null,
-      newReview.pocInclusivity || null,
-      newReview.buildingAccessibility || null,
-      newReview.furnitureSize || null,
+      newReview.fatRating || null,
+      newReview.transRating || null,
+      newReview.disabledRating || null,
       new Date(),
       categoryIds,
       reviewId
@@ -328,11 +310,9 @@ exports.getMostRecentReviews = async function() {
       businessName: row.name,
       businessAddress: row.address,
       timestamp: row.timestamp.getTime(),
-      bodyPositivity: row.body_positivity,
-      pocInclusivity: row.poc_inclusivity,
-      lgbtqInclusivity: row.lgbtq_inclusivity,
-      buildingAccessibility: row.buildingAccessibility,
-      furnitureSize: row.furniture_size,
+      fatRating: row.fat_rating,
+      transRating: row.trans_rating,
+      disabledRating: row.disabled_rating,
       user: {
         id: row.user_id,
         name: row.user_name
@@ -381,11 +361,9 @@ function reviewFromRow(row) {
     businessId: row.business_id,
     content: row.content,
     timestamp: row.timestamp.getTime(),
-    bodyPositivity: row.body_positivity,
-    pocInclusivity: row.poc_inclusivity,
-    lgbtqInclusivity: row.lgbtq_inclusivity,
-    buildingAccessibility: row.building_accessibility,
-    furnitureSize: row.furniture_size,
+    fatRating: row.fat_rating,
+    transRating: row.trans_rating,
+    disabledRating: row.disabled_rating,
     categories: row.category_ids.map(getCategoryTitle),
     user: {
       id: row.user_id,
@@ -406,12 +384,11 @@ exports.getBusinessRatingBreakdown = async function(businessId) {
   const [row] = await db.query(RATING_BREAKDOWN_QUERY, [ businessId ]);
   const result = {};
   for (const criteriaName of CRITERIA_NAMES) {
-    const dbCriteriaName = snakeCase(criteriaName);
     result[criteriaName] = {};
 
     let totalRatingCount = 0;
     for (const ratingValue of [1, 2, 3, 4, 5]) {
-      const ratingCount = parseInt(row[`${dbCriteriaName}_${ratingValue}_count`]);
+      const ratingCount = parseInt(row[`${criteriaName}_${ratingValue}_count`]);
       result[criteriaName][ratingValue] = {count: ratingCount, percentage: 0};
       totalRatingCount += ratingCount;
     }
@@ -488,10 +465,9 @@ exports.getProfileInformationForUser = async function(userId) {
 const RATING_BREAKDOWN_QUERY_COLUMNS = [];
 
 for (const criteriaName of CRITERIA_NAMES) {
-  const dbCriteriaName = snakeCase(criteriaName);
   for (const ratingValue of [1, 2, 3, 4, 5]) {
     RATING_BREAKDOWN_QUERY_COLUMNS.push(
-      `count(*) filter (where ${dbCriteriaName} = ${ratingValue}) as ${dbCriteriaName}_${ratingValue}_count`
+      `count(*) filter (where ${criteriaName}_rating = ${ratingValue}) as ${criteriaName}_${ratingValue}_count`
     );
   }
 }

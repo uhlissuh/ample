@@ -21,36 +21,15 @@
       <form class="main-form" method="POST" action="/businesses/<%- business.googleId -%>/reviews/<%- review.id -%>">
         <div class="row form-group">
           <div class="col-12">
-            <label class="star-rating-label" for="body-positivity-rating">Body Positivity Rating</label>
-            <div
-              class="star-rating"
-              id="body-positivity-rating"
-              data-name="body-positivity-rating"
-              data-value="<%- review.bodyPositivity %>"></div>
-            <label class="star-rating-label" for="lgbtq-inclusivity-rating">LGBTQ Inclusivity Rating</label>
-            <div
-              class="star-rating"
-              id="lgbtq-inclusivity-rating"
-              data-name="lgbtq-inclusivity-rating"
-              data-value="<%- review.lgbtqInclusivity %>"></div>
-            <label class="star-rating-label" for="poc-inclusivity-rating">P.O.C Inclusivity Rating</label>
-            <div
-              class="star-rating"
-              id="poc-inclusivity-rating"
-              data-name="poc-inclusivity-rating"
-              data-value="<%- review.pocInclusivity %>"></div>
-            <label class="star-rating-label" for="building-accessibility-rating">Building and Space Accessibility Rating</label>
-            <div
-              class="star-rating"
-              id="building-accessibility-rating"
-              data-name="building-accessibility-rating"
-              data-value="<%- review.buildingAccessibility %>"></div>
-            <label class="star-rating-label" for="furniture-size-rating">Furniture Suitable for Fat Bodies</label>
-            <div
-              class="star-rating"
-              id="furniture-size-rating"
-              data-name="furniture-size-rating"
-              data-value="<%- review.furnitureSize %>"></div>
+            <% for (const criteria in CRITERIA_DESCRIPTIONS) { %>
+              <% const ratingName = `${criteria}-rating`; %>
+              <label class="star-rating-label" for="<%- ratingName -%>"><%- CRITERIA_DESCRIPTIONS[criteria] -%> Rating</label>
+              <div
+                class="star-rating"
+                id="<%- ratingName -%>"
+                data-name="<%- ratingName -%>"
+                data-value="<%- review[`${criteria}Rating`] %>"></div>
+            <% } %>
           </div>
         </div>
 
@@ -76,7 +55,7 @@
         </div>
 
         <div class="row form-group">
-          <div class="col-12 col-lg-9">
+          <div class="col-12 col-lg-10">
             <button type="submit" class="btn review-submit-button" >Update Review</button>
           </div>
         </div>

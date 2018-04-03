@@ -31,16 +31,12 @@ describe("database", () => {
         categories: [],
         overallRating: null,
         reviewCount: 0,
-        pocInclusivityAverageRating: null,
-        pocInclusivityRatingCount: 0,
-        bodyPositivityAverageRating: null,
-        bodyPositivityRatingCount: 0,
-        lgbtqInclusivityAverageRating: null,
-        lgbtqInclusivityRatingCount: 0,
-        furnitureSizeAverageRating: null,
-        furnitureSizeRatingCount: 0,
-        buildingAccessibilityAverageRating: null,
-        buildingAccessibilityRatingCount: 0,
+        fatAverageRating: null,
+        fatRatingCount: 0,
+        transAverageRating: null,
+        transRatingCount: 0,
+        disabledAverageRating: null,
+        disabledRatingCount: 0,
       })
 
       assert.deepEqual(await database.getBusinessByGoogleId('5'), business)
@@ -101,44 +97,38 @@ describe("database", () => {
     it("creates a review and updates the business's score and categories", async () => {
       await database.createReview(userId, businessId, {
         content: "I love this person deeply.",
-        bodyPositivity: 5,
-        pocInclusivity: 2,
-        lgbtqInclusivity: 5,
-        buildingAccessibility: 5,
-        furnitureSize: 5,
+        fatRating: 5,
+        transRating: 5,
+        disabledRating: 5,
         categories: ['Doctors']
       });
 
       let business = await database.getBusinessById(businessId);
-      assert.equal(business.bodyPositivityAverageRating, 5);
+      assert.equal(business.fatAverageRating, 5);
       assert.deepEqual(business.categories, ['Doctors']);
 
       await database.createReview(userId, businessId, {
         content: "I hate.",
-        bodyPositivity: 1,
-        pocInclusivity: 4,
-        lgbtqInclusivity: 3,
-        buildingAccessibility: 1,
-        furnitureSize: 1,
+        fatRating: 1,
+        transRating: 3,
+        disabledRating: 1,
         categories: ['Doctors', 'Internal Medicine']
       });
 
       business = await database.getBusinessById(businessId);
-      assert.equal(business.bodyPositivityAverageRating, 3);
+      assert.equal(business.fatAverageRating, 3);
       assert.deepEqual(business.categories, ['Doctors', 'Internal Medicine']);
 
       await database.createReview(userId, businessId, {
         content: "I pretty much love this person.",
-        bodyPositivity: 5,
-        pocInclusivity: 4,
-        lgbtqInclusivity: 2,
-        buildingAccessibility: 2,
-        furnitureSize: 1,
+        fatRating: 5,
+        transRating: 2,
+        disabledRating: 2,
         categories: ['Doctors']
       });
 
       business = await database.getBusinessById(businessId);
-      assert.equal(business.bodyPositivityAverageRating, 3.7)
+      assert.equal(business.fatAverageRating, 3.7)
       assert.deepEqual(business.categories, ['Doctors', 'Internal Medicine']);
 
       const reviews = await database.getBusinessReviewsById(businessId);
@@ -160,18 +150,15 @@ describe("database", () => {
         id: userId
       })
 
-      assert.deepEqual(reviews.map(review => review.bodyPositivity).sort(), [1, 5, 5]);
+      assert.deepEqual(reviews.map(review => review.fatRating).sort(), [1, 5, 5]);
     });
 
     it("doesn't allow unknown categories", async () => {
       try {
         await database.createReview(userId, businessId, {
           content: "I love this person deeply.",
-          bodyPositivity: 5,
-          pocInclusivity: 2,
-          lgbtqInclusivity: 5,
-          buildingAccessibility: 5,
-          furnitureSize: 5,
+          fatRating: 5,
+          transRating: 5,
           categories: ['Rodeo Clowns']
         });
       } catch (error) {
@@ -186,17 +173,16 @@ describe("database", () => {
     it("allows ratings to be omitted", async () => {
       await database.createReview(userId, businessId, {
         content: "I love this person deeply.",
-        bodyPositivity: 4,
-        furnitureSize: 3,
-        lgbtqInclusivity: NaN,
+        fatRating: 4,
+        transRating: NaN,
         categories: ['Doctors']
       });
 
       const business = await database.getBusinessById(businessId);
-      assert.equal(business.lgbtqInclusivityRatingCount, 0);
-      assert.equal(business.lgbtqInclusivityAverageRating, null);
-      assert.equal(business.bodyPositivityRatingCount, 1);
-      assert.equal(business.bodyPositivityAverageRating, 4);
+      assert.equal(business.transRatingCount, 0);
+      assert.equal(business.transAverageRating, null);
+      assert.equal(business.fatRatingCount, 1);
+      assert.equal(business.fatAverageRating, 4);
     });
   })
 
@@ -230,7 +216,7 @@ describe("database", () => {
       });
 
       let breakdown = await database.getBusinessRatingBreakdown(businessId);
-      assert.deepEqual(breakdown.bodyPositivity, {
+      assert.deepEqual(breakdown.fat, {
         1: {count: 0, percentage: 0},
         2: {count: 0, percentage: 0},
         3: {count: 0, percentage: 0},
@@ -241,27 +227,27 @@ describe("database", () => {
 
       await database.createReview(userId1, businessId, {
         content: "Cool.",
-        bodyPositivity: 4,
-        pocInclusivity: 3,
+        fatRating: 4,
+        transRating: 3,
         categories: ['Doctors']
       });
 
       await database.createReview(userId2, businessId, {
         content: "Not as cool.",
-        bodyPositivity: 4,
-        pocInclusivity: 2,
+        fatRating: 4,
+        transRating: 2,
         categories: ['Doctors']
       });
 
       await database.createReview(userId3, businessId, {
         content: "Really cool.",
-        bodyPositivity: 5,
-        pocInclusivity: 2,
+        fatRating: 5,
+        transRating: 2,
         categories: ['Doctors']
       });
 
       breakdown = await database.getBusinessRatingBreakdown(businessId);
-      assert.deepEqual(breakdown.bodyPositivity, {
+      assert.deepEqual(breakdown.fat, {
         1: {count: 0, percentage: 0},
         2: {count: 0, percentage: 0},
         3: {count: 0, percentage: 0},
@@ -269,7 +255,7 @@ describe("database", () => {
         5: {count: 1, percentage: 33},
         total: 3
       });
-      assert.deepEqual(breakdown.pocInclusivity, {
+      assert.deepEqual(breakdown.trans, {
         1: {count: 0, percentage: 0},
         2: {count: 2, percentage: 67},
         3: {count: 1, percentage: 33},
@@ -307,33 +293,30 @@ describe("database", () => {
 
       await database.createReview(otherUserId, businessId, {
         content: "Meh.",
-        bodyPositivity: 3,
-        lgbtqInclusivity: 3,
+        fatRating: 3,
+        transRating: 3,
         categories: ['Doctors']
       });
 
       reviewId = await database.createReview(userId, businessId, {
         content: "I love this person deeply.",
-        bodyPositivity: 4,
-        buildingAccessibility: 4,
-        furnitureSize: 4,
+        fatRating: 4,
+        disabledRating: 4,
         categories: ['Doctors']
       });
     });
 
     it("updates an existing review and updates the business review information", async() => {
       let business = await database.getBusinessById(businessId);
-      assert.equal(business.bodyPositivityRatingCount, 2);
-      assert.equal(business.bodyPositivityAverageRating, 3.5);
-      assert.equal(business.lgbtqInclusivityRatingCount, 1);
-      assert.equal(business.lgbtqInclusivityAverageRating, 3);
-      assert.equal(business.furnitureSizeRatingCount, 1);
-      assert.equal(business.furnitureSizeAverageRating, 4);
+      assert.equal(business.fatRatingCount, 2);
+      assert.equal(business.fatAverageRating, 3.5);
+      assert.equal(business.transRatingCount, 1);
+      assert.equal(business.transAverageRating, 3);
 
       await database.updateReview(reviewId, {
         content: "I actually love this person more than I even thought was possible.",
-        bodyPositivity: 5,
-        lgbtqInclusivity: 1,
+        fatRating: 5,
+        transRating: 1,
         categories: ['Doctors']
       });
 
@@ -341,20 +324,16 @@ describe("database", () => {
       business = await database.getBusinessById(businessId);
 
       assert.equal(updatedReview.content, 'I actually love this person more than I even thought was possible.')
-      assert.equal(updatedReview.bodyPositivity, 5);
-      assert.equal(updatedReview.lgbtqInclusivity, 1);
-      assert.equal(updatedReview.pocInclusivity, null);
-      assert.equal(updatedReview.buildingAccessibility, null);
-      assert.equal(updatedReview.furnitureSize, null);
+      assert.equal(updatedReview.fatRating, 5);
+      assert.equal(updatedReview.transRating, 1);
+      assert.equal(updatedReview.disabledRating, null);
 
-      assert.equal(business.bodyPositivityRatingCount, 2);
-      assert.equal(business.bodyPositivityAverageRating, 4);
-      assert.equal(business.lgbtqInclusivityRatingCount, 2);
-      assert.equal(business.lgbtqInclusivityAverageRating, 2);
-      assert.equal(business.furnitureSizeRatingCount, 0);
-      assert.equal(business.furnitureSizeAverageRating, null);
-      assert.equal(business.buildingAccessibilityRatingCount, 0);
-      assert.equal(business.buildingAccessibilityAverageRating, null);
+      assert.equal(business.fatRatingCount, 2);
+      assert.equal(business.fatAverageRating, 4);
+      assert.equal(business.transRatingCount, 2);
+      assert.equal(business.transAverageRating, 2);
+      assert.equal(business.disabledRatingCount, 0);
+      assert.equal(business.disabledAverageRating, null);
     });
   });
 
@@ -404,15 +383,13 @@ describe("database", () => {
 
       const review1 = await database.createReview(id, businessId1, {
         content: "Cool.",
-        bodyPositivity: 4,
-        pocInclusivity: 3,
+        fatRating: 4,
         categories: ['Doctors']
       });
 
       const review2 = await database.createReview(id, businessId2, {
         content: "BAD.",
-        bodyPositivity: 1,
-        pocInclusivity: 1,
+        fatRating: 1,
         categories: ['Doctors']
       });
 
@@ -420,14 +397,14 @@ describe("database", () => {
 
       profileInfo.reviews.sort();
       const reviewsContent = [];
-      const reviewsBodyPositivity = []
+      const fatRatings = []
       for (review of profileInfo.reviews) {
         reviewsContent.push(review.content);
-        reviewsBodyPositivity.push(review.bodyPositivity);
+        fatRatings.push(review.fatRating);
       }
 
       assert.deepEqual(reviewsContent, ['Cool.', "BAD."]);
-      assert.deepEqual(reviewsBodyPositivity, [4, 1]);
+      assert.deepEqual(fatRatings, [4, 1]);
     });
   });
 

@@ -89,7 +89,7 @@
                   <% for (const criteriaName in CRITERIA_DESCRIPTIONS) { %>
                     <div class="row float-right">
                       <label class="star-rating-label"><%- CRITERIA_DESCRIPTIONS[criteriaName] -%></label>
-                      <div class="star-rating" data-value="<%- review[criteriaName] -%>" data-size="small"></div>
+                      <div class="star-rating" data-value="<%- review[criteriaName + 'Rating'] -%>" data-size="small"></div>
                     </div>
                   <% } %>
                 </div>

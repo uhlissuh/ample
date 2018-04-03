@@ -10,11 +10,9 @@ const pluralize = require('pluralize');
 const sslRedirect = require('heroku-ssl-redirect');
 
 const CRITERIA_DESCRIPTIONS = {
-  bodyPositivity: 'Body Positivity',
-  furnitureSize: 'Fat-Friendly Furniture',
-  buildingAccessibility: 'Building Accessibility',
-  pocInclusivity: 'POC Inclusivity',
-  lgbtqInclusivity: 'LGBTQ Inclusivity',
+  fat: 'Body Positivity',
+  trans: 'Trans Awareness',
+  disabled: 'Accessibility'
 };
 
 module.exports =
@@ -153,18 +151,16 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
       }
 
       ratingBreakdown = await database.getBusinessRatingBreakdown(reviewedBusiness.id);
+
       business.overallRating = reviewedBusiness.overallRating;
       business.reviewCount = reviewedBusiness.reviewCount;
-      business.bodyPositivityAverageRating = reviewedBusiness.bodyPositivityAverageRating;
-      business.bodyPositivityRatingCount = reviewedBusiness.bodyPositivityRatingCount;
-      business.pocInclusivityAverageRating = reviewedBusiness.pocInclusivityAverageRating;
-      business.pocInclusivityRatingCount = reviewedBusiness.pocInclusivityRatingCount;
-      business.lgbtqInclusivityAverageRating = reviewedBusiness.lgbtqInclusivityAverageRating;
-      business.lgbtqInclusivityRatingCount = reviewedBusiness.lgbtqInclusivityRatingCount;
-      business.furnitureSizeAverageRating = reviewedBusiness.furnitureSizeAverageRating;
-      business.furnitureSizeRatingCount =  reviewedBusiness.furnitureSizeRatingCount;
-      business.buildingAccessibilityAverageRating = reviewedBusiness.buildingAccessibilityAverageRating;
-      business.buildingAccessibilityRatingCount = reviewedBusiness.buildingAccessibilityRatingCount;
+
+      business.fatAverageRating = reviewedBusiness.fatAverageRating;
+      business.fatRatingCount = reviewedBusiness.fatRatingCount;
+      business.transAverageRating = reviewedBusiness.transAverageRating;
+      business.transRatingCount = reviewedBusiness.transRatingCount;
+      business.disabledAverageRating = reviewedBusiness.disabledAverageRating;
+      business.disabledRatingCount = reviewedBusiness.disabledRatingCount;
     }
     const photoReference = business.photos && business.photos[0].photo_reference;
 
@@ -206,7 +202,8 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         rating: business.rating,
         reviewerId: req.signedCookies["userId"],
         childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
-        user: user
+        user: user,
+        CRITERIA_DESCRIPTIONS
       })
     }
   });
@@ -223,6 +220,7 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
         review,
         business,
         childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
+        CRITERIA_DESCRIPTIONS
       });
     } else {
       throw new Error();
@@ -266,11 +264,9 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
   function reviewFromRequest(body) {
     const review = {
       content: body.content,
-      bodyPositivity: parseInt(body["body-positivity-rating"]),
-      pocInclusivity: parseInt(body["poc-inclusivity-rating"]),
-      lgbtqInclusivity: parseInt(body["lgbtq-inclusivity-rating"]),
-      buildingAccessibility: parseInt(body["building-accessibility-rating"]),
-      furnitureSize: parseInt(body["furniture-size-rating"]),
+      fatRating: parseInt(body["fat-rating"]),
+      transRating: parseInt(body["trans-rating"]),
+      disabledRating: parseInt(body["disabled-rating"]),
       categories: [body['parent-category']]
     };
 
