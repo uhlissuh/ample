@@ -223,9 +223,15 @@ exports.createReview = async function(userId, businessId, review) {
 
     const rows = await tx.query(
       `insert into reviews
-        (business_id, user_id, content, timestamp, body_positivity, poc_inclusivity, lgbtq_inclusivity, building_accessibility, furniture_size)
+        (
+          business_id, user_id, content, timestamp, body_positivity,
+          poc_inclusivity, lgbtq_inclusivity, building_accessibility,
+          furniture_size, category_ids
+        )
         values
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+        )
         returning id`,
       [
         businessId,
@@ -236,7 +242,8 @@ exports.createReview = async function(userId, businessId, review) {
         review.pocInclusivity || null,
         review.lgbtqInclusivity || null,
         review.buildingAccessibility || null,
-        review.furnitureSize || null
+        review.furnitureSize || null,
+        categoryIds
       ]
     );
     return rows[0].id;
@@ -278,9 +285,10 @@ exports.updateReview = async function(reviewId, newReview) {
         poc_inclusivity = $4,
         building_accessibility = $5,
         furniture_size = $6,
-        timestamp = $7
+        timestamp = $7,
+        category_ids = $8
       where
-        id = $8
+        id = $9
     `, [
       newReview.content,
       newReview.bodyPositivity || null,
@@ -289,6 +297,7 @@ exports.updateReview = async function(reviewId, newReview) {
       newReview.buildingAccessibility || null,
       newReview.furnitureSize || null,
       new Date(),
+      categoryIds,
       reviewId
     ]);
   });
@@ -357,7 +366,7 @@ exports.tx = function() { return db.tx.apply(db, arguments); };
 
 exports.getBusinessReviewsById = async function(id) {
   const rows = await db.query(
-  `select *, users.id as user_id, reviews.id as review_id
+  `select *, users.id as user_id, reviews.id as id
      from reviews, users
      where reviews.business_id = $1 and reviews.user_id = users.id
      order by reviews.timestamp desc`,
@@ -368,8 +377,8 @@ exports.getBusinessReviewsById = async function(id) {
 
 function reviewFromRow(row) {
   return {
-    id: row.review_id,
-    business_id: row.business_id,
+    id: row.id,
+    businessId: row.business_id,
     content: row.content,
     timestamp: row.timestamp.getTime(),
     bodyPositivity: row.body_positivity,
@@ -377,6 +386,7 @@ function reviewFromRow(row) {
     lgbtqInclusivity: row.lgbtq_inclusivity,
     buildingAccessibility: row.building_accessibility,
     furnitureSize: row.furniture_size,
+    categories: row.category_ids.map(getCategoryTitle),
     user: {
       id: row.user_id,
       name: row.name
@@ -384,30 +394,12 @@ function reviewFromRow(row) {
   };
 }
 
-exports.getReviewById = async function(review_id) {
-  const row = await db.query(
-    `select * from reviews
-      where id = $1 limit 1`,
-      [review_id]
+exports.getReviewById = async function(id) {
+  const [row] = await db.query(
+    `select * from reviews where id = $1 limit 1`,
+    [id]
   );
-
-  return row.map(row => {
-    return {
-      reviewId: row.id,
-      businessId: row.business_id,
-      content: row.content,
-      timestamp: row.timestamp.getTime(),
-      bodyPositivity: row.body_positivity,
-      pocInclusivity: row.poc_inclusivity,
-      lgbtqInclusivity: row.lgbtq_inclusivity,
-      buildingAccessibility: row.building_accessibility,
-      furnitureSize: row.furniture_size,
-      user: {
-        id: row.user_id,
-        name: row.name
-      },
-    };
-  })[0];
+  return row && reviewFromRow(row);
 };
 
 exports.getBusinessRatingBreakdown = async function(businessId) {

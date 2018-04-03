@@ -149,6 +149,12 @@ describe("database", () => {
         'I pretty much love this person.'
       ]);
 
+      assert.deepEqual(reviews.map(review => review.categories).sort(), [
+        ['Doctors'],
+        ['Doctors'],
+        ['Doctors', 'Internal Medicine'],
+      ]);
+
       assert.deepEqual(reviews[0].user, {
         name: 'Bob Carlson',
         id: userId
