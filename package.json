@@ -7,6 +7,7 @@
     "node": "^8.11"
   },
   "dependencies": {
+    "autocomplete.js": "^0.29.0",
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-beta.3",
     "clamp-js": "^0.7.0",

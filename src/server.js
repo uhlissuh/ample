@@ -44,10 +44,13 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     }
     const recentReviews = await database.getMostRecentReviews();
 
+    const categories = await database.getAllCategories();
+
     res.render('index',
       {
-        user: user,
-        recentReviews: recentReviews ? recentReviews : null
+        user,
+        recentReviews: recentReviews ? recentReviews : null,
+        categories
       }
     )
   });

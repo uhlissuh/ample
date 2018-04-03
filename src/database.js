@@ -195,6 +195,10 @@ exports.getChildCategoriesByParentCategory = async function() {
   return CHILD_CATEGORIES_BY_PARENT_CATEGORY;
 };
 
+exports.getAllCategories = async function() {
+  return Object.keys(CATEGORY_IDS_BY_TITLE);
+};
+
 exports.createReview = async function(userId, businessId, review) {
   return this.tx(async tx => {
     const businessRow = await getFullBusinessById(tx, businessId);

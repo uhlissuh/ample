@@ -20,6 +20,7 @@
               type="text"
               class="form-control"
               id="business-search-term"
+              autocomplete="off"
               name="term"
               placeholder="doctors, Sally's Hair Salon, massage" />
           </div>
@@ -46,7 +47,7 @@
     <div class="row">
       <div class="col-12">
         <p class="tag-line">
-          Ample is a review site to help people find all sorts of establishments that are friendly to marginalized bodies. 
+          Ample is a review site to help people find all sorts of establishments that are friendly to marginalized bodies.
         </p>
       </div>
     </div>
@@ -85,6 +86,35 @@ ample.setUpStarRatings();
 for (const card of document.getElementsByClassName('card-text')) {
   ample.clamp(card, {clamp: 'auto'});
 }
+
+const categories = <%- JSON.stringify(categories) %>;
+
+ample.autocomplete('#business-search-term', {
+  appendTo: 'body',
+  hint: false,
+  openOnFocus: true,
+}, [
+  {
+    displayKey: (category) => category,
+    source: (query, callback) => {
+      query = query.toLowerCase();
+
+      callback(categories.filter(category => {
+        category = category.toLowerCase();
+        return (
+          category.indexOf(query) === 0 ||
+          category.indexOf(' ' + query) !== -1
+        );
+      }));
+    }
+  },
+  {
+    source: (query, callback) => {
+      callback([]);
+    }
+  }
+]);
+
 </script>
 
 <%- contentFor('title') -%>

@@ -18,6 +18,11 @@
     height: 550px;
 }
 
+.form-control:nth-last-child(2).aa-input {
+  border-top-right-radius: 0.25em;
+  border-bottom-right-radius: 0.25em;
+}
+
 .summary-item {
   vertical-align: middle;
   font-size: 40px;
@@ -494,4 +499,31 @@ a:hover {
   .star-rating--star.half-highlighted {
     background-image: url('/static/star-half-highlight-large-phone.png');
   }
+}
+
+.algolia-autocomplete {
+  width: 100%;
+}
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+  width: 100%;
+}
+.algolia-autocomplete .aa-hint {
+  color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #999;
+  border-top: none;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+  cursor: pointer;
+  padding: 5px 4px;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+  background-color: #B2D7FF;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+  font-weight: bold;
+  font-style: normal;
 }
