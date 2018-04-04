@@ -4,16 +4,18 @@ const database = require("../src/database");
 const BusinessSearch = require("../src/business-search");
 
 describe("BusinessSearch", () => {
+  let userId;
+
   beforeEach(async () => {
     await database.clear();
+    userId = await database.createUser({
+      name: 'user 1',
+      email: 'user1@example.com',
+      googleId: '123'
+    });
   });
 
   it("finds businesses near the given location", async () => {
-    const userId = await database.createUser({
-      name: 'user 1',
-      email: 'user1@example.com'
-    });
-
     const googlePlacesClient = {
       async getCoordinatesForLocationName(locationName) {
         return {
@@ -161,5 +163,82 @@ describe("BusinessSearch", () => {
     const search = new BusinessSearch(googlePlacesClient);
     const businesses = await search.findBusinessesForLocation('behaul', 42, -122);
     assert.deepEqual(businesses, []);
+  });
+
+  describe("when searching for a known category", () => {
+    it("ensures that any reviewed businesses w/ that category remotely nearby are included", async () => {
+      const businessId1 = await database.createBusiness({
+        name: "Beaverton Stylist",
+        googleId: "stylist-1-id",
+        latitude: 45.4871,
+        longitude: -122.8037
+      });
+      const businessId2 = await database.createBusiness({
+        name: "Gresham Stylist",
+        googleId: "stylist-2-id",
+        latitude: 45.5059,
+        longitude: -122.4486
+      });
+      const businessId3 = await database.createBusiness({
+        name: "Arcata Stylist",
+        googleId: "stylist-3-id",
+        latitude: 40.8665,
+        longitude: -124.0828
+      });
+
+      await database.createReview(userId, businessId1, {
+        content: 'a good stylist.',
+        fatRating: 4,
+        categories: ['Beauty']
+      });
+      await database.createReview(userId, businessId2, {
+        content: 'a very good stylist.',
+        fatRating: 4,
+        categories: ['Beauty']
+      });
+      await database.createReview(userId, businessId3, {
+        content: 'a kewl stylist.',
+        fatRating: 4,
+        categories: ['Beauty']
+      });
+
+      const googlePlacesClient = {
+        async getBusinessesNearCoordinates(term, latitude, longitude) {
+          return [
+            {
+              place_id: "stylist-4-id",
+              name: "Portland Stylist",
+              geometry: {
+                location: {
+                  lat: 45.5232,
+                  lng: -122.6766
+                }
+              },
+              photos: [
+                {
+                  photo_reference: 'stylist-4-photo-reference'
+                }
+              ],
+              types: ["hair_care"],
+              vicinity: "Address 4"
+            },
+          ]
+        },
+
+        getPhotoURL() {
+          return 'the-url'
+        }
+      };
+
+      const search = new BusinessSearch(googlePlacesClient);
+
+      const businesses = await search.findBusinessesForLocation('beauty', 45.5231, -122.6765);
+
+      assert.deepEqual(businesses.map(business => business.name), [
+        'Beaverton Stylist',
+        'Gresham Stylist',
+        'Portland Stylist'
+      ]);
+    });
   });
 });

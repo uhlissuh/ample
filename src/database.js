@@ -8,19 +8,21 @@ const CRITERIA_NAMES = [
   'disabled',
 ];
 
-let CATEGORY_IDS_BY_TITLE, CATEGORY_TITLES_BY_ID, CHILD_CATEGORIES_BY_PARENT_CATEGORY;
+let ALL_CATEGORIES, CATEGORY_IDS_BY_TITLE, CATEGORY_TITLES_BY_ID, CHILD_CATEGORIES_BY_PARENT_CATEGORY;
 
 exports.connect = async function(environment) {
   let config = databaseConfig[environment];
   if (config.ENV) config = process.env[config.ENV];
   db = pgp(config);
 
+  ALL_CATEGORIES = [];
   CATEGORY_IDS_BY_TITLE = {};
   CATEGORY_TITLES_BY_ID = {};
   CHILD_CATEGORIES_BY_PARENT_CATEGORY = {};
   const rows = await db.query('select * from categories');
   for (const row of rows) {
-    CATEGORY_IDS_BY_TITLE[row.title] = row.id;
+    ALL_CATEGORIES.push(row.title);
+    CATEGORY_IDS_BY_TITLE[row.title.toLowerCase()] = row.id;
     CATEGORY_TITLES_BY_ID[row.id] = row.title;
     if (row.parent_id == null) {
       CHILD_CATEGORIES_BY_PARENT_CATEGORY[row.title] = [];
@@ -37,6 +39,7 @@ exports.connect = async function(environment) {
   Object.freeze(CHILD_CATEGORIES_BY_PARENT_CATEGORY);
   Object.freeze(CATEGORY_IDS_BY_TITLE);
   Object.freeze(CATEGORY_TITLES_BY_ID);
+  Object.freeze(ALL_CATEGORIES);
 };
 
 exports.clear = async function() {
@@ -79,6 +82,26 @@ exports.getBusinessById = async function(id) {
     id
   );
   if (row) return businessFromRow(row);
+};
+
+exports.getBusinessesByCategoryandLocation = async function(
+  category,
+  latitude,
+  longitude
+) {
+  const categoryId = getCategoryId(category);
+  const businessRows = await db.query(`
+    select distinct
+      businesses.*,
+      ST_x(businesses.coordinates) as latitude,
+      ST_y(businesses.coordinates) as longitude
+    from
+      businesses
+    where
+      ST_DistanceSphere(businesses.coordinates, ST_MakePoint($1, $2)) <= 50000 and
+      $3 = ANY (businesses.category_ids)
+  `, [latitude, longitude, categoryId]);
+  return businessRows.map(businessFromRow);
 };
 
 function businessFromRow(row) {
@@ -171,7 +194,7 @@ async function updateBusinessAfterReview(tx, businessId, businessRow) {
 }
 
 function getCategoryId(title) {
-  const result = CATEGORY_IDS_BY_TITLE[title];
+  const result = CATEGORY_IDS_BY_TITLE[title.toLowerCase()];
   if (!result) throw new Error(`Invalid category '${title}'`);
   return result;
 }
@@ -180,12 +203,16 @@ function getCategoryTitle(id) {
   return CATEGORY_TITLES_BY_ID[id];
 }
 
+exports.hasCategory = function(category) {
+  return category.toLowerCase() in CATEGORY_IDS_BY_TITLE;
+}
+
 exports.getChildCategoriesByParentCategory = async function() {
   return CHILD_CATEGORIES_BY_PARENT_CATEGORY;
 };
 
 exports.getAllCategories = async function() {
-  return Object.keys(CATEGORY_IDS_BY_TITLE);
+  return ALL_CATEGORIES;
 };
 
 exports.createReview = async function(userId, businessId, review) {

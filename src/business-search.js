@@ -12,6 +12,7 @@ class BusinessSearch {
   }
 
   async findBusinessesForLocation(term, lat, lng) {
+
     const googleBusinesses = await this.googlePlacesClient.getBusinessesNearCoordinates(
       term,
       lat,
@@ -40,6 +41,15 @@ class BusinessSearch {
         reviewCount: 0
       }, ratedBusiness);
     });
+
+    if (database.hasCategory(term)) {
+      const nearbyBusinesses = await database.getBusinessesByCategoryandLocation(
+        term,
+        lat,
+        lng
+      );
+      results.push(...nearbyBusinesses);
+    }
 
     return results.sort((a, b) =>
       (b.overallRating || -Infinity) - (a.overallRating || -Infinity)
