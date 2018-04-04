@@ -10,6 +10,7 @@ const pluralize = require('pluralize');
 const sslRedirect = require('heroku-ssl-redirect');
 const GeoIP = require('geoip-lite');
 
+
 const CRITERIA_DESCRIPTIONS = {
   fat: 'Body Positivity',
   trans: 'Trans Awareness',
@@ -17,7 +18,12 @@ const CRITERIA_DESCRIPTIONS = {
 };
 
 module.exports =
-function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
+function (
+  cookieSigningSecret,
+  facebookClient,
+  googleOauthClient,
+  googlePlacesClient,cache
+) {
   const app = express();
   catchErrors(app);
 
@@ -54,36 +60,53 @@ function (cookieSigningSecret, facebookClient, googlePlacesClient, cache) {
     )
   });
 
+  app.get('/ourvision', async (req, res) => {
+    let user = null;
+    if (req.signedCookies['userId']) {
+      user = await database.getUserById(req.signedCookies['userId']);
+    }
+
+    res.render('our_vision', {
+      user: user,
+    });
+  });
+
+
   app.get('/login', (req, res) => {
     res.render('login', {
       facebookAppId: facebookClient.appId,
+      googleClientId: googleOauthClient._clientId,
       user: null,
       referer: req.query.referer
     });
   });
 
-
-    app.get('/ourvision', async (req, res) => {
-      let user = null;
-      if (req.signedCookies['userId']) {
-        user = await database.getUserById(req.signedCookies['userId']);
-      }
-
-      res.render('our_vision', {
-        user: user,
-      });
-    });
-
   app.post('/login', async (req, res) => {
     const accessToken = req.body['access-token']
-    const response = await facebookClient.getUserInfo(accessToken);
-    const userId = await database.findOrCreateUser({
-      facebookId: response.id,
-      email: response.email,
-      name: response.name
-    })
-    res.cookie('userId', userId, {signed: true, encode: String})
-    res.redirect(req.body.referer || '/')
+    const loginService = req.body['login-service'];
+
+    let userId;
+    if (loginService === 'facebook') {
+      const response = await facebookClient.getUserInfo(accessToken);
+      userId = await database.findOrCreateUser({
+        facebookId: response.id,
+        email: response.email,
+        name: response.name
+      });
+    } else if (loginService === 'google') {
+      const ticket = await googleOauthClient.verifyIdToken({idToken: accessToken});
+      const response = ticket.getPayload();
+      userId = await database.findOrCreateUser({
+        googleId: response.sub,
+        email: response.email,
+        name: response.name,
+      });
+    } else {
+      throw new Error(`Invalid login service name: ${loginService}`);
+    }
+
+    res.cookie('userId', userId, {signed: true, encode: String});
+    res.redirect(req.body.referer || '/');
   })
 
   app.post('/logout', (req, res) => {

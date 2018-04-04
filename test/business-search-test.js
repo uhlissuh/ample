@@ -10,7 +10,8 @@ describe("BusinessSearch", () => {
 
   it("finds businesses near the given location", async () => {
     const userId = await database.createUser({
-      name: 'user 1'
+      name: 'user 1',
+      email: 'user1@example.com'
     });
 
     const googlePlacesClient = {
@@ -138,7 +139,6 @@ describe("BusinessSearch", () => {
       'Stylist 1',
       'Stylist 0'
     ]);
-
     assert.deepEqual(businesses.map(b => b.reviewCount), [
       1,
       1,

@@ -431,27 +431,86 @@ exports.getUserById = async function(id) {
       id: row.id,
       name: row.name,
       facebookId: row.facebook_id,
+      googleId: row.google_id,
       email: row.email,
     }
   }
 };
 
 exports.findOrCreateUser = async function(user) {
-  const row = await db.query(
-    `insert into users
-    (name, email, facebook_id) values
-    ($1, $2, $3)
-    on conflict (facebook_id)
-    do update
-      set name = $1, email = $2
-    returning id`,
-    [
-      user.name,
-      user.email,
-      user.facebookId
-    ]
-  );
-  return row[0].id;
+  return db.tx(async tx => {
+    if (user.googleId) {
+      const [row] = await tx.query(`
+        select * from users where email = $1 or google_id = $2 limit 1
+      `, [
+        user.email,
+        user.googleId
+      ]);
+
+      if (row) {
+        await tx.query(`
+          update users
+          set name = $1, email = $2, google_id = $3
+          where id = $4
+        `, [
+          user.name,
+          user.email,
+          user.googleId,
+          row.id
+        ]);
+        return row.id
+      } else {
+        const [row] = await tx.query(`
+          insert into users
+            (name, email, google_id)
+          values
+            ($1, $2, $3)
+          returning id
+        `, [
+          user.name,
+          user.email,
+          user.googleId
+        ]);
+
+        return row.id;
+      }
+    } else {
+      const [row] = await tx.query(`
+        select * from users where email = $1 or facebook_id = $2 limit 1
+      `, [
+        user.email,
+        user.facebookId
+      ]);
+
+      if (row) {
+        await tx.query(`
+          update users
+          set name = $1, email = $2, facebook_id = $3
+          where id = $4
+        `, [
+          user.name,
+          user.email,
+          user.facebookId,
+          row.id
+        ]);
+        return row.id
+      } else {
+        const [row] = await tx.query(`
+          insert into users
+            (name, email, facebook_id)
+          values
+            ($1, $2, $3)
+          returning id
+        `, [
+          user.name,
+          user.email,
+          user.facebookId
+        ]);
+
+        return row.id;
+      }
+    }
+  });
 }
 
 exports.getProfileInformationForUser = async function(userId) {

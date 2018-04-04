@@ -349,6 +349,7 @@ describe("database", () => {
       assert.deepEqual(user, {
         id,
         facebookId: '5',
+        googleId: null,
         name: 'John Smith',
         email: 'john@example.com',
       })
@@ -409,41 +410,115 @@ describe("database", () => {
   });
 
   describe(".findOrCreateUser", () => {
-    it("creates a user when none exists with the given facebook id", async () => {
-      const id = await database.findOrCreateUser({
-        facebookId: '123',
-        name: 'Harold',
-        email: 'harold@example.com'
+    describe("with a facebook id", () => {
+      it("creates a user when none exists with the given facebook id", async () => {
+        const id = await database.findOrCreateUser({
+          facebookId: '123',
+          name: 'Harold',
+          email: 'harold@example.com'
+        });
+
+        assert.deepEqual(await database.getUserById(id), {
+          id,
+          facebookId: '123',
+          googleId: null,
+          name: 'Harold',
+          email: 'harold@example.com'
+        });
       });
 
-      assert.deepEqual(await database.getUserById(id), {
-        id,
-        facebookId: '123',
-        name: 'Harold',
-        email: 'harold@example.com'
+      it("updates a user if one already exists with the given facebook id", async () => {
+        const id1 = await database.findOrCreateUser({
+          facebookId: '123',
+          name: 'Harold',
+          email: 'harold@example.com'
+        });
+
+        const id2 = await database.findOrCreateUser({
+          facebookId: '123',
+          name: 'Shmarold',
+          email: 'shmarold@example.com'
+        });
+
+        assert.equal(id2, id1);
+        assert.deepEqual(await database.getUserById(id1), {
+          id: id1,
+          facebookId: '123',
+          googleId: null,
+          name: 'Shmarold',
+          email: 'shmarold@example.com',
+        });
+      });
+
+      it("updates a user if one already exists with the given email and a google id", async () => {
+        const id1 = await database.findOrCreateUser({
+          googleId: '123',
+          name: 'Harold',
+          email: 'harold@example.com'
+        });
+
+        const id2 = await database.findOrCreateUser({
+          facebookId: '456',
+          name: 'Shmarold',
+          email: 'harold@example.com'
+        });
+
+        assert.equal(id2, id1);
+        assert.deepEqual(await database.getUserById(id1), {
+          id: id1,
+          facebookId: '456',
+          googleId: '123',
+          name: 'Shmarold',
+          email: 'harold@example.com',
+        });
       });
     });
 
-    it("updates a user if one already exists with the given facebook id", async () => {
-      const id1 = await database.findOrCreateUser({
-        facebookId: '123',
-        name: 'Harold',
-        email: 'harold@example.com'
+    describe("with a google id", () => {
+      it("updates a user if one already exists with the given email (and a different sign in method)", async () => {
+        const id1 = await database.findOrCreateUser({
+          facebookId: '123',
+          name: 'Harold',
+          email: 'harold@example.com'
+        });
+
+        const id2 = await database.findOrCreateUser({
+          googleId: '456',
+          name: 'Shmarold',
+          email: 'harold@example.com'
+        });
+
+        assert.equal(id2, id1);
+        assert.deepEqual(await database.getUserById(id1), {
+          id: id1,
+          facebookId: '123',
+          googleId: '456',
+          name: 'Shmarold',
+          email: 'harold@example.com',
+        });
       });
 
-      const id2 = await database.findOrCreateUser({
-        facebookId: '123',
-        name: 'Shmarold',
-        email: 'shmarold@example.com'
-      });
+      it("updates a user if one already exists with the given google id", async () => {
+        const id1 = await database.findOrCreateUser({
+          googleId: '123',
+          name: 'Harold',
+          email: 'harold@example.com'
+        });
 
-      assert.equal(id2, id1);
+        const id2 = await database.findOrCreateUser({
+          googleId: '123',
+          name: 'Shmarold',
+          email: 'shmarold@example.com'
+        });
 
-      assert.deepEqual(await database.getUserById(id1), {
-        id: id1,
-        facebookId: '123',
-        name: 'Shmarold',
-        email: 'shmarold@example.com',
+        assert.equal(id2, id1);
+        assert.deepEqual(await database.getUserById(id1), {
+          id: id1,
+          googleId: '123',
+          facebookId: null,
+          name: 'Shmarold',
+          email: 'shmarold@example.com',
+        });
       });
     });
   });

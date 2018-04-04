@@ -3,6 +3,7 @@ const GooglePlacesClient = require('./google-places');
 const database = require('./database');
 const server = require('./server');
 const Memcached = require("./memcached")
+const {OAuth2Client} = require('google-auth-library');
 
 if (process.env.NODE_ENV === 'production') {
   database.connect('production');
@@ -15,6 +16,8 @@ const {
   FACEBOOK_APP_ID,
   FACEBOOK_APP_SECRET,
   GOOGLE_API_KEY,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
   PORT,
   COOKIE_SIGNING_SECRET,
   MEMCACHEDCLOUD_SERVERS,
@@ -29,6 +32,10 @@ const app = server(
   new FacebookClient(
     FACEBOOK_APP_ID,
     FACEBOOK_APP_SECRET
+  ),
+  new OAuth2Client(
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET
   ),
   new GooglePlacesClient(
     GOOGLE_API_KEY

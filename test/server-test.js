@@ -10,6 +10,7 @@ const request = require('request-promise').defaults({
 });
 
 const facebookClient = {};
+const googleOauthClient = {};
 const googlePlacesClient = {};
 const cookieSigningSecret = 'the-cookie-signing-secret';
 const cache = {
@@ -20,6 +21,7 @@ const cache = {
 const server = require('../src/server')(
   cookieSigningSecret,
   facebookClient,
+  googleOauthClient,
   googlePlacesClient,
   cache
 );
@@ -48,7 +50,7 @@ describe("server", () => {
   });
 
   describe("login", () => {
-    describe("when the access token is valid", () => {
+    describe("when the facebook access token is valid", () => {
       beforeEach(() => {
         facebookClient.getUserInfo = function(accessToken) {
           assert.equal(accessToken, 'the-access-token')
@@ -62,7 +64,8 @@ describe("server", () => {
 
       it("sets a cookie", async () => {
         const response = await post('login', {
-          'access-token': 'the-access-token'
+          'access-token': 'the-access-token',
+          'login-service': 'facebook'
         })
 
         const userId = getLoggedInUser();
@@ -72,6 +75,7 @@ describe("server", () => {
           email: 'bob@example.com',
           name: 'Bob',
           facebookId: '12345',
+          googleId: null
         });
 
         assert.equal(response.statusCode, 302);
@@ -81,6 +85,7 @@ describe("server", () => {
       it("redirects to the given referer URL", async () => {
         const response = await post('login', {
           'access-token': 'the-access-token',
+          'login-service': 'facebook',
           'referer': '/businesses/123/reviews/new'
         });
 

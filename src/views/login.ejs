@@ -1,14 +1,25 @@
+
 <body>
   <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6 offset-lg-3">
+        <div class="g-signin2" data-onsuccess="onGoogleSignIn"></div>
+      </div>
+    </div>
+
     <div id="fb-root"></div>
+
     <form id="login-hidden-form" method="post" action="/login">
       <input id="access-token-field" type="hidden" name="access-token" />
       <input name="referer" value="<%- referer -%>" type="hidden" />
+      <input id="login-service-field" name="login-service" type="hidden" />
     </form>
+
     <script>
       function checkLoginState() {
         FB.getLoginStatus(response => {
           if (response.status === 'connected') {
+            document.getElementById('login-service-field').value = 'facebook';
             document.getElementById('access-token-field').value = response.authResponse.accessToken;
             document.getElementById('login-hidden-form').submit();
           }
@@ -31,32 +42,21 @@
         js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=156289218248813&autoLogAppEvents=1';
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
+
+      function onGoogleSignIn(googleUser) {
+        var idToken = googleUser.getAuthResponse().id_token;
+        document.getElementById('login-service-field').value = 'google';
+        document.getElementById('access-token-field').value = idToken;
+        document.getElementById('login-hidden-form').submit();
+      }
     </script>
-
-    <div class="row login-button">
-      <div class="col-md-4">
-      </div>
-      <div class="col-md-4 ">
-        <div
-          class="fb-login-button"
-          data-scope="public_profile,email"
-          data-width="120"
-          data-max-rows="1"
-          data-size="large"
-          data-button-type="login_with"
-          data-show-faces="false"
-          data-auto-logout-link="false"
-          data-onlogin="checkLoginState()"
-          data-use-continue-as="false"
-        ></div>
-      </div>
-    </div>
-    <div class="row">
-      <p id="status"></p>
-    </div>
   </div>
-
 </body>
+
+<%- contentFor('styleSheets') %>
+
+<meta name="google-signin-client_id" content="<%- googleClientId -%>">
+<script src="https://apis.google.com/js/platform.js?onload=startGoogleLogin" async defer></script>
 
 <%- contentFor('title') -%>
 Ample | Login
