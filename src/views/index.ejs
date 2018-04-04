@@ -55,8 +55,12 @@
 </div>
 
 <div class="container cards">
-  <div class="row">
+  <div class="row characters-row">
+    <div class="characters1" src="/static/characters1.png"></div>
+    <div class="characters2" src="/static/characters2.png"></div>
+  </div>
 
+  <div class="row">
     <% for (let i = 0; i < 3; i++) { %>
       <% const review = recentReviews[i]; %>
       <% if (!review) break; %>

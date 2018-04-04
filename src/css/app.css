@@ -71,8 +71,31 @@
   font-family: 'Roboto', sans-serif;
   color: #EB6E79;
   font-size: 20px;
-
 }
+
+.characters1 {
+  height: 350px;
+  width: 350px;
+  background-image: url('/static/characters1.png');
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  vertical-align:bottom;
+}
+
+.characters2 {
+  height: 350px;
+  width: 350px;
+  background-image: url('/static/characters2.png');
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  vertical-align:bottom;
+}
+
+.characters-row {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 
 .go-button {
   background-color: #EB6E79;
