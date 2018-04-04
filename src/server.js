@@ -319,15 +319,15 @@ function (
     return review;
   }
 
-  // app.use(async (error, req, res, next) => {
-  //   const userId = req.signedCookies.userId;
-  //   const user = userId && await database.getUserById(userId);
-  //
-  //   console.error('Caught Error');
-  //   console.error(error.stack);
-  //   res.status(500);
-  //   res.render('error', {user, error});
-  // });
+  app.use(async (error, req, res, next) => {
+    const userId = req.signedCookies.userId;
+    const user = userId && await database.getUserById(userId);
+
+    console.error('Caught Error');
+    console.error(error.stack);
+    res.status(500);
+    res.render('error', {user, error});
+  });
 
   return app;
 }
