@@ -18,6 +18,8 @@ class BusinessSearch {
       lng
     );
 
+    if (googleBusinesses.length === 0) return [];
+
     const ratedBusinesses = await database.getBusinessesByGoogleIds(
       googleBusinesses.map(business => business.place_id)
     );

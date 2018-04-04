@@ -35,57 +35,64 @@
       </div>
     </div>
   </form>
-  <div class="row">
-    <div class="col-12">
-      <h3 class="search-results-title">
-        Search Results for <%- term -%> near <%- location -%> :
-      </h3>
-    </div>
-  </div>
 
-  <ul class="list-group list-group-flush">
-    <% for (const business of businesses) { %>
-      <li class="list-group-item">
-        <div class="row align-self-start">
-          <div class="col-3 col-lg-3 image-column">
-            <% if (business.photoURL) { %>
-            <img
-              class="biz-img-thumb img-fluid"
-              src="<%- business.photoURL -%>"
-            />
-            <% } else { %>
+  <% if (businesses.length > 0) { %>
+    <div class="row">
+      <div class="col-12">
+        <h3 class="search-results-title">
+          Search Results for <%- term -%> near <%- location -%> :
+        </h3>
+      </div>
+    </div>
+
+    <ol class="list-group list-group-flush">
+      <% for (const business of businesses) { %>
+        <li class="list-group-item">
+          <div class="row align-self-start">
+            <div class="col-3 col-lg-3 image-column">
+              <% if (business.photoURL) { %>
               <img
                 class="biz-img-thumb img-fluid"
-                src="/static/no-image-small.png"
+                src="<%- business.photoURL -%>"
               />
-            <% } %>
-          </div>
-          <div class="col-9 col-lg-9 search-results-business-info">
-            <div class="row">
-              <div class="col-12 col-lg-8">
-                <a href="/businesses/<%=business.googleId%>"><span class="business-listing-title"><%= business.name %></span></a> </br>
-                <span class="business-address-tag-line"><%- business.vicinity -%></span>
-              </div>
-              <div class="col-12 col-lg-4 ">
-                <% if (business.reviewCount > 0) { %>
-                  <div class="score-grouping">
-                    <div class="star-rating" data-value= "<%=business.overallRating %>" data-size="small"></div>
-                    <span class="review-count">(<%= business.reviewCount %>)</span>
-                  </div>
+              <% } else { %>
+                <img
+                  class="biz-img-thumb img-fluid"
+                  src="/static/no-image-small.png"
+                />
+              <% } %>
+            </div>
+            <div class="col-9 col-lg-9 search-results-business-info">
+              <div class="row">
+                <div class="col-12 col-lg-8">
+                  <a href="/businesses/<%=business.googleId%>"><span class="business-listing-title"><%= business.name %></span></a> </br>
+                  <span class="business-address-tag-line"><%- business.vicinity -%></span>
+                </div>
+                <div class="col-12 col-lg-4 ">
+                  <% if (business.reviewCount > 0) { %>
+                    <div class="score-grouping">
+                      <div class="star-rating" data-value= "<%=business.overallRating %>" data-size="small"></div>
+                      <span class="review-count">(<%= business.reviewCount %>)</span>
+                    </div>
 
-                <% } else { %>
-                  <span class="score-grouping be-first-words">Be the first to review</span>
-                <% } %>
+                  <% } else { %>
+                    <span class="score-grouping be-first-words">Be the first to review</span>
+                  <% } %>
+                </div>
               </div>
             </div>
           </div>
+        </li>
+      <% } %>
+    </ol>
+  <% } else { %>
+    <div class='row alert alert-info'>
+      <div class='col-12'>
+        Oops! We couldn't find any businesses for that search term and location.
+      </div>
+    </div>
+  <% } %>
 
-
-
-        </div>
-      </li>
-    <% } %>
-  </ol>
 </div>
 
 <%- contentFor('scripts') -%>

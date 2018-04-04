@@ -47,7 +47,9 @@ class GooglePlacesClient {
   async makeRequest(uri) {
     const fullURI = GOOGLE_URL + '/' + uri;
     const response = await this.request({uri: fullURI, json: true});
-    if (response.status != 'OK') {
+    if (response.status == 'ZERO_RESULTS') {
+      return {results: []};
+    } else if (response.status != 'OK') {
       throw new Error(`Google places request failed. URI: ${uri}, Status: ${response.status}`);
     }
     return response;

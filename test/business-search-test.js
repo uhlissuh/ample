@@ -150,4 +150,16 @@ describe("BusinessSearch", () => {
       'http://google.com/stylist-0-photo-reference'
     ]);
   });
+
+  it("returns empty array when no businesses are found on google", async () => {
+    const googlePlacesClient = {
+      async getBusinessesNearCoordinates() {
+        return [];
+      }
+    };
+
+    const search = new BusinessSearch(googlePlacesClient);
+    const businesses = await search.findBusinessesForLocation('behaul', 42, -122);
+    assert.deepEqual(businesses, []);
+  });
 });
