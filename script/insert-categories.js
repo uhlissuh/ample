@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 
+const fs = require('fs');
 const categories = require('../src/categories.json');
+const tags = fs.readFileSync(__dirname + '/../src/tags.txt', 'utf8')
+  .split('\n')
+  .filter(line => line.length != 0);
+
 const database = require('../src/database');
 
 const environment = process.argv[2];
@@ -37,6 +42,17 @@ database.tx(async tx => {
       set parent_id = $2
       where id = $1
     `, [idsByTitle[category.title], idsByTitle[category.parent]]);
+  }
+
+  for (const tag of tags) {
+    await tx.query(`
+      insert into tags
+        (name)
+      values
+        ($1)
+      on conflict
+      do nothing
+    `, [tag]);
   }
 }).then(() => {
   process.exit(0);

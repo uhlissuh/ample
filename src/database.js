@@ -49,7 +49,7 @@ exports.clear = async function() {
 };
 
 exports.getBusinessByGoogleId = async function(googleId) {
-  const [row] = await db.query(
+  const rows = await db.query(
     `
       select *, ST_x(coordinates) as latitude, ST_y(coordinates) as longitude
       from businesses
@@ -57,7 +57,7 @@ exports.getBusinessByGoogleId = async function(googleId) {
     `,
     googleId
   );
-  if (row) return businessFromRow(row);
+  return (await businessesFromRows(db, rows))[0];
 };
 
 exports.getBusinessesByGoogleIds = async function(googleIds) {
@@ -69,11 +69,11 @@ exports.getBusinessesByGoogleIds = async function(googleIds) {
     `,
     [googleIds]
   );
-  return rows.map(businessFromRow);
+  return businessesFromRows(db, rows);
 }
 
 exports.getBusinessById = async function(id) {
-  const [row] = await db.query(
+  const rows = await db.query(
     `
       select *, ST_x(coordinates) as latitude, ST_y(coordinates) as longitude
       from businesses
@@ -81,7 +81,7 @@ exports.getBusinessById = async function(id) {
     `,
     id
   );
-  if (row) return businessFromRow(row);
+  return (await businessesFromRows(db, rows))[0];
 };
 
 exports.getBusinessesByCategoryandLocation = async function(
@@ -101,42 +101,72 @@ exports.getBusinessesByCategoryandLocation = async function(
       ST_DistanceSphere(businesses.coordinates, ST_MakePoint($1, $2)) <= 50000 and
       $3 = ANY (businesses.category_ids)
   `, [latitude, longitude, categoryId]);
-  return businessRows.map(businessFromRow);
+  return businessesFromRows(db, businessRows);
 };
 
-function businessFromRow(row) {
-  const business = {
-    id: row.id,
-    name: row.name,
-    address: row.address,
-    googleId: row.google_id,
-    latitude: row.latitude,
-    longitude: row.longitude,
-    phone: row.phone,
-    reviewCount: row.review_count,
-    categories: row.category_ids.map(getCategoryTitle)
-  };
+async function businessesFromRows(tx, rows) {
+  if (rows.length === 0) return [];
 
-  let combinedRatingCount = 0;
-  let combinedTotalRating = 0;
+  const businesses = rows.map(row => {
+    const business = {
+      id: row.id,
+      name: row.name,
+      address: row.address,
+      googleId: row.google_id,
+      latitude: row.latitude,
+      longitude: row.longitude,
+      phone: row.phone,
+      reviewCount: row.review_count,
+      categories: row.category_ids.map(getCategoryTitle)
+    };
 
-  for (const criteriaName of CRITERIA_NAMES) {
-    const ratingCount = row[criteriaName + '_rating_count'];
-    const totalRating = row[criteriaName + '_rating_total'];
-    combinedRatingCount += ratingCount;
-    combinedTotalRating += totalRating;
+    let combinedRatingCount = 0;
+    let combinedTotalRating = 0;
 
-    business[`${criteriaName}RatingCount`] = ratingCount;
-    business[`${criteriaName}AverageRating`] = ratingCount > 0
-      ? roundRating(totalRating / ratingCount)
+    for (const criteriaName of CRITERIA_NAMES) {
+      const ratingCount = row[criteriaName + '_rating_count'];
+      const totalRating = row[criteriaName + '_rating_total'];
+      combinedRatingCount += ratingCount;
+      combinedTotalRating += totalRating;
+
+      business[`${criteriaName}RatingCount`] = ratingCount;
+      business[`${criteriaName}AverageRating`] = ratingCount > 0
+        ? roundRating(totalRating / ratingCount)
+        : null;
+    }
+
+    business.overallRating = combinedRatingCount > 0
+      ? roundRating(combinedTotalRating / combinedRatingCount)
       : null;
+
+    return business;
+  });
+
+  const businessIds = businesses.map(business => business.id);
+
+  const tagRows = await tx.query(`
+    select distinct
+      business_id, name
+    from
+      business_tags, tags
+    where
+      business_tags.business_id = ANY ($1) and business_tags.tag_id = tags.id
+  `, [businessIds]);
+
+  const tagsByBusiness = {};
+  for (const row of tagRows) {
+    if (!tagsByBusiness[row.business_id]) {
+      tagsByBusiness[row.business_id] = [row.name];
+    } else {
+      tagsByBusiness[row.business_id].push(row.name);
+    }
   }
 
-  business.overallRating = combinedRatingCount > 0
-    ? roundRating(combinedTotalRating / combinedRatingCount)
-    : null;
+  for (const business of businesses) {
+    business.tags = tagsByBusiness[business.id] || []
+  }
 
-  return business;
+  return businesses;
 }
 
 async function getFullBusinessById(tx, id) {
@@ -215,6 +245,30 @@ exports.getAllCategories = async function() {
   return ALL_CATEGORIES;
 };
 
+async function addTagsToBusiness(tx, userId, businessId, tags) {
+  const rows = await tx.query(`
+    insert into tags
+      (name)
+    select * from
+      unnest ($1::text[])
+    on conflict (name)
+    do update
+      set name = excluded.name
+    returning id
+  `, [tags]);
+
+  const tagIds = rows.map(row => row.id);
+  const userIds = tags.map(tag => userId);
+  const businessIds = tags.map(tag => businessId);
+
+  await tx.query(`
+    insert into business_tags
+      (user_id, business_id, tag_id)
+      select * from
+        unnest ($1::int[], $2::int[], $3::int[])
+  `, [userIds, businessIds, tagIds]);
+}
+
 exports.createReview = async function(userId, businessId, review) {
   return this.tx(async tx => {
     const businessRow = await getFullBusinessById(tx, businessId);
@@ -234,6 +288,10 @@ exports.createReview = async function(userId, businessId, review) {
       }
     }
     businessRow.category_ids.sort((a, b) => a - b);
+
+    if (review.tags && review.tags.length > 0) {
+      addTagsToBusiness(tx, userId, businessId, review.tags);
+    }
 
     await updateBusinessAfterReview(tx, businessId, businessRow);
 

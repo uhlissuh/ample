@@ -26,6 +26,7 @@ describe("database", () => {
         name: "Solae's Lounge",
         address: '123 alberta',
         phone: '123-456-7890',
+        tags: [],
         latitude: 37.76,
         longitude: -122.42,
         categories: [],
@@ -168,6 +169,31 @@ describe("database", () => {
       const business = await database.getBusinessById(businessId);
       assert.deepEqual(business.categories, []);
       assert.deepEqual(await database.getBusinessReviewsById(businessId), []);
+    });
+
+    it("allows adding tags to businesses", async () => {
+      const userId2 = await database.createUser({
+        facebookId: '5678',
+        name: 'Todd Carlson',
+        email: 'todd@example.com'
+      });
+
+      await database.createReview(userId, businessId, {
+        content: "I love this doctor deeply.",
+        disabledRating: 4,
+        categories: ['Doctors'],
+        tags: ['wheelchair-accessible', 'cool']
+      });
+
+      await database.createReview(userId2, businessId, {
+        content: "Great doctor.",
+        disabledRating: 4,
+        categories: ['Doctors'],
+        tags: ['wheelchair-accessible', 'kind']
+      });
+
+      const business = await database.getBusinessById(businessId);
+      assert.deepEqual(business.tags.sort(), ['cool', 'kind', 'wheelchair-accessible']);
     });
 
     it("allows ratings to be omitted", async () => {

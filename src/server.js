@@ -203,6 +203,7 @@ function (
       business.transRatingCount = reviewedBusiness.transRatingCount;
       business.disabledAverageRating = reviewedBusiness.disabledAverageRating;
       business.disabledRatingCount = reviewedBusiness.disabledRatingCount;
+      business.tags = reviewedBusiness.tags;
     }
     const photoReference = business.photos && business.photos[0].photo_reference;
 
@@ -217,7 +218,7 @@ function (
         isMobile,
         pluralize,
         CRITERIA_DESCRIPTIONS,
-        business
+        business,
       }
     );
   });
