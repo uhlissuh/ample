@@ -15,7 +15,7 @@
     background: -o-linear-gradient(left, #ffd7ea, #fecc72);
 
 
-    height: 550px;
+    height: 500px;
 }
 
 .summary-item {
@@ -79,7 +79,9 @@
   background-image: url('/static/characters1.png');
   background-repeat: no-repeat;
   margin: 0 auto;
-  vertical-align:bottom;
+  background-position: bottom;
+  margin-top: 50px;
+
 }
 
 .characters2 {
@@ -89,11 +91,19 @@
   background-repeat: no-repeat;
   margin: 0 auto;
   vertical-align:bottom;
+  background-position: bottom;
+  margin-top: 50px;
+
 }
 
 .characters-row {
-  margin-top: 30px;
-  margin-bottom: 30px;
+}
+
+.confettibackground {
+  background-repeat: repeat;
+  background-image: url('/static/confettibackground.svg');
+  background-size: 200px;
+  height: 435px;
 }
 
 
