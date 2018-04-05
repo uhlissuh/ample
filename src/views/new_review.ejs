@@ -36,6 +36,17 @@
         </div>
 
         <div class="row form-group">
+          <div class="col-12 col-lg-10">
+            <small class="tag-label" for="tag-input">Add tags that describe key aspects of this business.</small>
+            <div id="tag-input-outer-div" class="form-control">
+              <ul id="tag-list" class="tag-list">
+              </ul>
+              <input id="tag-input" type="text" class="tag-input"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="row form-group">
           <div class="col-12 col-lg-5">
             <small for="parent-category">Help us to know what kind of business this is.</small>
             <select id="parent-category-select" class="form-control" name="parent-category">
@@ -84,6 +95,47 @@ parentCategorySelect.addEventListener('change', (event) => {
 });
 
 ample.setUpStarRatings();
+
+const tagInput = document.getElementById('tag-input');
+const tagInputList = document.getElementById('tag-list');
+
+tagInput.addEventListener('keydown', (e) => {
+  if (e.keyCode == '13' && tagInput.value.length > 0) {
+    event.preventDefault();
+    const tagInput = document.getElementById('tag-input');
+    const tagListItem = document.createElement("li");
+    const tagListItemInput = document.createElement('input')
+    const tagListItemDeleteLink = document.createElement('a');
+    const tagListItemContent = document.createElement('span');
+    tagListItemContent.className = 'tag-list-item-content';
+    tagListItemContent.innerText = tagInput.value;
+    tagListItemDeleteLink.innerText = '×';
+    tagListItemDeleteLink.className = 'tag-list-item-delete-link';
+    tagListItemDeleteLink.href = '#';
+
+    tagListItemDeleteLink.addEventListener('click', e => {
+      e.preventDefault();
+      tagListItem.remove();
+      tagInput.focus();
+    });
+
+    tagListItemInput.value = tagInput.value;
+    tagListItemInput.type = 'hidden';
+    tagListItemInput.name = `tags[]`;
+    tagListItem.className = 'tag-list-item';
+    tagListItem.appendChild(tagListItemInput);
+    tagListItem.appendChild(tagListItemContent);
+    tagListItem.appendChild(tagListItemDeleteLink);
+    tagInputList.appendChild(tagListItem);
+    tagInput.value = "";
+    return;
+  }
+
+  if (e.keyCode == 8 && tagInput.value.length === 0 && tagInputList.lastChild) {
+    tagInputList.lastChild.remove();
+  }
+});
+
 </script>
 
 <%- contentFor('title') -%>

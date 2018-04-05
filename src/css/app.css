@@ -144,6 +144,42 @@
   width: 100%;
 }
 
+.tag-input {
+  border: 0px;
+  width: 180px;
+  outline: none;
+}
+
+.tag-list {
+  display: inline !important;
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+.tag-list-item {
+  display: inline-block;
+  margin-right: 10px;
+  background-color: #f7baa1;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 5px;
+}
+
+.tag-list-item-content {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.tag-list-item-delete-link {
+  color: black;
+  margin-left: 10px;
+}
+
+.tag-list-item-delete-link:hover {
+  text-decoration: none;
+  color: white;
+}
+
 .summary-row {
   margin-bottom: 40px;
 }
