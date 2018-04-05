@@ -234,7 +234,9 @@ function getCategoryTitle(id) {
 }
 
 exports.hasCategory = function(category) {
-  return category.toLowerCase() in CATEGORY_IDS_BY_TITLE;
+  if (category) {
+    return category.toLowerCase() in CATEGORY_IDS_BY_TITLE;
+  }
 }
 
 exports.getChildCategoriesByParentCategory = async function() {
