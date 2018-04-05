@@ -47,12 +47,12 @@ database.tx(async tx => {
   for (const tag of tags) {
     await tx.query(`
       insert into tags
-        (name)
+        (name, is_pending)
       values
         ($1)
       on conflict
       do nothing
-    `, [tag]);
+    `, [tag, false]);
   }
 }).then(() => {
   process.exit(0);

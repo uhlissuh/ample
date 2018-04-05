@@ -4,12 +4,12 @@ const expressLayout = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const database = require("./database");
 const apiServer = require('./api-server');
+const adminServer = require('./admin-server');
 const BusinessSearch = require("./business-search");
 const catchErrors = require('./catch-errors');
 const pluralize = require('pluralize');
 const sslRedirect = require('heroku-ssl-redirect');
 const GeoIP = require('geoip-lite');
-
 
 const CRITERIA_DESCRIPTIONS = {
   fat: 'Body Positivity',
@@ -22,7 +22,9 @@ function (
   cookieSigningSecret,
   facebookClient,
   googleOauthClient,
-  googlePlacesClient,cache
+  googlePlacesClient,
+  cache,
+  users
 ) {
   const app = express();
   catchErrors(app);
@@ -33,6 +35,7 @@ function (
   app.use(expressLayout);
   app.use('/static', express.static('static'));
   app.use('/api', apiServer);
+  app.use('/admin', adminServer(users));
   app.use(bodyParser.urlencoded());
   app.use(bodyParser.json());
   app.use(cookieParser(cookieSigningSecret));
@@ -70,7 +73,6 @@ function (
       user: user,
     });
   });
-
 
   app.get('/login', (req, res) => {
     res.render('login', {
@@ -310,7 +312,8 @@ function (
       fatRating: parseInt(body["fat-rating"]),
       transRating: parseInt(body["trans-rating"]),
       disabledRating: parseInt(body["disabled-rating"]),
-      categories: [body['parent-category']]
+      categories: [body['parent-category']],
+      tags: body.tags && body.tags.map(tag => tag.trim())
     };
 
     if (body['child-category']) {
@@ -321,7 +324,7 @@ function (
   }
 
   app.use(async (error, req, res, next) => {
-    const userId = req.signedCookies.userId;
+    const userId = req.signedCookies && req.signedCookies.userId;
     const user = userId && await database.getUserById(userId);
 
     console.error('Caught Error');

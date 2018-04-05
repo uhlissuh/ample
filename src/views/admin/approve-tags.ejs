@@ -1,0 +1,34 @@
+<div class="container">
+  <h2>Pending tags:</h2>
+
+  <ul>
+    <% for (const tag of pendingTags) { %>
+      <li>
+        <%- tag -%>
+        <a class="btn btn-primary approve-tag" data-tag="<%- tag -%>">Approve</a>
+      </li>
+    <% } %>
+  </ul>
+
+</div>
+
+<form id='approve-tag-form' method="POST" action='/admin/approve-tag'>
+  <input name="tag" id='approve-tag-input' type="hidden" />
+</form>
+
+<%- contentFor('title') -%>
+Ample | Admin
+
+<%- contentFor('scripts') -%>
+<script>
+
+document.addEventListener('click', event => {
+  if (event.target.classList.contains('approve-tag')) {
+    const {tag} = event.target.dataset;
+    if (confirm(`Are you sure you want to approve the tag '${tag}'`)) {
+      document.getElementById('approve-tag-input').value = tag;
+      document.getElementById('approve-tag-form').submit();
+    }
+  }
+});
+</script>

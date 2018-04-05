@@ -23,6 +23,8 @@ const {
   MEMCACHEDCLOUD_SERVERS,
   MEMCACHEDCLOUD_USERNAME,
   MEMCACHEDCLOUD_PASSWORD,
+  ADMIN_USERNAME,
+  ADMIN_PASSWORD
 } = process.env;
 
 process.on('unhandledRejection', console.error);
@@ -44,7 +46,10 @@ const app = server(
     MEMCACHEDCLOUD_SERVERS,
     MEMCACHEDCLOUD_USERNAME,
     MEMCACHEDCLOUD_PASSWORD
-  )
+  ),
+  {
+    [ADMIN_USERNAME]: ADMIN_PASSWORD
+  }
 );
 
 app.listen(PORT, err => {

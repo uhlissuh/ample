@@ -23,7 +23,8 @@ const server = require('../src/server')(
   facebookClient,
   googleOauthClient,
   googlePlacesClient,
-  cache
+  cache,
+  {}
 );
 
 const GOOGLE_PLACES_SEARCH_RESPONSE = require('./fixtures/google-place-search-response.json');
@@ -140,6 +141,53 @@ describe("server", () => {
 
       assert.equal(response.statusCode, 200);
       assert(response.body.includes('the-business'));
+    });
+
+    it("can add tags to the business", async () => {
+      logIn(userId);
+
+      googlePlacesClient.getBusinessById = async function (id) {
+        assert.equal(id, '567');
+        return {
+          name: 'the-business',
+          formatted_address: '123 Example St',
+          geometry: {
+            location: {
+              lat: 42,
+              lng: -122
+            }
+          }
+        }
+      };
+
+      await database.createApprovedTags(['large seating', 'no stairs']);
+
+      const createReviewResponse = await post('businesses/567/reviews', {
+        'content': 'I like this business.',
+        'fat-rating': '5',
+        'trans-rating': '3',
+        'parent-category': 'Doctors',
+        'tags[0]': 'large seating',
+        'tags[1]': 'no stairs',
+        'tags[2]': 'some new tag'
+      });
+
+      assert.equal(createReviewResponse.statusCode, 302);
+      assert.equal(createReviewResponse.headers.location, '/businesses/567');
+
+      let business = await database.getBusinessByGoogleId('567');
+      assert.deepEqual(business.tags.sort(), ['large seating', 'no stairs']);
+
+      let getBusinessResponse = await get('businesses/567');
+      assert(getBusinessResponse.body.includes('large seating'));
+      assert(getBusinessResponse.body.includes('no stairs'));
+      assert(!getBusinessResponse.body.includes('some new tag'));
+
+      await database.approveTag('some new tag');
+      business = await database.getBusinessByGoogleId('567');
+      assert.deepEqual(business.tags.sort(), ['large seating', 'no stairs', 'some new tag']);
+      getBusinessResponse = await get('businesses/567');
+      assert(getBusinessResponse.body.includes('some new tag'));
     });
   });
 

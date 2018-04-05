@@ -46,6 +46,8 @@ exports.clear = async function() {
   await db.query("delete from reviews");
   await db.query("delete from businesses");
   await db.query("delete from users");
+  await db.query("delete from business_tags");
+  await db.query("delete from tags");
 };
 
 exports.getBusinessByGoogleId = async function(googleId) {
@@ -145,12 +147,18 @@ async function businessesFromRows(tx, rows) {
   const businessIds = businesses.map(business => business.id);
 
   const tagRows = await tx.query(`
-    select distinct
-      business_id, name
+    select
+      business_id, name, count(*) as count
     from
       business_tags, tags
     where
-      business_tags.business_id = ANY ($1) and business_tags.tag_id = tags.id
+      business_tags.business_id = ANY ($1) and
+      business_tags.tag_id = tags.id and
+      is_pending = false
+    group by
+      business_id, name
+    order by
+      count desc
   `, [businessIds]);
 
   const tagsByBusiness = {};
@@ -163,7 +171,7 @@ async function businessesFromRows(tx, rows) {
   }
 
   for (const business of businesses) {
-    business.tags = tagsByBusiness[business.id] || []
+    business.tags = tagsByBusiness[business.id] || [];
   }
 
   return businesses;
@@ -250,14 +258,14 @@ exports.getAllCategories = async function() {
 async function addTagsToBusiness(tx, userId, businessId, tags) {
   const rows = await tx.query(`
     insert into tags
-      (name)
+      (name, is_pending)
     select * from
-      unnest ($1::text[])
+      unnest ($1::text[], $2::boolean[])
     on conflict (name)
     do update
       set name = excluded.name
     returning id
-  `, [tags]);
+  `, [tags, tags.map(tag => true)]);
 
   const tagIds = rows.map(row => row.id);
   const userIds = tags.map(tag => userId);
@@ -465,6 +473,30 @@ exports.getReviewById = async function(id) {
     [id]
   );
   return row && reviewFromRow(row);
+};
+
+exports.getPendingTags = async function() {
+  const rows = await db.query('select name from tags where is_pending = true');
+  return rows.map(row => row.name);
+};
+
+exports.createApprovedTags = async function(tags) {
+  await db.query(`
+    insert into tags
+      (name, is_pending)
+    select * from
+      unnest ($1::text[], $2::boolean[])
+    on conflict (name)
+    do nothing
+  `, [tags, tags.map(tag => false)]);
+};
+
+exports.approveTag = async function(tag) {
+  await db.query(`
+    update tags
+    set is_pending = false
+    where name = $1
+  `, [tag]);
 };
 
 exports.getBusinessRatingBreakdown = async function(businessId) {

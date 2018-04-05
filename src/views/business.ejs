@@ -31,7 +31,7 @@
       <div class="row">
         <% if (business.tags && business.tags.length != 0) { %>
           <% for (const tag of business.tags) { %>
-            tag
+            <span class="tag-list-item"><%- tag -%></span>
           <% } %>
         <% } %>
       </div>

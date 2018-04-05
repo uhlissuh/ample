@@ -192,7 +192,15 @@ describe("database", () => {
         tags: ['wheelchair-accessible', 'kind']
       });
 
-      const business = await database.getBusinessById(businessId);
+      let business = await database.getBusinessById(businessId);
+      assert.deepEqual(business.tags, []);
+
+      await database.approveTag('wheelchair-accessible');
+      await database.approveTag('kind');
+      await database.approveTag('cool');
+
+      business = await database.getBusinessById(businessId);
+      assert.equal(business.tags[0], ['wheelchair-accessible']);
       assert.deepEqual(business.tags.sort(), ['cool', 'kind', 'wheelchair-accessible']);
     });
 
