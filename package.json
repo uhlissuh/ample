@@ -32,6 +32,7 @@
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "concurrently": "^3.5.1",
     "mocha": "^3.5.0",
     "webpack": "^4.1.0",

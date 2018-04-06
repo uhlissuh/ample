@@ -3,6 +3,7 @@ const assert = require('assert');
 const cookieParser = require('cookie-parser');
 const cookieSignature = require('cookie-signature');
 const database = require('../src/database');
+const cheerio = require('cheerio');
 const request = require('request-promise').defaults({
   simple: false,
   followRedirect: false,
@@ -179,15 +180,17 @@ describe("server", () => {
       assert.deepEqual(business.tags.sort(), ['large seating', 'no stairs']);
 
       let getBusinessResponse = await get('businesses/567');
-      assert(getBusinessResponse.body.includes('large seating'));
-      assert(getBusinessResponse.body.includes('no stairs'));
-      assert(!getBusinessResponse.body.includes('some new tag'));
+      let $ = cheerio.load(getBusinessResponse.body);
+      assert($('.tag-list-item').text().includes('large seating'));
+      assert($('.tag-list-item').text().includes('no stairs'));
+      assert(!$('.tag-list-item').text().includes('some new tag'));
 
       await database.approveTag('some new tag');
       business = await database.getBusinessByGoogleId('567');
       assert.deepEqual(business.tags.sort(), ['large seating', 'no stairs', 'some new tag']);
       getBusinessResponse = await get('businesses/567');
-      assert(getBusinessResponse.body.includes('some new tag'));
+      $ = cheerio.load(getBusinessResponse.body);
+      assert($('.tag-list-item').text().includes('some new tag'));
     });
   });
 
