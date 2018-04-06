@@ -49,7 +49,7 @@ database.tx(async tx => {
       insert into tags
         (name, is_pending)
       values
-        ($1)
+        ($1, $2)
       on conflict
       do nothing
     `, [tag, false]);
