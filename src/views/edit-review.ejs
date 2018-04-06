@@ -116,6 +116,19 @@ ample.tagInput(
   document.getElementById('tag-input-outer-div'),
   <%- JSON.stringify(review.tags) -%>
 );
+
+ample.enableSubmitButton(
+  document.getElementsByTagName('form')[0],
+  (parameters) =>
+    parameters.content &&
+    parameters['parent-category'] &&
+    (
+      parameters['fat-rating'] ||
+      parameters['trans-rating'] ||
+      parameters['disabled-rating']
+    )
+);
+
 </script>
 
 <%- contentFor('title') -%>

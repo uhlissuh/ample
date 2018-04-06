@@ -2,6 +2,7 @@ module.exports =
 function(form, callback) {
   form.addEventListener('change', handleChange);
   form.addEventListener('keyup', handleChange);
+  form.addEventListener('click', handleChange);
 
   const inputs = form.querySelectorAll('input, textarea, select');
   const submitButton = form.querySelector('[type="submit"]');

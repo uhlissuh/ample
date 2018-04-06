@@ -52,7 +52,7 @@ class StarRatingView {
     const starIndex = this.stars.indexOf(event.target);
     const rating = starIndex + 1;
     if (rating === parseFloat(this.hiddenInput.value)) {
-      this.hiddenInput.value = 0;
+      this.hiddenInput.value = '';
     } else {
       this.hiddenInput.value = rating;
     }
@@ -60,7 +60,7 @@ class StarRatingView {
   }
 
   highlightForCurrentRating() {
-    const index = parseFloat(this.hiddenInput.value) - 1;
+    const index = (parseFloat(this.hiddenInput.value) - 1) || -1
 
     for (let i = 0; i <= index; i++) {
       this.stars[i].classList.add('highlighted');

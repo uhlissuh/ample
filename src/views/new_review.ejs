@@ -94,21 +94,14 @@ parentCategorySelect.addEventListener('change', (event) => {
 ample.setUpStarRatings();
 ample.enableSubmitButton(
   document.getElementsByTagName('form')[0],
-  (parameters) => {
-    if (!parameters.content) {
-      return false;
-    }
-
-    if (!parameters['fat-rating'] && !parameters['trans-rating'] && !parameters['disabled-rating']) {
-      return false;
-    }
-
-    if (!parameters['parent-category']) {
-      return false;
-    }
-
-    return true;
-  }
+  (parameters) =>
+    parameters.content &&
+    parameters['parent-category'] &&
+    (
+      parameters['fat-rating'] ||
+      parameters['trans-rating'] ||
+      parameters['disabled-rating']
+    )
 );
 
 ample.tagInput(
