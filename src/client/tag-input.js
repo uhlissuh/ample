@@ -83,5 +83,6 @@ function (formControlDiv, initialTags, tagsToAutocomplete) {
     tagListItem.appendChild(tagListItemDeleteLink);
     tagList.appendChild(tagListItem);
     tagInput.value = "";
+    tagInput.dispatchEvent(new UIEvent('input'));
   }
 }
