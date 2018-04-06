@@ -74,6 +74,19 @@ function (
     });
   });
 
+
+  app.get('/feedback', async (req, res) => {
+    let user = null;
+    if (req.signedCookies['userId']) {
+      user = await database.getUserById(req.signedCookies['userId']);
+    }
+
+    res.render('feedback', {
+      user: user,
+    });
+  });
+
+
   app.get('/login', (req, res) => {
     res.render('login', {
       facebookAppId: facebookClient.appId,
