@@ -7,7 +7,7 @@
         <p class="business-by-line address"> <%- business.formatted_address -%></p>
         <p class="business-by-line"> <%- business.formatted_phone_number -%></p>
 
-      <div class="row score-row">
+      <div id="score-row" class="row score-row">
         <% if (reviews.length != 0) { %>
           <div class="col-6 rating-doodad">
             <span class="summary-item">
@@ -120,6 +120,13 @@
 <script>
   ample.setUpStarRatings();
   ample.collapseNoAnimate();
+
+  const scoreRow = document.getElementById('score-row');
+
+  if (<%-JSON.stringify(reviews)%>.length == 0)  {
+    scoreRow.classList.add('no-reviews');
+  }
+
 </script>
 
 <%- contentFor('title') -%>

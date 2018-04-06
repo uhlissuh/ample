@@ -538,6 +538,13 @@ a:hover {
     padding-bottom: 10px;
   }
 
+  .no-reviews {
+    border-top: 0px;
+    border-bottom: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+
   .tags-row {
     margin-top: 10px;
     border-bottom: .5px solid #d3d3d3;
