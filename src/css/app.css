@@ -73,7 +73,7 @@
   font-size: 20px;
 }
 
-.characters1 {
+/* .characters1 {
   height: 350px;
   width: 350px;
   background-image: url('/static/characters1.svg');
@@ -94,6 +94,16 @@
   background-position: bottom;
   margin-top: 50px;
 
+} */
+
+.characters-big {
+  background-image: url('/static/chars-large.svg');
+  background-repeat: no-repeat;
+  height: 700px;
+  width: 700px;
+  margin: 0 auto;
+  vertical-align: bottom;
+  margin-top: 70px;
 }
 
 .characters-row {
