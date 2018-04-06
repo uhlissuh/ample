@@ -178,7 +178,7 @@ describe("database", () => {
         email: 'todd@example.com'
       });
 
-      await database.createReview(userId, businessId, {
+      const reviewId1 = await database.createReview(userId, businessId, {
         content: "I love this doctor deeply.",
         disabledRating: 4,
         categories: ['Doctors'],
@@ -202,6 +202,15 @@ describe("database", () => {
       business = await database.getBusinessById(businessId);
       assert.equal(business.tags[0], ['wheelchair-accessible']);
       assert.deepEqual(business.tags.sort(), ['cool', 'kind', 'wheelchair-accessible']);
+
+      const reviews = await database.getBusinessReviewsById(businessId);
+      assert.deepEqual(reviews.map(r => r.tags), [
+        ['wheelchair-accessible', 'kind'],
+        ['wheelchair-accessible', 'cool'],
+      ]);
+
+      const review = await database.getReviewById(reviewId1);
+      assert.deepEqual(review.tags, ['wheelchair-accessible', 'cool'])
     });
 
     it("allows ratings to be omitted", async () => {

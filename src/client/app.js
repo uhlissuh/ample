@@ -8,5 +8,6 @@ ample = {
   clamp: require('clamp-js'),
   autocomplete: require('autocomplete.js'),
   locationField: require('./location-field'),
-  enableSubmitButton: require('./enable-submit-button')
+  enableSubmitButton: require('./enable-submit-button'),
+  tagInput: require('./tag-input')
 };

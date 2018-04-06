@@ -40,6 +40,14 @@
         </div>
 
         <div class="row form-group">
+          <div class="col-12 col-lg-10">
+            <small class="tag-label" for="tag-input">Add tags that describe key aspects of this business.</small>
+            <div id="tag-input-outer-div" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <div class="row form-group">
           <div class="col-12 col-lg-5">
             <small for="parent-category">Help us to know what kind of business this is.</small>
             <select id="parent-category-select" class="form-control" name="parent-category">
@@ -103,6 +111,11 @@ function populateChildCategories(selectedChildCategory) {
 }
 
 ample.setUpStarRatings();
+
+ample.tagInput(
+  document.getElementById('tag-input-outer-div'),
+  <%- JSON.stringify(review.tags) -%>
+);
 </script>
 
 <%- contentFor('title') -%>

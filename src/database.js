@@ -255,7 +255,7 @@ exports.getAllCategories = async function() {
   return ALL_CATEGORIES;
 };
 
-async function addTagsToBusiness(tx, userId, businessId, tags) {
+async function addTagsToBusiness(tx, reviewId, businessId, tags) {
   const rows = await tx.query(`
     insert into tags
       (name, is_pending)
@@ -268,15 +268,15 @@ async function addTagsToBusiness(tx, userId, businessId, tags) {
   `, [tags, tags.map(tag => true)]);
 
   const tagIds = rows.map(row => row.id);
-  const userIds = tags.map(tag => userId);
+  const reviewIds = tags.map(tag => reviewId);
   const businessIds = tags.map(tag => businessId);
 
   await tx.query(`
     insert into business_tags
-      (user_id, business_id, tag_id)
+      (review_id, business_id, tag_id)
       select * from
         unnest ($1::int[], $2::int[], $3::int[])
-  `, [userIds, businessIds, tagIds]);
+  `, [reviewIds, businessIds, tagIds]);
 }
 
 exports.createReview = async function(userId, businessId, review) {
@@ -299,13 +299,9 @@ exports.createReview = async function(userId, businessId, review) {
     }
     businessRow.category_ids.sort((a, b) => a - b);
 
-    if (review.tags && review.tags.length > 0) {
-      addTagsToBusiness(tx, userId, businessId, review.tags);
-    }
-
     await updateBusinessAfterReview(tx, businessId, businessRow);
 
-    const rows = await tx.query(
+    const [row] = await tx.query(
       `insert into reviews
         (
           business_id, user_id, content, timestamp, category_ids,
@@ -327,8 +323,13 @@ exports.createReview = async function(userId, businessId, review) {
         review.disabledRating || null,
       ]
     );
-    return rows[0].id;
-  })
+
+    if (review.tags && review.tags.length > 0) {
+      await addTagsToBusiness(tx, row.id, businessId, review.tags);
+    }
+
+    return row.id;
+  });
 };
 
 exports.updateReview = async function(reviewId, newReview) {
@@ -447,24 +448,48 @@ exports.getBusinessReviewsById = async function(id) {
      order by reviews.timestamp desc`,
     [id]
   );
-  return rows.map(reviewFromRow);
+  return reviewsFromRows(db, rows);
 };
 
-function reviewFromRow(row) {
-  return {
-    id: row.id,
-    businessId: row.business_id,
-    content: row.content,
-    timestamp: row.timestamp.getTime(),
-    fatRating: row.fat_rating,
-    transRating: row.trans_rating,
-    disabledRating: row.disabled_rating,
-    categories: row.category_ids.map(getCategoryTitle),
-    user: {
-      id: row.user_id,
-      name: row.name
-    },
-  };
+async function reviewsFromRows(tx, rows) {
+  const tagRows = await tx.query(`
+    select
+      review_id, name
+    from
+      business_tags, tags
+    where
+      business_tags.review_id = ANY ($1::int[]) and
+      business_tags.tag_id = tags.id
+    order by
+      business_tags.id
+  `, [rows.map(row => row.id)]);
+
+  const tagsByReviewId = {};
+  for (const {review_id, name} of tagRows) {
+    if (tagsByReviewId[review_id]) {
+      tagsByReviewId[review_id].push(name);
+    } else {
+      tagsByReviewId[review_id] = [name];
+    }
+  }
+
+  return rows.map(row => {
+    return {
+      id: row.id,
+      businessId: row.business_id,
+      content: row.content,
+      timestamp: row.timestamp.getTime(),
+      fatRating: row.fat_rating,
+      transRating: row.trans_rating,
+      disabledRating: row.disabled_rating,
+      categories: row.category_ids.map(getCategoryTitle),
+      user: {
+        id: row.user_id,
+        name: row.name
+      },
+      tags: tagsByReviewId[row.id] || []
+    };
+  });
 }
 
 exports.getReviewById = async function(id) {
@@ -472,7 +497,9 @@ exports.getReviewById = async function(id) {
     `select * from reviews where id = $1 limit 1`,
     [id]
   );
-  return row && reviewFromRow(row);
+  if (row) {
+    return (await reviewsFromRows(db, [row]))[0];
+  }
 };
 
 exports.getPendingTags = async function() {
@@ -636,8 +663,7 @@ exports.getProfileInformationForUser = async function(userId) {
   const reviewRows = await db.query(`
     select * from reviews where user_id = $1
   `, [userId]);
-
-  return {reviews: reviewRows.map(reviewFromRow)};
+  return {reviews: await reviewsFromRows(db, reviewRows)};
 }
 
 const RATING_BREAKDOWN_QUERY_COLUMNS = [];
