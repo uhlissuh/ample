@@ -61,7 +61,8 @@ function (
         user,
         recentReviews: recentReviews ? recentReviews : null,
         categories,
-        isMobile
+        isMobile,
+        abbreviateAddress
       }
     )
   });
@@ -353,4 +354,9 @@ function (
   });
 
   return app;
+}
+
+function abbreviateAddress(address) {
+  address = address.replace(/\s*\d+,\s*USA$/, '');
+  return address;
 }
