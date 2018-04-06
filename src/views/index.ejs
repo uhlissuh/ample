@@ -54,10 +54,20 @@
   </div>
 </div>
 
+<% if (isMobile) { %>
+<% } else { %>
+<% } %>
+
 <div class="confettibackground">
   <div class="container">
     <div class="row characters-row">
-      <div class="characters-big"></div>
+      <% if (isMobile) { %>
+        <div id="chars-mobile" class="chars-mobile char1">
+
+        </div>
+      <% } else { %>
+        <div class="characters-big"></div>
+      <% } %>
     </div>
   </div>
 </div>
@@ -121,6 +131,23 @@ ample.autocomplete('#business-search-term', {
 ]);
 
 ample.locationField(document.getElementById("business-location"));
+
+const charDiv = document.getElementById('chars-mobile');
+
+function timeoutLoop () {
+  setTimeout(function () {
+    if (charDiv.classList.contains('char1')) {
+      charDiv.classList.remove('char1');
+      charDiv.classList.add('char2');
+    } else {
+      charDiv.classList.remove('char2');
+      charDiv.classList.add('char1');
+    }
+    timeoutLoop();
+  }, 3000);
+}
+
+timeoutLoop()
 
 </script>
 

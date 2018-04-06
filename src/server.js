@@ -45,6 +45,8 @@ function (
   }
 
   app.get('/', async (req, res) => {
+    const isMobile = req.headers.host.startsWith('mobile.');
+
     const userId = req.signedCookies["userId"];
     let user = null;
     if (userId) {
@@ -58,7 +60,8 @@ function (
       {
         user,
         recentReviews: recentReviews ? recentReviews : null,
-        categories
+        categories,
+        isMobile
       }
     )
   });

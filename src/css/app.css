@@ -73,28 +73,27 @@
   font-size: 20px;
 }
 
-/* .characters1 {
+.char1 {
   height: 350px;
   width: 350px;
-  background-image: url('/static/characters1.svg');
+  background-image: url('/static/chars1.svg');
   background-repeat: no-repeat;
   margin: 0 auto;
-  background-position: bottom;
+  /* background-position: bottom; */
   margin-top: 50px;
 
 }
 
-.characters2 {
+.char2 {
   height: 350px;
   width: 350px;
-  background-image: url('/static/characters2.svg');
+  background-image: url('/static/chars2.svg');
   background-repeat: no-repeat;
   margin: 0 auto;
   vertical-align:bottom;
-  background-position: bottom;
+  /* background-position: bottom; */
   margin-top: 50px;
-
-} */
+}
 
 .characters-big {
   background-image: url('/static/chars-large.svg');
@@ -516,5 +515,12 @@ a:hover {
 
   .rating-doodad {
     text-align: center;
+  }
+
+  .confettibackground {
+    background-repeat: repeat;
+    background-image: url('/static/confettibackground.svg');
+    background-size: 200px;
+    height: 335px;
   }
 }
