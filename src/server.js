@@ -261,6 +261,7 @@ function (
         reviewerId: req.signedCookies["userId"],
         childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
         user: user,
+        allTags: await database.getApprovedTags(),
         CRITERIA_DESCRIPTIONS
       })
     }
@@ -278,7 +279,8 @@ function (
         review,
         business,
         childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
-        CRITERIA_DESCRIPTIONS
+        CRITERIA_DESCRIPTIONS,
+        allTags: await database.getApprovedTags()
       });
     } else {
       throw new Error();

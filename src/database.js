@@ -525,6 +525,11 @@ exports.getReviewById = async function(id) {
   }
 };
 
+exports.getApprovedTags = async function() {
+  const rows = await db.query('select name from tags where is_pending is false');
+  return rows.map(row => row.name);
+}
+
 exports.getPendingTags = async function() {
   const rows = await db.query('select name from tags where is_pending = true');
   return rows.map(row => row.name);

@@ -1,9 +1,36 @@
+const autocomplete = require('autocomplete.js');
+
 module.exports =
-function (formControlDiv, tags) {
+function (formControlDiv, initialTags, tagsToAutocomplete) {
 
   const tagInput = document.createElement('input');
   tagInput.className = 'tag-input';
   tagInput.type = 'text';
+
+  autocomplete(
+    tagInput,
+    {
+      appendTo: 'body',
+      hint: false,
+      openOnFocus: true
+    },
+    [
+      {
+        displayKey: (tag) => tag,
+        source: (query, callback) => {
+          query = query.toLowerCase();
+
+          callback(tagsToAutocomplete.filter(tag => {
+            tag = tag.toLowerCase();
+            return (
+              tag.indexOf(query) === 0 ||
+              tag.indexOf(' ' + query) !== -1
+            );
+          }));
+        }
+      }
+    ]
+  );
 
   const tagList = document.createElement('ul');
   tagList.className = 'tag-list';
@@ -12,7 +39,7 @@ function (formControlDiv, tags) {
   formControlDiv.appendChild(tagInput);
 
   tagInput.addEventListener('keydown', (e) => {
-    if (e.keyCode == '13' && tagInput.value.length > 0) {
+    if (e.keyCode == 13 && tagInput.value.length > 0) {
       event.preventDefault();
       addTag(tagInput.value);
     }
@@ -22,7 +49,7 @@ function (formControlDiv, tags) {
     }
   });
 
-  for (const tag of tags) {
+  for (const tag of initialTags) {
     addTag(tag);
   }
 
@@ -45,7 +72,7 @@ function (formControlDiv, tags) {
 
     tagListItemInput.value = tag;
     tagListItemInput.type = 'hidden';
-    tagListItemInput.name = `tags[]`;
+    tagListItemInput.name = 'tags[]';
     tagListItem.className = 'tag-list-item';
     tagListItem.appendChild(tagListItemInput);
     tagListItem.appendChild(tagListItemContent);
