@@ -279,6 +279,7 @@ a {
 
 a:hover {
   color: #CC5C4A;
+  text-decoration: none;
 }
 
 .reviewer-headline {
@@ -351,11 +352,6 @@ a:hover {
   height: 80px;
 }
 
-.review-count {
-  display: inline;
-  vertical-align: top;
-}
-
 .business-overall-rating {
   display: inline;
   vertical-align: top;
@@ -368,6 +364,17 @@ a:hover {
 
 .score-grouping {
   float: right;
+}
+
+.review-count {
+  display: inline;
+  vertical-align: top;
+}
+
+.search-results-star-rating {
+  display: inline;
+  vertical-align: bottom;
+
 }
 
 .rating-breakdown-link.highlighted {
@@ -535,6 +542,7 @@ a:hover {
   .score-grouping {
     float: left;
     margin-top: 5px;
+    display: inline-block;
   }
 
   .score-row {
