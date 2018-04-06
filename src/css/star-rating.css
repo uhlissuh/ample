@@ -8,12 +8,8 @@
   width: 105px;
 }
 
-.star-rating--radio {
-  position: absolute;
-  visibility: hidden;
-}
-
 .star-rating--star {
+  display: inline-block;
   height: 35px;
   width: 35px;
   background-image: url('/static/star-no-highlight-large.png');
@@ -29,6 +25,7 @@
 }
 
 .star-rating--star-small {
+  display: inline-block;
   width: 21px;
   height: 21px;
   background-image: url('/static/star-no-highlight-small.png');

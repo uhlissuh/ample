@@ -8,81 +8,68 @@ function setUpStarRatings() {
 class StarRatingView {
   constructor(element) {
     this.element = element;
-    const inputName = element.dataset.name;
-    if (element.dataset.value != null) {
-      this.ratingValue = parseFloat(element.dataset.value) - 1;
-    } else {
-      this.ratingValue = null;
-    }
-
     this.size = element.dataset.size
+    this.stars = [];
 
-    this.radioButtons = [];
-    this.labels = [];
+    const inputName = element.dataset.name;
+    this.hiddenInput = document.createElement('input');
+    this.hiddenInput.type = 'hidden';
+    this.hiddenInput.name = inputName;
+    this.element.appendChild(this.hiddenInput);
 
     for (let i = 0; i < 5; i++) {
-      const label = document.createElement('label');
-
-      if (this.size === "small") {
-        label.className = 'star-rating--star-small'
-      } else {
-        label.className = 'star-rating--star';
-      }
-
-      element.appendChild(label);
-      this.labels.push(label);
+      let star;
 
       if (inputName != null) {
-        const id = `star-rating--${inputName}-${i + 1}`
-        label.setAttribute('for', id);
-
-        const radioButton = document.createElement('input');
-        radioButton.type = 'radio';
-        radioButton.name = inputName;
-        radioButton.value = i + 1;
-        radioButton.className = 'star-rating--radio';
-        radioButton.id = id;
-
-        if (i === this.ratingValue) {
-          radioButton.checked = true;
-        }
-
-        element.appendChild(radioButton);
-        this.radioButtons.push(radioButton);
+        star = document.createElement('a');
+        star.href = '#';
+      } else {
+        star = document.createElement('span');
       }
+
+      if (this.size === "small") {
+        star.className = 'star-rating--star-small'
+      } else {
+        star.className = 'star-rating--star';
+      }
+
+      element.appendChild(star);
+      this.stars.push(star);
     }
 
     if (inputName != null) {
-      element.addEventListener('mouseover', this.highlightThroughHoveredIndex.bind(this));
-      element.addEventListener('mouseout', this.highlightThroughSelectedIndex.bind(this));
-      this.highlightThroughSelectedIndex();
+      element.addEventListener('click', this.handleClick.bind(this));
+    }
+
+    if (element.dataset.value != null) {
+      this.hiddenInput.value = element.dataset.value;
+      this.highlightForCurrentRating();
+    }
+  }
+
+  handleClick(event) {
+    event.preventDefault();
+    const starIndex = this.stars.indexOf(event.target);
+    const rating = starIndex + 1;
+    if (rating === parseFloat(this.hiddenInput.value)) {
+      this.hiddenInput.value = 0;
     } else {
-      this.highlightThroughIndex(this.ratingValue);
+      this.hiddenInput.value = rating;
     }
+    this.highlightForCurrentRating();
   }
 
+  highlightForCurrentRating() {
+    const index = parseFloat(this.hiddenInput.value) - 1;
 
-  highlightThroughHoveredIndex(event) {
-    const labelIndex = this.labels.indexOf(event.target);
-    if (labelIndex >= 0) {
-      this.highlightThroughIndex(labelIndex);
-    }
-  }
-
-  highlightThroughSelectedIndex() {
-    const selectedIndex = this.radioButtons.findIndex(button => button.checked);
-    this.highlightThroughIndex(selectedIndex);
-  }
-
-  highlightThroughIndex(index) {
     for (let i = 0; i <= index; i++) {
-      this.labels[i].classList.add('highlighted');
+      this.stars[i].classList.add('highlighted');
     }
     for (let i = Math.floor(index + 1); i < 5; i++) {
-      this.labels[i].classList.remove('highlighted', 'half-highlighted');
+      this.stars[i].classList.remove('highlighted', 'half-highlighted');
     }
     if (index > Math.floor(index)) {
-      this.labels[Math.floor(index) + 1].classList.add('half-highlighted');
+      this.stars[Math.floor(index) + 1].classList.add('half-highlighted');
     }
   }
 }
