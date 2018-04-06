@@ -180,6 +180,12 @@
   margin-bottom: 0px;
 }
 
+.no-reviews-yet {
+  margin-top: 50px;
+  font-size: 20px;
+  color: #A9A9A9;
+}
+
 .reviews-body {
   padding-top: 10px;
 }
@@ -508,8 +514,13 @@ a:hover {
   }
 
   .search-results-title {
-    margin-bottom:20px;
+    margin-bottom:10px;
     font-size: 16px;
+  }
+
+  .search-bar {
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
 
   .business-listing-title {
@@ -600,5 +611,9 @@ a:hover {
     margin-top: 100px;
     font-size: 25px;
     font-family: 'Roboto', sans-serif;
+  }
+
+  .no-reviews-yet {
+    margin-top: 30px;
   }
 }
