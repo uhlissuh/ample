@@ -185,14 +185,16 @@
 .tag-list-item {
   display: inline-block;
   margin-right: 10px;
-  background-color: #f7baa1;
+  background-color: #FFD4D3;
   padding-left: 5px;
   padding-right: 5px;
   border-radius: 5px;
+  color: #EB6E79;
 }
 
 .tag-list-item-display {
   margin-top: 5px;
+  padding: 5px;
 }
 
 .tag-list-item-content {
@@ -201,7 +203,7 @@
 }
 
 .tag-list-item-delete-link {
-  color: black;
+  color: #EB6E79;
   margin-left: 10px;
 }
 
@@ -393,6 +395,13 @@ a:hover {
 .rating-breakdown-link {
   text-align: center;
   display: block;
+}
+
+.biz-name {
+  font-size: 30px;
+  color: #A9A9A9;
+  font-family: 'Roboto', sans-serif;
+  margin-top: 5px;
 }
 
 .top-our-vision {
