@@ -99,6 +99,30 @@
 <script>
 ample.setUpStarRatings();
 ample.locationField(document.getElementById("business-location"));
+
+const categories = <%- JSON.stringify(categories) %>;
+
+ample.autocomplete('#business-search-term', {
+  appendTo: 'body',
+  hint: false,
+  openOnFocus: true,
+}, [
+  {
+    displayKey: (category) => category,
+    source: (query, callback) => {
+      query = query.toLowerCase();
+
+      callback(categories.filter(category => {
+        category = category.toLowerCase();
+        return (
+          category.indexOf(query) === 0 ||
+          category.indexOf(' ' + query) !== -1
+        );
+      }));
+    }
+  }
+]);
+
 </script>
 
 <%- contentFor('title') -%>

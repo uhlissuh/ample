@@ -176,7 +176,8 @@ function (
         term: term,
         location: location,
         businesses: searchResults,
-        user: user
+        user: user,
+        categories: await database.getAllCategories()
       }
     );
   });
