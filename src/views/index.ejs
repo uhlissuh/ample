@@ -47,7 +47,7 @@
     <div class="row">
       <div class="col-12">
         <p class="tag-line">
-          Ample is a review site to help people find all sorts of establishments that are friendly to marginalized bodies.
+          Ample is a review app to help people find all sorts of establishments that are friendly to marginalized bodies.
         </p>
       </div>
     </div>
@@ -74,29 +74,36 @@
 
 
 
-
-<div class="container cards">
-  <div class="row">
-    <% for (let i = 0; i < 3; i++) { %>
-      <% const review = recentReviews[i]; %>
-      <% if (!review) break; %>
-
-      <div class="col-md-4">
-        <div class="card recent-review-card">
-          <a href="/businesses/<%- review.businessGoogleId -%>">
-            <div class="card-body">
-              <div class="card-top">
-                <h5 class="card-title"><%- review.businessName -%></h5>
-                <h6 class="card-subtitle mb-2 text-muted">reviewed by <%- review.user.name -%></h6>
-              </div>
-              <p class="card-text"><%- review.content -%></p>
-            </div>
-          </a>
-        </div>
+<div class="cards-background">
+  <div class="container cards">
+    <div class="row">
+      <div class="col-12">
+        <h5 class="cards-title">Check out the most
+          recently-reviewed businesses from around the world</h5>
       </div>
+    </div>
+    <div class="row">
+      <% for (let i = 0; i < 3; i++) { %>
+        <% const review = recentReviews[i]; %>
+        <% if (!review) break; %>
 
-    <% } %>
+        <div class="col-md-4">
+          <div class="card recent-review-card">
+            <a href="/businesses/<%- review.businessGoogleId -%>">
+              <div class="card-body">
+                <div class="card-top">
+                  <h5 class="card-title"><%- review.businessName -%></h5>
+                  <h6 class="card-subtitle mb-2 text-muted">reviewed by <%- review.user.name -%></h6>
+                </div>
+                <p class="card-text"><%- review.content -%></p>
+              </div>
+            </a>
+          </div>
+        </div>
+      <% } %>
+    </div>
   </div>
+
 </div>
 
 <%- contentFor('scripts') -%>

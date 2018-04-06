@@ -132,10 +132,27 @@
   padding-top: 50px;
 }
 
-.dr-name {
+.cards-background {
+  height: 450px;
+  background-color: #FFD4D3;
+}
+
+.cards-title {
+  color: #EB6E79;
+  font-family: 'Roboto', sans-serif;
+  margin-bottom: 20px;
+}
+
+.review-biz-name {
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
   color: #A9A9A9;
+}
+
+.biz-name {
+  font-size: 30px;
+  color: #A9A9A9;
+  font-family: 'Roboto', sans-serif;
 }
 
 .business-by-line {
@@ -495,6 +512,11 @@ a:hover {
     padding-top: 35px;
   }
 
+  .cards-background {
+    height: 900px;
+    background-color: #FFD4D3;
+  }
+
   .score-grouping {
     float: left;
     margin-top: 5px;
@@ -520,7 +542,7 @@ a:hover {
   .confettibackground {
     background-repeat: repeat;
     background-image: url('/static/confettibackground.svg');
-    background-size: 200px;
+    background-size: 160px;
     height: 335px;
   }
 }
