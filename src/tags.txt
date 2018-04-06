@@ -1,6 +1,7 @@
-wide aisle width
-large seating
-large exam/bodywork table
+wide aisles
+roomy seating
+wide exam table
+wide bodywork table
 non-booth seating
 HAES-informed
 fat positive
@@ -10,6 +11,6 @@ trans-owned
 trans employees
 trans health
 wheelchair accessible
-dedicated handicapped parking
+handicapped parking
 no stairs
-dedicated handicapped seating
+handicapped seating
