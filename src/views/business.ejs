@@ -30,10 +30,10 @@
       </div>
 
       <div class="row tags-row">
-        <div class="col-6">
+        <div class="col-12">
           <% if (business.tags && business.tags.length != 0) { %>
             <% for (const tag of business.tags.slice(0, 6)) { %>
-              <span class="tag-list-item"><%- tag -%></span>
+              <span class="tag-list-item tag-list-item-display"><%- tag -%></span>
             <% } %>
           <% } %>
         </div>

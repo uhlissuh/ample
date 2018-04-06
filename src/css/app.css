@@ -165,6 +165,10 @@
   border-radius: 5px;
 }
 
+.tag-list-item-display {
+  margin-top: 5px;
+}
+
 .tag-list-item-content {
   padding-top: 2px;
   padding-bottom: 2px;

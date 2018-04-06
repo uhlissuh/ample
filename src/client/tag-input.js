@@ -2,12 +2,15 @@ const autocomplete = require('autocomplete.js');
 
 module.exports =
 function (formControlDiv, initialTags, tagsToAutocomplete) {
-
   const tagInput = document.createElement('input');
   tagInput.className = 'tag-input';
   tagInput.type = 'text';
 
-  autocomplete(
+  formControlDiv.addEventListener('click', () => {
+    tagInput.focus();
+  });
+
+  const search = autocomplete(
     tagInput,
     {
       appendTo: 'body',
@@ -42,6 +45,7 @@ function (formControlDiv, initialTags, tagsToAutocomplete) {
     if (e.keyCode == 13 && tagInput.value.length > 0) {
       event.preventDefault();
       addTag(tagInput.value);
+      search.autocomplete.close();
     }
 
     if (e.keyCode == 8 && tagInput.value.length === 0 && tagList.lastChild) {
