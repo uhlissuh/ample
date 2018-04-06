@@ -82,6 +82,10 @@
   padding-top: 120px;
 }
 
+.login-background {
+  background-color: #FFD4D3;
+}
+
 .tag-line {
   padding-top: 20px;
   font-family: 'Roboto', sans-serif;
