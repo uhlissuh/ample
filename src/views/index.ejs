@@ -62,7 +62,7 @@
   <div class="container">
     <div class="row characters-row">
       <% if (isMobile) { %>
-        <div id="chars-mobile" class="chars-mobile char1">
+        <div id="chars-mobile" class="chars-mobile">
 
         </div>
       <% } else { %>
@@ -154,6 +154,7 @@ function timeoutLoop () {
   }, 3000);
 }
 
+charDiv.classList.add('char1');
 timeoutLoop()
 
 </script>
