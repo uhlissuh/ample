@@ -188,7 +188,7 @@ describe("BusinessSearch", () => {
 
       await database.createReview(userId, businessId1, {
         content: 'a good stylist.',
-        fatRating: 4,
+        fatRating: 5,
         categories: ['Beauty']
       });
       await database.createReview(userId, businessId2, {
@@ -221,6 +221,23 @@ describe("BusinessSearch", () => {
               ],
               types: ["hair_care"],
               vicinity: "Address 4"
+            },
+            {
+              place_id: "stylist-2-id",
+              name: "Gresham Stylist",
+              geometry: {
+                location: {
+                  lat: 45.5059,
+                  lng: -122.4486
+                }
+              },
+              photos: [
+                {
+                  photo_reference: 'stylist-2-photo-reference'
+                }
+              ],
+              types: ["hair_care"],
+              vicinity: "Address 2"
             },
           ]
         },

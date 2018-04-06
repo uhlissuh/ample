@@ -48,7 +48,12 @@ class BusinessSearch {
         lat,
         lng
       );
-      results.push(...nearbyBusinesses);
+
+      for (const nearbyBusiness of nearbyBusinesses) {
+        if (!results.some(result => result.googleId === nearbyBusiness.googleId)) {
+          results.push(nearbyBusiness);
+        }
+      }
     }
 
     return results.sort((a, b) =>
