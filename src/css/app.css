@@ -404,6 +404,12 @@ a:hover {
   margin-top: 5px;
 }
 
+.feedback-row {
+  margin-top: 100px;
+  font-size: 30px;
+  font-family: 'Roboto', sans-serif;
+}
+
 .top-our-vision {
   margin-top: 30px;
 }
@@ -560,5 +566,11 @@ a:hover {
     background-image: url('/static/confettibackground.svg');
     background-size: 160px;
     height: 335px;
+  }
+
+  .feedback-row {
+    margin-top: 100px;
+    font-size: 25px;
+    font-family: 'Roboto', sans-serif;
   }
 }
