@@ -50,7 +50,7 @@
           <div class="col-12 col-lg-5">
             <small for="parent-category">Help us to know what kind of business this is.</small>
             <select id="parent-category-select" class="form-control" name="parent-category">
-              <option disabled selected="selected">Select a category</option>
+              <option disabled selected="selected" value="">Select a category</option>
               <% for (const category in childCategoriesByParentCategory) { %>
                 <option value="<%- category -%>"><%- category -%></option>
               <% } %>
@@ -95,6 +95,24 @@ parentCategorySelect.addEventListener('change', (event) => {
 });
 
 ample.setUpStarRatings();
+ample.enableSubmitButton(
+  document.getElementsByTagName('form')[0],
+  (parameters) => {
+    if (!parameters.content) {
+      return false;
+    }
+
+    if (!parameters['fat-rating'] && !parameters['trans-rating'] && !parameters['disabled-rating']) {
+      return false;
+    }
+
+    if (!parameters['parent-category']) {
+      return false;
+    }
+
+    return true;
+  }
+);
 
 const tagInput = document.getElementById('tag-input');
 const tagInputList = document.getElementById('tag-list');
