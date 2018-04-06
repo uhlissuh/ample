@@ -60,7 +60,8 @@ class StarRatingView {
   }
 
   highlightForCurrentRating() {
-    const index = (parseFloat(this.hiddenInput.value) - 1) || -1
+    let index = parseFloat(this.hiddenInput.value) - 1;
+    if (isNaN(index)) index = -1;
 
     for (let i = 0; i <= index; i++) {
       this.stars[i].classList.add('highlighted');
