@@ -1,10 +1,16 @@
 
 <div class="container">
-  <h1><%- user.name -%></h1>
-  <form method="POST" action="/logout">
-      <button type="submit" class="btn review-submit-button">Logout</button>
-  </form>
-
+  <div class="row">
+    <div class="col-12 col-lg-6 offset-lg-3 text-center">
+      <h3 class="profile-name-row">You're logged in as <%- user.name -%>.</h3>
+      <form class="profile-form" method="POST" action="/logout">
+          <button type="submit" class="btn review-submit-button">Logout</button>
+      </form>
+      <div class="alert alert-info profile-alert" role="alert">
+        More coming soon to Profiles!
+      </div>
+    </div>
+  </div>
 </div>
 
 

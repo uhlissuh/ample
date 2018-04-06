@@ -62,6 +62,22 @@
 
 }
 
+.profile-name-row {
+  margin-top: 80px;
+}
+
+.profile-form {
+  margin-top: 40px;
+}
+
+.profile-alert {
+  margin-top: 30px
+}
+
+.signin-button-row {
+  margin-top: 80px;
+}
+
 .logo-row {
   padding-top: 120px;
 }
