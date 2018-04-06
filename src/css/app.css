@@ -457,6 +457,13 @@ a:hover {
   margin-top: 15px;
 }
 
+
+.cards-address {
+  font-size: 13px;
+  color: #d3d3d3
+}
+
+
 @media screen and (max-width: 800px) {
   .founder-img-second {
     padding-top: 15px;
@@ -563,6 +570,11 @@ a:hover {
 
   .cards {
     padding-top: 35px;
+  }
+
+  .cards-address {
+    font-size: 13px;
+    color: #d3d3d3
   }
 
   .cards-background {
