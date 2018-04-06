@@ -345,7 +345,8 @@ describe("database", () => {
         content: "I love this person deeply.",
         fatRating: 4,
         disabledRating: 4,
-        categories: ['Doctors']
+        categories: ['Doctors'],
+        tags: ['tag-1', 'tag-2']
       });
     });
 
@@ -377,6 +378,19 @@ describe("database", () => {
       assert.equal(business.transAverageRating, 2);
       assert.equal(business.disabledRatingCount, 0);
       assert.equal(business.disabledAverageRating, null);
+    });
+
+    it("updates the review's tags", async () => {
+      await database.updateReview(reviewId, {
+        content: "I love this person deeply.",
+        fatRating: 4,
+        disabledRating: 4,
+        categories: ['Doctors'],
+        tags: ['tag-2', 'tag-3']
+      });
+
+      const review = await database.getReviewById(reviewId);
+      assert.deepEqual(review.tags, ['tag-2', 'tag-3']);
     });
   });
 

@@ -255,7 +255,7 @@ exports.getAllCategories = async function() {
   return ALL_CATEGORIES;
 };
 
-async function addTagsToBusiness(tx, reviewId, businessId, tags) {
+async function addTagsToReview(tx, reviewId, businessId, tags) {
   const rows = await tx.query(`
     insert into tags
       (name, is_pending)
@@ -278,6 +278,22 @@ async function addTagsToBusiness(tx, reviewId, businessId, tags) {
         unnest ($1::int[], $2::int[], $3::int[])
   `, [reviewIds, businessIds, tagIds]);
 }
+
+async function removeTagsFromReview(tx, reviewId, tags) {
+  const rows = await tx.query(`
+    select id from tags where name = ANY ($1::text[])
+  `, [tags]);
+
+  const tagIds = rows.map(row => row.id);
+
+  await tx.query(`
+    delete from business_tags
+    where
+      review_id = $1 and
+      tag_id = ANY ($2::int[])
+  `, [reviewId, tagIds]);
+}
+
 
 exports.createReview = async function(userId, businessId, review) {
   return this.tx(async tx => {
@@ -325,7 +341,7 @@ exports.createReview = async function(userId, businessId, review) {
     );
 
     if (review.tags && review.tags.length > 0) {
-      await addTagsToBusiness(tx, row.id, businessId, review.tags);
+      await addTagsToReview(tx, row.id, businessId, review.tags);
     }
 
     return row.id;
@@ -355,8 +371,15 @@ exports.updateReview = async function(reviewId, newReview) {
         business.category_ids.push(categoryId);
       }
     }
+
     business.category_ids.sort((a, b) => a - b);
 
+    if (!newReview.tags) newReview.tags = [];
+    const tagsToDelete = oldReview.tags.filter(tag => !newReview.tags.includes(tag));
+    const tagsToInsert = newReview.tags.filter(tag => !oldReview.tags.includes(tag));
+
+    await addTagsToReview(tx, reviewId, business.id, tagsToInsert);
+    await removeTagsFromReview(tx, reviewId, tagsToDelete);
     await updateBusinessAfterReview(tx, business.id, business);
 
     await db.query(`
