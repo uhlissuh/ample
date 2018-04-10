@@ -24,7 +24,7 @@
             <% for (const criteria in CRITERIA_DESCRIPTIONS) { %>
               <% const ratingName = `${criteria}-rating`; %>
               <label class="star-rating-label new-review-star-label" for="<%- ratingName -%>"><%- CRITERIA_DESCRIPTIONS[criteria] -%> Rating</label>
-              <a class="tooltip-questionmark" id="<%- ratingName -%>" data-toggle="tooltip" data-trigger= "click, hover" data-placement="top">⍰</a>
+              <a class="tooltip-questionmark" id="<%- ratingName -%>" data-toggle="tooltip" data-trigger= "click, hover" data-placement="top"><div class="round-question">?</div></a>
               <div class="star-rating" id="<%- ratingName -%>" data-name="<%- ratingName -%>"></div>
             <% } %>
           </div>
@@ -39,7 +39,7 @@
         <div class="row form-group">
           <div class="col-12 col-lg-10">
             <h5 class="tag-label" for="tag-input">Add Tags</h5>
-            <a class="tooltip-questionmark" id="tooltip-tag" data-toggle="tooltip" data-trigger= "click, hover" data-placement="top">⍰</a>
+            <a class="tooltip-questionmark" id="tooltip-tag" data-toggle="tooltip" data-trigger= "click, hover" data-placement="top"><div class="round-question">?</div></a>
             <div class="row">
               <div class="col-12">
                 <small>Tags are an important part of the review process.</small>
@@ -118,7 +118,7 @@ ample.tagInput(
 );
 
 function setBodyPositiveText() {
-  return "This rating explains attitudes towards larger-bodied people. 5 stars indicates that large bodies, including very fat bodies, would be welcomed here, 1 star indicates fatphobia or sizeism is common. Don't rate if you don't know."
+  return "This rating explains attitudes towards larger-bodied people. 5 stars indicates that large bodies, including very fat bodies, would be welcomed here. 1 star indicates fatphobia or sizeism is common. Don't rate if you don't know."
 }
 
 function setTransAwarenessText() {

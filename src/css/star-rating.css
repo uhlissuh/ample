@@ -56,9 +56,20 @@
 }
 
 .tooltip-questionmark {
-  font-size: 28px;
-  color: #EB6E79;
+
   margin-left: 10px;
+}
+
+.round-question {
+  width: 25px;
+  height: 25px;
+  background-color: #FFD4D3;
+  color: white;
+  border-radius: 50%;
+  display:inline-block;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 18px;
 }
 
 a:not([href]):not([tabindex]) {
