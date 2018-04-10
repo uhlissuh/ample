@@ -23,7 +23,8 @@
           <div class="col-12 col-lg-6">
             <% for (const criteria in CRITERIA_DESCRIPTIONS) { %>
               <% const ratingName = `${criteria}-rating`; %>
-              <label class="star-rating-label" for="<%- ratingName -%>"><%- CRITERIA_DESCRIPTIONS[criteria] -%> Rating</label>
+              <label class="star-rating-label new-review-star-label" for="<%- ratingName -%>"><%- CRITERIA_DESCRIPTIONS[criteria] -%> Rating</label>
+              <a class="tooltip-questionmark" id="<%- ratingName -%>" data-toggle="tooltip" data-trigger= "click, hover" data-placement="top">⍰</a>
               <div class="star-rating" id="<%- ratingName -%>" data-name="<%- ratingName -%>"></div>
             <% } %>
           </div>
@@ -31,13 +32,19 @@
 
         <div class="row form-group">
           <div class="col-12 col-lg-10">
-            <textarea class="form-control" name="content" rows="8" placeholder="Clarify your rating with a review!"></textarea>
+            <textarea class="form-control" name="content" rows="8" placeholder="Explain your ratings with a review!"></textarea>
           </div>
         </div>
 
         <div class="row form-group">
           <div class="col-12 col-lg-10">
-            <small class="tag-label" for="tag-input">Add tags that describe key aspects of this business.</small>
+            <h5 class="tag-label" for="tag-input">Add Tags</h5>
+            <a class="tooltip-questionmark" id="tooltip-tag" data-toggle="tooltip" data-trigger= "click, hover" data-placement="top">⍰</a>
+            <div class="row">
+              <div class="col-12">
+                <small>Tags are an important part of the review process.</small>
+              </div>
+            </div>
             <div id="tag-input-outer-div" class="form-control">
             </div>
           </div>
@@ -55,7 +62,7 @@
           </div>
 
           <div class="col-12 col-lg-5">
-            <small for="parent-category">Some subcategories...</small>
+            <small for="parent-category">Optionally, add a subcategory.</small>
             <select id="child-category-select" class="form-control" name="child-category">
             </select>
           </div>
@@ -109,6 +116,40 @@ ample.tagInput(
   [],
   <%- JSON.stringify(allTags) -%>
 );
+
+function setBodyPositiveText() {
+  return "This rating explains attitudes towards larger-bodied people. 5 stars indicates that large bodies, including very fat bodies, would be welcomed here, 1 star indicates fatphobia or sizeism is common. Don't rate if you don't know."
+}
+
+function setTransAwarenessText() {
+  return "This rating explains attitudes towards trans and gender nonbinary people. 5 stars indicates awareness of issues like pronoun respect. 1 star indicates intolerance towards these identities. Don't rate if you don't know."
+}
+
+function setAccessibilityText() {
+  return "This rating tells others about the physical accessibility of the space for those with disabilities. 5 stars would indicate that the space is easy to access, is without stairs, has wide doorways/aisles, or has easy parking. 5 stars would also indicate that the space has furniture suitable for very large bodies. Don't rate if you don't know."
+}
+
+function setTagText() {
+  return "To add a tag, put cursor inside box and begin typing. A dropdown menu will appear with other commonly used tags. Press enter upon completion of typing to attach the tag, and add more if you want! Example tags: all gender bathrooms, high limit scale, wide aisles, handicap parking. Soon tags will be searchable across all Ample reviews."
+}
+
+$('#fat-rating').tooltip({
+    title: setBodyPositiveText
+})
+
+$('#trans-rating').tooltip({
+    title: setTransAwarenessText
+})
+
+$('#disabled-rating').tooltip({
+    title: setAccessibilityText
+})
+
+$('#tooltip-tag').tooltip({
+    title: setTagText
+})
+
+$('[rel=tooltip]').tooltip({container: 'body'});
 
 </script>
 

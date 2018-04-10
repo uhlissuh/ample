@@ -202,6 +202,12 @@
   outline: none;
 }
 
+.tag-label {
+  display: inline-block;
+  color: #EB6E79;
+  margin-bottom: 0px;
+}
+
 .tag-list {
   display: inline !important;
   list-style-type: none;
