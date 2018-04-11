@@ -227,6 +227,14 @@ function (
     }
     const photoReference = business.photos && business.photos[0].photo_reference;
 
+    const reviewUserIds = [];
+    let hasReviewedThisBusiness = false;
+    for (const review of reviews) {
+      reviewUserIds.push(review.user.id)
+    }
+    if (reviewUserIds.includes(user.id)) {
+      hasReviewedThisBusiness = true;
+    }
 
     res.render('business',
       {
@@ -239,6 +247,7 @@ function (
         pluralize,
         CRITERIA_DESCRIPTIONS,
         business,
+        hasReviewedThisBusiness
       }
     );
   });

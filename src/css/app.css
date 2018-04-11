@@ -196,6 +196,11 @@
   width: 100%;
 }
 
+.review-button.disabled {
+  background-color: grey;
+  border-color: grey;
+}
+
 .tag-input {
   border: 0px;
   width: 180px;

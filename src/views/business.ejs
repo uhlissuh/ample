@@ -72,10 +72,18 @@
     </div>
 
     <div class="col-8 col-lg-3">
-      <a
-        class="btn btn-info review-button"
-        href="/businesses/<%- googleId -%>/reviews/new"
-        role="button">Add Your Review</a>
+      <% if (!hasReviewedThisBusiness) { %>
+        <a
+          class="btn btn-info review-button"
+          href="/businesses/<%- googleId -%>/reviews/new"
+          role="button">Add Your Review</a>
+      <% } else { %>
+        <a
+          class="btn btn-info review-button disabled"
+          href=""
+          role="button">Reviewed</a>
+      <% } %>
+
     </div>
   </div>
 
