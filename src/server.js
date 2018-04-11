@@ -232,7 +232,8 @@ function (
     for (const review of reviews) {
       reviewUserIds.push(review.user.id)
     }
-    if (reviewUserIds.includes(user.id)) {
+
+    if (user && reviewUserIds.includes(user.id)) {
       hasReviewedThisBusiness = true;
     }
 
