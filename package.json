@@ -11,6 +11,7 @@
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-beta.3",
     "clamp-js": "^0.7.0",
+    "clamp-js-main": "^0.11.4",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.11",
     "db-migrate": "^0.10.0-beta.20",
