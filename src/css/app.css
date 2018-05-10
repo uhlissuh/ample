@@ -380,6 +380,7 @@ a:hover {
 .card-title {
   color: #A9A9A9;
   font-size: 18px;
+  margin-bottom: 8px;
 }
 
 .card-text {
