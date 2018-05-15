@@ -525,6 +525,25 @@ exports.getReviewById = async function(id) {
   }
 };
 
+exports.getAllReviews = async function() {
+  return [row] = await db.query(
+    `select *,
+      users.id as user_id,
+      businesses.id as business_id,
+      reviews.id as review_id,
+      users.name as user_name,
+      businesses.name as business_name
+    from
+      reviews, users, businesses
+    where
+      reviews.user_id = users.id
+    and
+      reviews.business_id = businesses.id
+    order by
+      reviews.timestamp desc`
+  )
+}
+
 exports.getApprovedTags = async function() {
   const rows = await db.query('select name from tags where is_pending is false');
   return rows.map(row => row.name);

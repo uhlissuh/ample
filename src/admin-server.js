@@ -28,7 +28,9 @@ function (users) {
 
   app.get('/', async (req, res) => {
     const pendingTags = await database.getPendingTags();
-    res.render('admin/approve-tags', { pendingTags, user: null });
+    const allReviews = await database.getAllReviews();
+    allReviews.map(review => review.date = new Date(review.timestamp).toDateString())
+    res.render('admin/approve-tags', { pendingTags, user: null, allReviews });
   });
 
   app.post('/approve-tag', async (req, res) => {

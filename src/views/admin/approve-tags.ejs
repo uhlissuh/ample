@@ -10,6 +10,38 @@
     <% } %>
   </ul>
 
+  <h2> All Reviews:</h2>
+  <ul class="list-group">
+    <% for (const review of allReviews) { %>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-1">
+            <%- review.review_id -%>
+          </div>
+          <div class="col-2">
+            <%- review.business_name -%>
+          </div>
+          <div class="col-3">
+            <%- review.address -%>
+          </div>
+          <div class="col-3">
+            <%- review.user_name -%>
+            <%- review.email -%>
+          </div>
+          <div class="col-2">
+            <%- review.date -%>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <%- review.content -%>
+          </div>
+        </div>
+
+      </li>
+    <% } %>
+  </ul>
+
 </div>
 
 <form id='approve-tag-form' method="POST" action='/admin/approve-tag'>
