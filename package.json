@@ -30,7 +30,7 @@
     "pg-promise": "^5.9.5",
     "pluralize": "^7.0.0",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1",
+    "request-promise": "^4.2.1"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
