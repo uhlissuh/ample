@@ -11,7 +11,7 @@ date: 2018-05-22
 tags: [fat, trans, disabilities]
 ---
 
-Ample is similar to other popular review sites, but it’s the first that rates doctors, services, and all types of establishments specifically on their accessibility and inclusiveness towards those in marginalized bodies (fat, trans, and disabled, for now). You can search for businesses to discover what others are saying and then rate and review establishments, both positively and negatively, on the job they’re doing.
+Ample is similar to other popular review sites, but it’s the first that rates doctors, services, and all types of establishments specifically on their accessibility and inclusiveness towards people in marginalized bodies (fat, trans, and disabled, for now). You can search for businesses to discover what others are saying and then rate and review establishments, both positively and negatively, on the job they’re doing.
 
 <!--more-->
 
