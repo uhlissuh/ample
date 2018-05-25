@@ -1,5 +1,5 @@
 # SITE CONFIGURATION
-baseurl: "/ample"
+baseurl: ""
 url: "https://blog.isitample.com"
 title: Ample Body Liberation App Blog
 description: "The blog for Ample App! Your stop for all things trans, body, and disability positivity." # used by search engines
