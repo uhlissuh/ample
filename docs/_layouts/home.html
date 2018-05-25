@@ -30,11 +30,13 @@ layout: default
             </p>
           </header>
           <div class="excerpt">
-              {{ post.excerpt | strip_html | escape }}
-            <!--{{ post.content | strip_html | truncate: "250" }}-->
-            <!--<a class="button" href="{{ post.url | prepend: site.baseurl }}">
-              {{ site.theme_settings.str_continue_reading }}
-            </a>-->
+            {{ post.excerpt | strip_html | escape }}
+
+            <div>
+              <a class="button" href="{{ post.url | prepend: site.baseurl }}">
+                {{ site.theme_settings.str_continue_reading }}
+              </a>
+            </div>
           </div>
       </span>
     </div>
