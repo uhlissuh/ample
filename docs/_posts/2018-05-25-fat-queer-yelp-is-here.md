@@ -14,6 +14,7 @@ Ample is similar to other popular review sites, but it’s the first that rates 
 
 <!--more-->
 
+![Diverse Gang of Amplers]({{ "/assets/img/peepsies.png" | absolute_url }})
 
 ### What motivated the creation of Ample?
 
