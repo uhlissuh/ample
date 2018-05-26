@@ -14,7 +14,7 @@ Ample is similar to other popular review sites, but it’s the first that rates 
 
 <!--more-->
 
-![Diverse Gang of Amplers woo woo]({{ "/assets/img/peepsies.png" | absolute_url }})
+![Image description: Five people face the viewer with big smiles on their faces. They are meant to represent some of the wonderful diversity of embodiment. On the left, a very fat, masculine PoC holds up a flag with Ample’s logo on it. Next to them is a short, transmasculine person with the Trans Pride flag on their shirt and wearing glasses. To the right of them is a slender PoC; they are an amputee and using a crutch. A fat, blonde, feminine-presenting person stands next to him. The Ample peach logo is on her shirt, and she is wearing shorts and a hot pink baseball cap. Lastly, next to her, is another PoC. Ze is wearing a pink stocking cap, and hir shirt has the LGBT Pride flag on it in the shape of a heart.]({{ "/assets/img/peepsies.png" | absolute_url }})
 
 ### What motivated the creation of Ample?
 
