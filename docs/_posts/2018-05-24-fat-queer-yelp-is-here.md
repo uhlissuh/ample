@@ -38,9 +38,9 @@ Also high on our agenda: functionality to upload photos to your review, and an o
 
 And of course, native mobile apps for iPhone and Android are on the agenda! We think the site performs well in a browser tab on your phone, but it’s always nice to have a native app.
 
-### Will you be selling my data? How will you be paying the bills?
+### How will you be paying the bills?
 
-No, we will not be selling your data. Right now we are footing the bills ourselves, but in the future we will probably need to curate some advertisement space for revenue, or seek some grant funding to keep the lights on. We are a volunteer team; do you want to [join us?](isitample.com/feedback "Ample's feedback page")
+Right now we are footing the bills ourselves, but in the future we will probably need to curate some advertisement space for revenue, or seek some grant funding to keep the lights on. We are a volunteer team; do you want to [join us?](isitample.com/feedback "Ample's feedback page")
 
 ### What’s some of the other feedback you’ve been getting?
 
