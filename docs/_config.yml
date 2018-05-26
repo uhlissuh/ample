@@ -1,8 +1,8 @@
 # SITE CONFIGURATION
 baseurl: ""
 url: "http://blog.isitample.com"
-title: Ample Body Liberation App Blog
-description: "The blog for Ample App! Your stop for all things trans, body, and disability positivity." # used by search engines
+title: Ample Body Liberation Blog
+description: "Your stop for all things trans, body, and disability positivity." # used by search engines
 
 
 # THEME-SPECIFIC CONFIGURATION
@@ -15,7 +15,7 @@ theme_settings:
 
   # Header and footer text
   header_text: ""
-  header_text_feature_image: assets/img/blip.png
+  header_text_feature_image:
   footer_text: Copyright 2018
   # Icons
   rss: false  # Make sure you created a feed.xml with feed.xml layout
