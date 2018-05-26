@@ -22,8 +22,6 @@ Ample was originally envisioned as a way for fat people to track feedback on med
 
 We soon realized that there are many other types of establishments that could use our collective knowledge: restaurants, theaters, coffee shops, stores, service providers… the possibilities are endless. Also, what about others in traditionally-marginalized bodies, or those who live at the intersections of multiple identities? How can we make the internet sleuthing— of whether a business has armless chairs, or a ramp, or a staff who respects gender pronouns— easier for the people who need this information? Ultimately, we want Ample to be a community-generated accessibility tool, so we can exist more comfortably in our non-conforming bodies while out in the world!
 
-![Diverse Gang of Amplers]({{ "/assets/img/peepsies.png" | absolute_url }})
-
 
 ### Why does Ample cater to fat, trans, and disabled people, instead of just one of these groups?
 
