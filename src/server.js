@@ -14,7 +14,8 @@ const GeoIP = require('geoip-lite');
 const CRITERIA_DESCRIPTIONS = {
   fat: 'Body Positivity',
   trans: 'Trans Awareness',
-  disabled: 'Accessibility'
+  disabled: 'Accessibility',
+  poc: "POC Inclusivity"
 };
 
 module.exports =
@@ -353,6 +354,7 @@ function (
       fatRating: parseInt(body["fat-rating"]),
       transRating: parseInt(body["trans-rating"]),
       disabledRating: parseInt(body["disabled-rating"]),
+      pocRating: parseInt(body["poc-rating"]),
       categories: [body['parent-category']],
       tags: body.tags && body.tags.map(tag => tag.trim())
     };

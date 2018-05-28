@@ -6,6 +6,7 @@ const CRITERIA_NAMES = [
   'fat',
   'trans',
   'disabled',
+  'poc'
 ];
 
 let ALL_CATEGORIES, CATEGORY_IDS_BY_TITLE, CATEGORY_TITLES_BY_ID, CHILD_CATEGORIES_BY_PARENT_CATEGORY;
@@ -213,8 +214,10 @@ async function updateBusinessAfterReview(tx, businessId, businessRow) {
         trans_rating_count = $5,
         disabled_rating_total = $6,
         disabled_rating_count = $7,
-        review_count = $8,
-        category_ids = $9
+        poc_rating_total = $8,
+        poc_rating_count = $9,
+        review_count = $10,
+        category_ids = $11
       where id = $1
     `,
     [
@@ -225,6 +228,8 @@ async function updateBusinessAfterReview(tx, businessId, businessRow) {
       businessRow.trans_rating_count,
       businessRow.disabled_rating_total,
       businessRow.disabled_rating_count,
+      businessRow.poc_rating_total,
+      businessRow.poc_rating_count,
       businessRow.review_count,
       businessRow.category_ids
     ]
@@ -321,11 +326,11 @@ exports.createReview = async function(userId, businessId, review) {
       `insert into reviews
         (
           business_id, user_id, content, timestamp, category_ids,
-          fat_rating, trans_rating, disabled_rating
+          fat_rating, trans_rating, disabled_rating, poc_rating
         )
         values
         (
-          $1, $2, $3, $4, $5, $6, $7, $8
+          $1, $2, $3, $4, $5, $6, $7, $8, $9
         )
         returning id`,
       [
@@ -337,6 +342,7 @@ exports.createReview = async function(userId, businessId, review) {
         review.fatRating || null,
         review.transRating || null,
         review.disabledRating || null,
+        review.pocRating || null
       ]
     );
 
@@ -505,6 +511,7 @@ async function reviewsFromRows(tx, rows) {
       fatRating: row.fat_rating,
       transRating: row.trans_rating,
       disabledRating: row.disabled_rating,
+      pocRating: row.poc_rating,
       categories: row.category_ids.map(getCategoryTitle),
       user: {
         id: row.user_id,

@@ -38,6 +38,8 @@ describe("database", () => {
         transRatingCount: 0,
         disabledAverageRating: null,
         disabledRatingCount: 0,
+        pocAverageRating: null,
+        pocRatingCount: 0,
       })
 
       assert.deepEqual(await database.getBusinessByGoogleId('5'), business)
@@ -101,11 +103,14 @@ describe("database", () => {
         fatRating: 5,
         transRating: 5,
         disabledRating: 5,
+        pocRating: 4,
         categories: ['Doctors']
       });
 
       let business = await database.getBusinessById(businessId);
       assert.equal(business.fatAverageRating, 5);
+      assert.equal(business.pocAverageRating, 4);
+
       assert.deepEqual(business.categories, ['Doctors']);
 
       await database.createReview(userId, businessId, {
@@ -113,11 +118,14 @@ describe("database", () => {
         fatRating: 1,
         transRating: 3,
         disabledRating: 1,
+        pocRating: 2,
         categories: ['Doctors', 'Internal Medicine']
       });
 
       business = await database.getBusinessById(businessId);
       assert.equal(business.fatAverageRating, 3);
+      assert.equal(business.pocAverageRating, 3);
+
       assert.deepEqual(business.categories, ['Doctors', 'Internal Medicine']);
 
       await database.createReview(userId, businessId, {
@@ -125,11 +133,13 @@ describe("database", () => {
         fatRating: 5,
         transRating: 2,
         disabledRating: 2,
+        pocRating: 3,
         categories: ['Doctors']
       });
 
       business = await database.getBusinessById(businessId);
       assert.equal(business.fatAverageRating, 3.7)
+      assert.equal(business.pocAverageRating, 3)
       assert.deepEqual(business.categories, ['Doctors', 'Internal Medicine']);
 
       const reviews = await database.getBusinessReviewsById(businessId);
@@ -152,6 +162,7 @@ describe("database", () => {
       })
 
       assert.deepEqual(reviews.map(review => review.fatRating).sort(), [1, 5, 5]);
+      assert.deepEqual(reviews.map(review => review.pocRating).sort(), [2, 3, 4]);
     });
 
     it("doesn't allow unknown categories", async () => {
