@@ -1,7 +1,9 @@
-<div class="row border-top border-bottom breakdown-section">
-  <div class="col-12 col-lg-2">
+<div class="row">
+  <div class="col-12">
     Score Breakdown:
   </div>
+</div>
+<div class="row border-top border-bottom breakdown-section">
 
   <% for (const criteriaName in ratingBreakdown) { %>
     <div class="col-12 col-lg-3">
@@ -18,7 +20,7 @@
 
 <div id="rating-breakdowns">
   <% let i = 0; %>
-  <% let offsets = [1, 4, 7 ]; %>
+  <% let offsets = [0, 3, 6, 8 ]; %>
   <% for (const criteriaName in ratingBreakdown) { %>
     <div
       class="row collapse-no-animate breakdown-section"

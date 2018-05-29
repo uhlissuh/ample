@@ -15,7 +15,7 @@ const CRITERIA_DESCRIPTIONS = {
   fat: 'Body Positivity',
   trans: 'Trans Awareness',
   disabled: 'Accessibility',
-  poc: "POC Inclusivity"
+  poc: "BIPOC Inclusivity"
 };
 
 module.exports =

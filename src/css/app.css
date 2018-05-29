@@ -145,7 +145,6 @@
 .business-header {
   margin-top: 30px;
   padding-bottom: 30px;
-  border-bottom: .5px solid #d3d3d3;
 }
 
 .cards {
@@ -357,6 +356,7 @@ a:hover {
   padding-top: 15px;
   padding-bottom: 15px;
   border-bottom: .5px solid #d3d3d3;
+  border-top: .5px solid #d3d3d3;
 }
 
 .link-highlighted {
@@ -443,6 +443,7 @@ a:hover {
 .rating-breakdown-link {
   text-align: center;
   display: block;
+  text-decoration: underline;
 }
 
 .biz-name {
