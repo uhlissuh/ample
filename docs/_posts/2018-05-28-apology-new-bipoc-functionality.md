@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "An Apology, and new Ample functionality for BIPOC"
+title: "An Apology, and New Ample Functionality for BIPOC"
 author: Ample Team
 excerpt_separator: <!--more-->
 
