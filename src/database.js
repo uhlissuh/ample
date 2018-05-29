@@ -204,6 +204,7 @@ exports.createBusiness = async function(business) {
 };
 
 async function updateBusinessAfterReview(tx, businessId, businessRow) {
+
   await tx.query(
     `
       update businesses
@@ -359,6 +360,7 @@ exports.updateReview = async function(reviewId, newReview) {
     const oldReview = await this.getReviewById(reviewId);
 
     const business = await getFullBusinessById(tx, oldReview.businessId);
+    console.log(business);
     for (const criteriaName of CRITERIA_NAMES) {
       if (Number.isFinite(oldReview[criteriaName + 'Rating'])) {
         business[criteriaName + '_rating_count']--;
@@ -386,6 +388,7 @@ exports.updateReview = async function(reviewId, newReview) {
 
     await addTagsToReview(tx, reviewId, business.id, tagsToInsert);
     await removeTagsFromReview(tx, reviewId, tagsToDelete);
+    console.log(business);
     await updateBusinessAfterReview(tx, business.id, business);
 
     await db.query(`
@@ -394,15 +397,17 @@ exports.updateReview = async function(reviewId, newReview) {
         fat_rating = $2,
         trans_rating = $3,
         disabled_rating = $4,
-        timestamp = $5,
-        category_ids = $6
+        poc_rating = $5,
+        timestamp = $6,
+        category_ids = $7
       where
-        id = $7
+        id = $8
     `, [
       newReview.content,
       newReview.fatRating || null,
       newReview.transRating || null,
       newReview.disabledRating || null,
+      newReview.pocRating || null,
       new Date(),
       categoryIds,
       reviewId

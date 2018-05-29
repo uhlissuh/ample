@@ -349,6 +349,7 @@ describe("database", () => {
         content: "Meh.",
         fatRating: 3,
         transRating: 3,
+        pocRating: 5,
         categories: ['Doctors']
       });
 
@@ -356,6 +357,7 @@ describe("database", () => {
         content: "I love this person deeply.",
         fatRating: 4,
         disabledRating: 4,
+        pocRating: 2,
         categories: ['Doctors'],
         tags: ['tag-1', 'tag-2']
       });
@@ -372,6 +374,7 @@ describe("database", () => {
         content: "I actually love this person more than I even thought was possible.",
         fatRating: 5,
         transRating: 1,
+        pocRating: 5,
         categories: ['Doctors']
       });
 
@@ -382,6 +385,8 @@ describe("database", () => {
       assert.equal(updatedReview.fatRating, 5);
       assert.equal(updatedReview.transRating, 1);
       assert.equal(updatedReview.disabledRating, null);
+      assert.equal(updatedReview.pocRating, 5);
+
 
       assert.equal(business.fatRatingCount, 2);
       assert.equal(business.fatAverageRating, 4);
@@ -389,6 +394,9 @@ describe("database", () => {
       assert.equal(business.transAverageRating, 2);
       assert.equal(business.disabledRatingCount, 0);
       assert.equal(business.disabledAverageRating, null);
+      assert.equal(business.pocAverageRating, 5);
+      assert.equal(business.pocRatingCount, 2);
+
     });
 
     it("updates the review's tags", async () => {
