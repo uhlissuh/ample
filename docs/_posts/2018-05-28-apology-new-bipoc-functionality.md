@@ -14,7 +14,7 @@ We messed up. We, the white folks at Ample, thought we were being respectful by 
 
 It was generously brought to our attention that reviews without this axis of information are useless to BIPOC, as race strongly affects experiences with businesses and service providers. We are sorry this had to be reiterated, and that we didn’t ally adequately prior to launch. We were reminded it is more important to help dismantle white supremacy than it is to be perfect in our efforts.
 
-We’ve hustled to get this functionality rolled out immediately. We are still engaging in conversation about how to better collaborate and partner with BIPOC communities. Not least so we can assure that the wording, tags, and tool tips are what best serve— be aware these things might change as we continue this dialogue. But as of right now, this is available, with our promise it will only improve.
+We’ve hustled to get this functionality rolled out immediately. We are still engaging in conversation about how to better collaborate and partner with BIPOC communities. Not least so we can assure that the wording, tags, and tool tips are what best serve— be aware these things might change as we continue this dialogue. But as of right now, this is available, with our promise that it will only improve.
 
 ![Image description: A screenshot of the Ample business review page. 4 star ratings are presented to rate a business on body positivity, trans awareness, accessibility, and BIPOC Inclusivity.]({{ "/assets/img/BIPOC-review-changes.png" | absolute_url }})
 
