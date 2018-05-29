@@ -18,4 +18,4 @@ We’ve hustled to get this functionality rolled out immediately. We are still e
 
 ![Image description: A screenshot of the Ample business review page. 4 star ratings are presented to rate a business on body positivity, trans awareness, accessibility, and BIPOC Inclusivity.]({{ "/assets/img/BIPOC-review-changes.png" | absolute_url }})
 
-(A reminder to non-BIPOC folks: It is best practice to leave a rating unfilled if you do not know how an establishment does in a certain rating area. A blank rating is simply not used in an establishment's calculated score.)
+(A reminder to non-BIPOC folks: It is best practice to leave a rating unfilled if you do not know how an establishment performs in a certain rating area. A blank rating is simply not used in an establishment's calculated score.)
