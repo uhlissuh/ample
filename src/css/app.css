@@ -605,7 +605,7 @@ a:hover {
 
   .score-row {
     border-top: .5px solid #d3d3d3;
-    border-bottom: .5px solid #d3d3d3;
+    /* border-bottom: .5px solid #d3d3d3; */
     margin-top: 10px;
     padding-bottom: 10px;
   }
@@ -619,7 +619,7 @@ a:hover {
 
   .tags-row {
     margin-top: 10px;
-    border-bottom: .5px solid #d3d3d3;
+    /* border-bottom: .5px solid #d3d3d3; */
     padding-bottom: 10px;
   }
 
