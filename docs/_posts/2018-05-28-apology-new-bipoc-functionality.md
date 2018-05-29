@@ -16,4 +16,4 @@ It was generously brought to our attention that reviews without this axis of inf
 
 We’ve hustled to get this functionality rolled out immediately. We are still engaging in conversation about how to better collaborate and partner with BIPOC communities. Not least so we can assure that the wording, tags, and tool tips are what best serve— be aware these things might change as we continue this dialogue. But as of right now, this is available, with our promise it will only improve.
 
-(A reminder to non-BIPOC folks: It is best practice to leave a rating unfilled if you do not share that marginalization. A blank rating is simply not used in an establishment's calculated score.)
+(A reminder to non-BIPOC folks: It is best practice to leave a rating unfilled if you do not know how an establishment does in a certain rating area. A blank rating is simply not used in an establishment's calculated score.)
