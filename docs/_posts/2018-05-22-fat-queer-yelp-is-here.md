@@ -39,8 +39,8 @@ And of course, native mobile apps for iPhone and Android are on the agenda! We t
 
 ### How will you be paying the bills?
 
-Right now we are footing the bills ourselves, but in the future we will probably need to curate some advertisement space for revenue, or seek some grant funding to keep the lights on. We are a volunteer team; do you want to [join us?](isitample.com/feedback "Ample's feedback page")
+Right now we are footing the bills ourselves, but in the future we will probably need to curate some advertisement space for revenue, or seek some grant funding to keep the lights on. We are a volunteer team; do you want to [join us?](http://www.isitample.com/feedback "Ample's feedback page")
 
 ### What’s some of the other feedback you’ve been getting?
 
-We’ve been getting a lot of love, which we are radiating right back atcha! But also, we dearly love any and all [feedback](isitample.com/feedback "Ample's feedback page") on Ample. We want this to be something our communities have a hand in creating and ultimately find useful.
+We’ve been getting a lot of love, which we are radiating right back atcha! But also, we dearly love any and all [feedback](http://isitample.com/feedback "Ample's feedback page") on Ample. We want this to be something our communities have a hand in creating and ultimately find useful.
