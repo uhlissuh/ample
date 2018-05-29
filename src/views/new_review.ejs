@@ -129,6 +129,10 @@ function setAccessibilityText() {
   return "This rating tells others about the physical accessibility of the space for those with disabilities. 5 stars would indicate that the space is easy to access, is without stairs, has wide doorways/aisles, or has easy parking. Leave this blank if you don't know."
 }
 
+function setPocText() {
+  return "We are working with BIPOC on what this tooltip guide will be! Leave this blank if you don't know."
+}
+
 function setTagText() {
   return "To add a tag, put cursor inside box and begin typing. A dropdown menu will appear with other commonly used tags. Press enter upon completion of typing to attach the tag, and add more if you want! Example tags: all gender bathrooms, high limit scale, wide aisles, handicap parking. Soon tags will be searchable across all Ample reviews."
 }
@@ -143,6 +147,10 @@ $('#trans-rating').tooltip({
 
 $('#disabled-rating').tooltip({
     title: setAccessibilityText
+})
+
+$('#poc-rating').tooltip({
+    title: setPocText
 })
 
 $('#tooltip-tag').tooltip({
