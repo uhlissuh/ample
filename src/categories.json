@@ -408,6 +408,10 @@
     "parent": "Hotels & Travel"
   },
   {
+    "title": "Airports",
+    "parent": "Hotels & Travel"
+  },
+  {
     "title": "Hotels",
     "parent": "Hotels & Travel"
   },
@@ -426,5 +430,41 @@
   {
     "title": "Vacation Rentals",
     "parent": "Hotels & Travel"
+  },
+  {
+    "title": "Academic Institutions",
+    "parent": null
+  },
+  {
+    "title": "Colleges & Universities",
+    "parent": "Academic Institutions"
+  },
+  {
+    "title": "K-12 schools",
+    "parent": "Academic Institutions"
+  },
+  {
+    "title": "Religious Organizations",
+    "parent": null
+  },
+  {
+    "title": "Churches",
+    "parent": "Religious Organizations"
+  },
+  {
+    "title": "Mosques",
+    "parent": "Religious Organizations"
+  },
+  {
+    "title": "Synagogues",
+    "parent": "Religious Organizations"
+  },
+  {
+    "title": "Religious Youth Center",
+    "parent": "Religious Organizations"
+  },
+  {
+    "title": "Religious Group",
+    "parent": "Religious Organizations"
   }
 ]
