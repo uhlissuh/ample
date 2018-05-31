@@ -116,7 +116,7 @@
 }
 
 .characters-big {
-  background-image: url('/static/chars-large.svg');
+  background-image: url('/static/chars-big.svg');
   background-repeat: no-repeat;
   height: 700px;
   width: 700px;
