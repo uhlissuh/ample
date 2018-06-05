@@ -14,7 +14,7 @@ tags: [disabilities, travelling, fat]
 
 <!--more-->
 
-![Image description: A screenshot of the Ample business review page. 4 star ratings are presented to rate a business on body positivity, trans awareness, accessibility, and BIPOC Inclusivity.]({{ "/assets/img/woman-on-bed.jpg" | absolute_url }})
+![Image description: A photograph of a fat Woman of Color reclining on her side, propped up on her elbow, atop the bedclothes on a bed. Her hair is in loose curls, and her gaze is cast gently down to the bed's surface. A beige blanket lays around her hip and knees.]({{ "/assets/img/woman-on-bed.jpg" | absolute_url }})
 
 First of all, thank you for asking, and thank you for your willingness to pro-actively accommodate. It gets tiring having to ask for accommodation all the time, so it’s heavenly when we enter a space where these things have been thought about already! We have a few good tips to start you off in the right direction.
 
