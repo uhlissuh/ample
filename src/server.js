@@ -12,9 +12,9 @@ const sslRedirect = require('heroku-ssl-redirect');
 const GeoIP = require('geoip-lite');
 
 const CRITERIA_DESCRIPTIONS = {
-  fat: 'Body Positivity',
-  trans: 'Trans Awareness',
-  disabled: 'Accessibility',
+  fat: 'Weight Inclusivity',
+  trans: 'Trans Inclusivity',
+  disabled: 'Disability Inclusivity',
   poc: "BIPOC Inclusivity"
 };
 
@@ -101,7 +101,6 @@ function (
       user: user,
     });
   });
-
 
   app.get('/login', (req, res) => {
     res.render('login', {
@@ -196,6 +195,15 @@ function (
         categories: await database.getAllCategories()
       }
     );
+  });
+
+  app.get('/businesses/new', async function(req, res) {
+    let user = null;
+    const userId = req.signedCookies['userId'];
+    if (userId) {
+      user = await database.getUserById(req.signedCookies['userId'])
+    }
+    res.render('add-business', {user});
   });
 
   app.get('/businesses/:googleId', async function(req, res) {
