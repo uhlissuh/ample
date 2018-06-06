@@ -29,6 +29,7 @@
         <% } %>
       </div>
 
+
       <div class="row tags-row">
         <div class="col-12">
           <% if (business.tags && business.tags.length != 0) { %>
@@ -55,6 +56,11 @@
     </div>
   </div>
 
+  <% if (reviews.length === 0) { %>
+    <div class="section-separator">
+      <br />
+    </div>
+  <% } %>
 
   <% if (reviews.length != 0) { %>
 
