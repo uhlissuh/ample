@@ -12,7 +12,7 @@ const sslRedirect = require('heroku-ssl-redirect');
 const GeoIP = require('geoip-lite');
 
 const CRITERIA_DESCRIPTIONS = {
-  fat: 'Weight Inclusivity',
+  fat: 'Size Inclusivity',
   trans: 'Trans Inclusivity',
   disabled: 'Disability Inclusivity',
   poc: "BIPOC Inclusivity"
