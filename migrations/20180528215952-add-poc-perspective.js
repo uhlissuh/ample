@@ -14,7 +14,6 @@ exports.up = async function(db) {
   await db.addColumn('reviews', 'poc_rating', {type: 'int'})
   await db.addColumn('businesses', 'poc_rating_total', {type: 'int', defaultValue: 0})
   await db.addColumn('businesses', 'poc_rating_count', {type: 'int', defaultValue: 0})
-  return null;
 };
 
 exports.down = async function(db) {
