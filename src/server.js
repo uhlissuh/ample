@@ -202,15 +202,18 @@ function (
     let user = null;
     const userId = req.signedCookies['userId'];
     if (userId) {
-      user = await database.getUserById(req.signedCookies['userId'])
+      user = await database.getUserById(req.signedCookies['userId']);
+      res.render('add-business',
+        {
+          user,
+          countries: JSON.stringify(countriesStates),
+          childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
+        }
+      );
+    } else {
+      res.redirect('/login?referer=' + req.url);
     }
-    res.render('add-business',
-      {
-        user,
-        countries: JSON.stringify(countriesStates),
-        childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
-      }
-    );
+
   });
 
 
