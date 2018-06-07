@@ -1,0 +1,143 @@
+<div class="container">
+  <div class="form-row">
+    <div class="col-md-10 offset-md-1">
+      <h3 class="add-business-title">Add a Business</h3>
+      <small>For the businesses that aren't returned in our search results.</small>
+    </div>
+
+  </div>
+  <form class="add-business-form"  method="POST" action="/businesses">
+    <div class="col-lg-10 offset-md-1 inner-form">
+      <div class="form-group">
+        <label for="business-name">Business Name</label>
+        <input type="text" class="form-control" id="business-name" name="name">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="business-address">Business Address</label>
+          <input type="text" class="form-control" id="business-address" name="address">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="business-phone">Phone</label>
+          <input type="number" class="form-control" id="business-phone" name="phone">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputCountry">Country</label>
+          <select id="inputCountry" class="form-control" name="country">
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputState">State</label>
+          <select id="inputState" class="form-control" name="state">
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputZip">Zip Code</label>
+          <input type="number" class="form-control" id="inputZip" name="zip">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputCity">City</label>
+          <input type="text" class="form-control" id="inputCity" name="city">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <small for="parent-category">Help us to know what kind of business this is.</small>
+          <select id="parent-category-select" class="form-control" name="parent-category">
+            <option disabled selected="selected" value="">Select a category</option>
+            <% for (const category in childCategoriesByParentCategory) { %>
+              <option value="<%- category -%>"><%- category -%></option>
+            <% } %>
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <small for="parent-category">Optionally, add a subcategory.</small>
+          <select id="child-category-select" class="form-control" name="child-category">
+            <option>...</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- <div class="form-group col-md-6">
+        <label for="file">Add a photo of the business:</label>
+        <input type="file" />
+      </div> -->
+
+      <div class="row form-group">
+        <div class="col-md-12">
+          <button type="submit" class="btn review-submit-button" >Add Business</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+const countries = <%- countries -%>.countries;
+
+const selectCountry = document.getElementById('inputCountry');
+const selectState= document.getElementById('inputState');
+
+for (const country of countries) {
+  var option = document.createElement('option');
+  option.value = country.country;
+  option.innerHTML = country.country;
+  selectCountry.appendChild(option);
+  if (country.country == 'United States') {
+    option.selected = 'selected';
+  }
+}
+
+populateStates();
+
+function populateStates() {
+  selectState.innerHTML = '';
+  var option = document.createElement('option');
+  option.value = '';
+  option.innerHTML = '';
+  selectState.appendChild(option);
+  for (country of countries) {
+    if(country.country == selectCountry.value) {
+      for (state of country.states) {
+        var option = document.createElement('option');
+        option.value = state;
+        option.innerHTML = state;
+        selectState.appendChild(option);
+      }
+    }
+  }
+}
+
+selectCountry.addEventListener('change', populateStates)
+
+const childCategoriesByParentCategory = <%- JSON.stringify(childCategoriesByParentCategory) %>;
+
+console.log(childCategoriesByParentCategory);
+
+const parentCategorySelect = document.getElementById('parent-category-select');
+const childCategorySelect = document.getElementById('child-category-select');
+parentCategorySelect.addEventListener('change', (event) => {
+  const parentCategory = parentCategorySelect.value;
+  const childCategories = childCategoriesByParentCategory[parentCategory];
+  childCategorySelect.innerHTML = '<option></option>';
+
+  for (const childCategory of childCategories) {
+    const option = document.createElement('option');
+    option.innerText = childCategory;
+    option.value = childCategory;
+    childCategorySelect.appendChild(option);
+  }
+});
+
+</script>
+
+<%- contentFor('title') -%>
+Ample | Add Business

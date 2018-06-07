@@ -120,7 +120,8 @@ async function businessesFromRows(tx, rows) {
       longitude: row.longitude,
       phone: row.phone,
       reviewCount: row.review_count,
-      categories: row.category_ids.map(getCategoryTitle)
+      categories: row.category_ids.map(getCategoryTitle),
+      userId: row.user_id
     };
 
     let combinedRatingCount = 0;
@@ -189,15 +190,17 @@ function roundRating(rating) {
 exports.createBusiness = async function(business) {
   const rows = await db.query(
     "insert into businesses " +
-      "(name, google_id, address, phone, coordinates) values " +
-      "($1, $2, $3, $4, ST_MakePoint($5, $6)) returning id",
+      "(name, google_id, address, phone, user_id, coordinates) values " +
+      "($1, $2, $3, $4, $5, ST_MakePoint($6, $7)) returning id",
     [
       business.name,
       business.googleId,
       business.address,
       business.phone,
+      business.userId,
       parseFloat(business.latitude),
-      parseFloat(business.longitude)
+      parseFloat(business.longitude),
+
     ]
   );
   return rows[0].id;
@@ -360,7 +363,7 @@ exports.updateReview = async function(reviewId, newReview) {
     const oldReview = await this.getReviewById(reviewId);
 
     const business = await getFullBusinessById(tx, oldReview.businessId);
-    console.log(business);
+
     for (const criteriaName of CRITERIA_NAMES) {
       if (Number.isFinite(oldReview[criteriaName + 'Rating'])) {
         business[criteriaName + '_rating_count']--;
@@ -388,7 +391,7 @@ exports.updateReview = async function(reviewId, newReview) {
 
     await addTagsToReview(tx, reviewId, business.id, tagsToInsert);
     await removeTagsFromReview(tx, reviewId, tagsToDelete);
-    console.log(business);
+
     await updateBusinessAfterReview(tx, business.id, business);
 
     await db.query(`

@@ -482,6 +482,26 @@ a:hover {
   color: #A9A9A9;
 }
 
+.add-business-form {
+  padding-top: 10px;
+}
+
+.inner-form {
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  border: .5px solid #d3d3d3;
+}
+
+.add-business-background {
+  background-color: #FFD4D3;
+}
+
+.add-business-title {
+  font-family: 'Lilita One', cursive;
+  color: #EB6E79;
+  margin-top: 20px;
+}
 
 @media screen and (max-width: 800px) {
   .founder-img-second {

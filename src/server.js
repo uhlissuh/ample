@@ -10,6 +10,7 @@ const catchErrors = require('./catch-errors');
 const pluralize = require('pluralize');
 const sslRedirect = require('heroku-ssl-redirect');
 const GeoIP = require('geoip-lite');
+const countriesStates = require('./countries-states.json');
 
 const CRITERIA_DESCRIPTIONS = {
   fat: 'Size Inclusivity',
@@ -203,8 +204,15 @@ function (
     if (userId) {
       user = await database.getUserById(req.signedCookies['userId'])
     }
-    res.render('add-business', {user});
+    res.render('add-business',
+      {
+        user,
+        countries: JSON.stringify(countriesStates),
+        childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
+      }
+    );
   });
+
 
   app.get('/businesses/:googleId', async function(req, res) {
     const isMobile = req.headers.host.startsWith('mobile.');
@@ -354,6 +362,39 @@ function (
     const userId = req.signedCookies['userId'];
     await database.createReview(userId, businessId, reviewFromRequest(req.body));
     res.redirect(`/businesses/${googleId}`)
+  });
+
+  app.post('/businesses', async function(req, res) {
+    const userId = req.signedCookies['userId'];
+    const user = await database.getUserById(userId);
+    if (user) {
+      var city = req.body.city;
+      const re = /(\b[a-z](?!\s))/g;
+
+      city = city.replace(re, function(x){return x.toUpperCase();});
+
+      const formattedAddress = req.body.address + ", " +
+         city +  ", "  + req.body.state +  ", " + req.body.country;
+
+      const geometry = await googlePlacesClient.getCoordinatesForLocationName(formattedAddress);
+      console.log(geometry);
+      businessId = await database.createBusiness(
+        {
+          name: req.body.name,
+          latitude: geometry.lat,
+          longitude: geometry.lng,
+          phone: req.body.phone,
+          address: formattedAddress,
+          userId
+      }
+      );
+
+      console.log(businessId);
+      res.redirect(`/`)
+    } else {
+      res.render('404-error', {user});
+    }
+
   });
 
   function reviewFromRequest(body) {

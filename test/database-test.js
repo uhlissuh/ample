@@ -40,10 +40,53 @@ describe("database", () => {
         disabledRatingCount: 0,
         pocAverageRating: null,
         pocRatingCount: 0,
+        userId: null
       })
 
       assert.deepEqual(await database.getBusinessByGoogleId('5'), business)
     });
+
+    it("allows the business to be created manually", async () => {
+      userId = await database.createUser({
+        facebookId: '567',
+        name: 'Bob Carlson',
+        email: 'bob@example.com'
+      })
+
+      const id = await database.createBusiness({
+        name: "Alma's",
+        address: '123 alberta',
+        phone: '123-456-7890',
+        latitude: 37.76,
+        longitude: -122.42,
+        userId: userId
+      });
+
+      const business = await database.getBusinessById(id);
+
+      assert.deepEqual(business, {
+        id,
+        googleId: null,
+        name: "Alma's",
+        address: '123 alberta',
+        phone: '123-456-7890',
+        tags: [],
+        latitude: 37.76,
+        longitude: -122.42,
+        categories: [],
+        overallRating: null,
+        reviewCount: 0,
+        fatAverageRating: null,
+        fatRatingCount: 0,
+        transAverageRating: null,
+        transRatingCount: 0,
+        disabledAverageRating: null,
+        disabledRatingCount: 0,
+        pocAverageRating: null,
+        pocRatingCount: 0,
+        userId: userId
+      })
+    })
   });
 
   describe(".getBusinessesByGoogleIds", () => {
