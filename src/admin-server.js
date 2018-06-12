@@ -30,7 +30,7 @@ function (users) {
     const pendingTags = await database.getPendingTags();
     const allReviews = await database.getAllReviews();
     allReviews.map(review => review.date = new Date(review.timestamp).toDateString())
-    res.render('admin/approve-tags', { pendingTags, user: null, allReviews });
+    res.render('admin/admin-dashboard', { pendingTags, user: null, allReviews });
   });
 
   app.post('/approve-tag', async (req, res) => {
