@@ -79,17 +79,17 @@
 
     <div class="col-8 col-lg-3">
       <% if (!hasReviewedThisBusiness) { %>
-        <a
-          class="btn btn-info review-button"
-          href="/businesses/<%- business.id -%>/reviews/new"
-          role="button">Add Your Review</a>
+        <form method="GET" action="/businesses/<%- business.id -%>/reviews/new">
+          <input name="name" type="hidden" value="<%- business.name -%>"/>
+          <input name="address" type="hidden" value="<%- business.address -%>"/>
+          <input type="submit" value="Add a Review" class="btn btn-info review-button"/>
+        </form>
       <% } else { %>
         <a
           class="btn btn-info review-button disabled"
           href=""
           role="button">Reviewed</a>
       <% } %>
-
     </div>
   </div>
 

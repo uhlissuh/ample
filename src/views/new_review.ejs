@@ -4,21 +4,20 @@
     <div class="col-12 col-lg-6">
       <span class="review-biz-name"><%- name -%></span>
       <br />
-      <%- formatted_address -%>
-      <br />
-      <%- formatted_phone_number -%>
+      <span><%- address -%></span>
+
     </div>
   </div>
 
   <div class="row review-title">
     <div class="col-12">
-      <h2>Write A Review</h2>
+      <h2>Write a Review</h2>
     </div>
   </div>
 
   <div class="row">
     <div class="col-12">
-      <form class="main-form" method="POST" action="/businesses/<%- googleId -%>/reviews">
+      <form class="main-form" method="POST" action="/businesses/<%- id -%>/reviews">
         <div class="row form-group">
           <div class="col-12 col-lg-6">
             <% for (const criteria in CRITERIA_DESCRIPTIONS) { %>

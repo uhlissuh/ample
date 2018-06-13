@@ -313,6 +313,11 @@ function (
 
   app.get('/businesses/:id/reviews/new', async function(req, res) {
     const userId = req.signedCookies['userId'];
+
+    const name = req.query.name;
+    const address = req.query.address;
+
+
     if (!userId) {
       res.redirect('/login?referer=' + req.url);
       return;
@@ -320,27 +325,11 @@ function (
 
     const user = await database.getUserById(userId);
 
-    let googleId;
-
-    if (isGoogleId(req.params.id)) {
-      googleId = req.params.id;
-    } else {
-      const business = await database.getBusinessById(req.params.id);
-      googleId = business.googleId;
-    }
-
-    let business = await cache.get(req.params.id);
-    if (!business) {
-      business = await googlePlacesClient.getBusinessById(googleId);
-      await cache.set(googleId, business, 3600);
-    }
 
     res.render('new_review', {
-      name: business.name,
-      googleId: googleId,
-      formatted_address: business.formatted_address,
-      formatted_phone_number: business.formatted_phone_number,
-      location: business.geometry.location,
+      id: req.params.id,
+      name: name,
+      address: address,
       reviewerId: userId,
       childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
       user: user,
@@ -374,27 +363,32 @@ function (
     res.redirect(`/businesses/${req.params.id}`);
   });
 
-  app.post('/businesses/:googleId/reviews', async function(req, res) {
-    const googleId = req.params.googleId;
-    let business = await cache.get(googleId);
-    if (!business) {
-      business = await googlePlacesClient.getBusinessById(googleId);
-      await cache.set(googleId, business, 3600);
+  app.post('/businesses/:id/reviews', async function(req, res) {
+
+    let googleBusiness, existingBusiness, businessId;
+
+    if (isGoogleId(req.params.id)) {
+      googleId = req.params.id;
+      googleBusiness = await cache.get(googleId);
+      if (!googleBusiness) {
+        googleBusiness = await googlePlacesClient.getBusinessById(googleId);
+        await cache.set(googleId, googleBusiness, 3600);
+      }
+    } else {
+      existingBusiness = await database.getBusinessById(req.params.id);
     }
 
-    const existingBusiness = await database.getBusinessByGoogleId(googleId);
-    let businessId;
     if (existingBusiness) {
       businessId = existingBusiness.id;
     } else {
       businessId = await database.createBusiness(
       {
         googleId: googleId,
-        name: business.name,
-        latitude: business.geometry.location.lat,
-        longitude: business.geometry.location.lng,
-        phone: business.formatted_phone_number,
-        address: business.formatted_address
+        name: googleBusiness.name,
+        latitude: googleBusiness.geometry.location.lat,
+        longitude: googleBusiness.geometry.location.lng,
+        phone: googleBusiness.formatted_phone_number,
+        address: googleBusiness.formatted_address
       })
     }
 
