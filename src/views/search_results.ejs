@@ -40,7 +40,7 @@
     <div class="row">
       <div class="col-12">
         <h3 class="search-results-title">
-          Search Results for <%- term -%> near <%- location -%> :
+          Search Results for <%- term -%> near <%- location -%>:
         </h3>
       </div>
     </div>
@@ -82,7 +82,7 @@
                     </div>
 
                   <% } else { %>
-                    <span class="score-grouping"><a class="be-first-words" href="<%- businessURL -%>">Be the first to review.</a></span>
+                    <span class="score-grouping"><a class="be-first-words" href="<%- businessURL -%>">Be the first to review</a></span>
                   <% } %>
                 </div>
               </div>
@@ -91,10 +91,22 @@
         </li>
       <% } %>
     </ol>
+    <div class="row">
+      <div class="col-12">
+        <small>Missing the business you were looking for? </small>
+      </div>
+      <div class="col-12">
+        <small class="add-business-link"><a href="/businesses/new">Add the business here.</a></small>
+      </div>
+    </div>
+    <div class="row">
+      
+    </div>
+
   <% } else { %>
     <div class='row alert alert-info'>
       <div class='col-12'>
-        Oops! We couldn't find any businesses for that search term and location.
+        Oops! We couldn't find any businesses for that search term and location. <a href="/businesses/new">You can add the business here,</a> or try a new search.
       </div>
     </div>
   <% } %>
