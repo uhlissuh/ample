@@ -12,7 +12,6 @@ class BusinessSearch {
   }
 
   async findBusinessesForLocation(term, lat, lng) {
-
     const googleBusinesses = await this.googlePlacesClient.getBusinessesNearCoordinates(
       term,
       lat,
@@ -31,13 +30,14 @@ class BusinessSearch {
     }
 
     const results = googleBusinesses.map(googleBusiness => {
+
       const ratedBusiness = ratedBusinessesByGoogleId[googleBusiness.place_id];
       const photoReference = googleBusiness.photos ? googleBusiness.photos[0].photo_reference : null
       return Object.assign({}, {
         googleId: googleBusiness.place_id,
         name: googleBusiness.name,
         photoURL: photoReference ? this.googlePlacesClient.getPhotoURL(photoReference, 300, 300) : null,
-        vicinity: googleBusiness.vicinity,
+        address: googleBusiness.vicinity,
         reviewCount: 0
       }, ratedBusiness);
     });

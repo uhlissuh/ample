@@ -4,8 +4,8 @@
     <div class="col-12 col-lg-8 align-self-end order-12">
 
         <h1 class="biz-name"><%- business.name -%></h1>
-        <p class="business-by-line address"> <%- business.formatted_address -%></p>
-        <p class="business-by-line"> <%- business.formatted_phone_number -%></p>
+        <p class="business-by-line address"> <%- business.address -%></p>
+        <p class="business-by-line"> <%- business.phone -%></p>
 
       <div id="score-row" class="row score-row">
         <% if (reviews.length != 0) { %>
@@ -81,7 +81,7 @@
       <% if (!hasReviewedThisBusiness) { %>
         <a
           class="btn btn-info review-button"
-          href="/businesses/<%- googleId -%>/reviews/new"
+          href="/businesses/<%- business.id -%>/reviews/new"
           role="button">Add Your Review</a>
       <% } else { %>
         <a
@@ -106,7 +106,7 @@
                 </div>
                 <div class="col-12 col-lg-2 order-12">
                   <% if (user && user.id === review.user.id) { %>
-                  <a href="/businesses/<%- googleId -%>/reviews/<%- review.id -%>/edit">edit review</a>
+                  <a href="/businesses/<%- business.id -%>/reviews/<%- review.id -%>/edit">edit review</a>
                   <% } %>
                 </div>
                 <div class="col-12 col-md-6  col-lg-4 star-box order-2">

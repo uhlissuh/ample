@@ -303,7 +303,6 @@ async function removeTagsFromReview(tx, reviewId, tags) {
   `, [reviewId, tagIds]);
 }
 
-
 exports.createReview = async function(userId, businessId, review) {
   return this.tx(async tx => {
     const businessRow = await getFullBusinessById(tx, businessId);

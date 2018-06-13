@@ -47,6 +47,12 @@
 
     <ol class="list-group list-group-flush">
       <% for (const business of businesses) { %>
+        <%
+          const businessURL = business.id
+            ? `/businesses/${business.id}`
+            : `/businesses/${business.googleId}`;
+        %>
+
         <li class="list-group-item">
           <div class="row align-self-start">
             <div class="col-3 col-lg-3 image-column">
@@ -65,8 +71,8 @@
             <div class="col-9 col-lg-9 search-results-business-info">
               <div class="row">
                 <div class="col-12 col-lg-8">
-                  <a href="/businesses/<%=business.googleId%>"><span class="business-listing-title"><%= business.name %></span></a> </br>
-                  <span class="business-address-tag-line"><%- business.vicinity -%></span>
+                  <a href="<%- businessURL -%>"><span class="business-listing-title"><%= business.name %></span></a> </br>
+                  <span class="business-address-tag-line"><%- business.address -%></span>
                 </div>
                 <div class="col-12 col-lg-4 ">
                   <% if (business.reviewCount > 0) { %>
@@ -76,7 +82,7 @@
                     </div>
 
                   <% } else { %>
-                    <span class="score-grouping"><a class="be-first-words" href="/businesses/<%=business.googleId%>">Be the first to review.</a></span>
+                    <span class="score-grouping"><a class="be-first-words" href="<%- businessURL -%>">Be the first to review.</a></span>
                   <% } %>
                 </div>
               </div>

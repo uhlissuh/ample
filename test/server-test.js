@@ -99,6 +99,17 @@ describe("server", () => {
 
   describe("search for businesses", () => {
     it("can search based on the user's current location", async () => {
+      const businessGoogleId = GOOGLE_PLACES_SEARCH_RESPONSE.results[0].place_id;
+      const businessId = await database.createBusiness({
+        name: 'something',
+        googleId: businessGoogleId
+      });
+      await database.createReview(userId, businessId, {
+        fatRating: 4,
+        content: 'good',
+        categories: ['Wellness']
+      });
+
       googlePlacesClient.getBusinessesNearCoordinates = async function(term, lat, lng) {
         assert.equal(lat, 45.5442);
         assert.equal(lng, -122.6431);
@@ -114,7 +125,15 @@ describe("server", () => {
         'x-forwarded-for': '71.238.71.20'
       });
 
+      const $ = cheerio.load(response.body);
+      const linkURLs = $('.search-results-business-info a').map((index, link) => $(link).attr('href')).get();
+
+      // For businesses that exist in our database, we link to them
+      // with their ids. For businesses that aren't in our database,
+      // we link to them with their google ids.
       assert.equal(response.statusCode, 200);
+      assert(linkURLs.includes(`/businesses/${businessId}`));
+      assert(linkURLs.includes(`/businesses/${GOOGLE_PLACES_SEARCH_RESPONSE.results[1].place_id}`));
     });
   });
 
@@ -130,16 +149,24 @@ describe("server", () => {
       logIn(userId);
 
       googlePlacesClient.getBusinessById = async function (id) {
-        assert.equal(id, '567');
+        assert.equal(id, 'WX-YZ');
         return {
           name: 'the-business',
           formatted_address: '123 Example St',
           geometry: {}
         }
-      }
+      };
 
-      const response = await get('businesses/567/reviews/new');
+      let response = await get('businesses/WX-YZ/reviews/new');
+      assert.equal(response.statusCode, 200);
+      assert(response.body.includes('the-business'));
 
+      const businessId = await database.createBusiness({
+        name: 'something',
+        googleId: 'WX-YZ'
+      });
+
+      response = await get(`businesses/${businessId}/reviews/new`);
       assert.equal(response.statusCode, 200);
       assert(response.body.includes('the-business'));
     });
@@ -148,7 +175,7 @@ describe("server", () => {
       logIn(userId);
 
       googlePlacesClient.getBusinessById = async function (id) {
-        assert.equal(id, '567');
+        assert.equal(id, 'WX-YZ');
         return {
           name: 'the-business',
           formatted_address: '123 Example St',
@@ -163,7 +190,7 @@ describe("server", () => {
 
       await database.createApprovedTags(['large seating', 'no stairs']);
 
-      const createReviewResponse = await post('businesses/567/reviews', {
+      const createReviewResponse = await post('businesses/WX-YZ/reviews', {
         'content': 'I like this business.',
         'fat-rating': '5',
         'trans-rating': '3',
@@ -173,22 +200,24 @@ describe("server", () => {
         'tags[2]': 'some new tag'
       });
 
-      assert.equal(createReviewResponse.statusCode, 302);
-      assert.equal(createReviewResponse.headers.location, '/businesses/567');
+      let business = await database.getBusinessByGoogleId('WX-YZ');
 
-      let business = await database.getBusinessByGoogleId('567');
+      assert.equal(createReviewResponse.statusCode, 302);
+      assert.equal(createReviewResponse.headers.location, `/businesses/${business.id}`);
       assert.deepEqual(business.tags.sort(), ['large seating', 'no stairs']);
 
-      let getBusinessResponse = await get('businesses/567');
+      let getBusinessResponse = await get(createReviewResponse.headers.location);
+
       let $ = cheerio.load(getBusinessResponse.body);
       assert($('.tag-list-item').text().includes('large seating'));
       assert($('.tag-list-item').text().includes('no stairs'));
       assert(!$('.tag-list-item').text().includes('some new tag'));
 
       await database.approveTag('some new tag');
-      business = await database.getBusinessByGoogleId('567');
+      business = await database.getBusinessByGoogleId('WX-YZ');
       assert.deepEqual(business.tags.sort(), ['large seating', 'no stairs', 'some new tag']);
-      getBusinessResponse = await get('businesses/567');
+
+      getBusinessResponse = await get(createReviewResponse.headers.location);
       $ = cheerio.load(getBusinessResponse.body);
       assert($('.tag-list-item').text().includes('some new tag'));
     });
@@ -199,7 +228,7 @@ describe("server", () => {
       logIn(userId);
 
       googlePlacesClient.getBusinessById = async function (id) {
-        assert.equal(id, '567');
+        assert.equal(id, 'WX-YZ');
         return {
           name: 'the-business',
           formatted_address: '123 Example St',
@@ -212,17 +241,16 @@ describe("server", () => {
         }
       };
 
-      const createReviewResponse = await post('businesses/567/reviews', {
+      const createReviewResponse = await post('businesses/WX-YZ/reviews', {
         'content': 'I like this business.',
         'fat-rating': '5',
         'trans-rating': '3',
         'parent-category': 'Doctors'
       });
 
-      assert.equal(createReviewResponse.statusCode, 302);
-      assert.equal(createReviewResponse.headers.location, '/businesses/567');
 
-      const business = await database.getBusinessByGoogleId('567');
+
+      const business = await database.getBusinessByGoogleId('WX-YZ');
       const reviews = await database.getBusinessReviewsById(business.id);
 
       assert.deepEqual(business.categories, ['Doctors']);
@@ -230,7 +258,7 @@ describe("server", () => {
       assert.equal(reviews[0].fatRating, 5);
       assert.equal(reviews[0].transRating, 3);
 
-      const updateReviewResponse = await post(`businesses/567/reviews/${reviews[0].id}`, {
+      const updateReviewResponse = await post(`businesses/${business.id}/reviews/${reviews[0].id}`, {
         'content': 'I like this business. A lot.',
         'body-positivity-rating': '5',
         'lgbtq-inclusivity-rating': '4',
@@ -238,19 +266,20 @@ describe("server", () => {
       });
 
       assert.equal(updateReviewResponse.statusCode, 302);
-      assert.equal(updateReviewResponse.headers.location, '/businesses/567');
+      assert.equal(updateReviewResponse.headers.location, `/businesses/${business.id}`);
 
-      let getBusinessResponse = await get('businesses/567');
+      let getBusinessResponse = await get(`businesses/${business.id}`);
       assert(getBusinessResponse.body.includes('I like this business. A lot.'));
 
       // Can still view the business if not logged in.
       logOut();
-      getBusinessResponse = await get('businesses/567');
+      getBusinessResponse = await get(`businesses/${business.id}`);
       assert(getBusinessResponse.body.includes('I like this business. A lot.'));
     });
   });
 
   function get(url, headers) {
+    if (url.startsWith('/')) url = url.slice(1)
     return request({
       uri: `http://localhost:${port}/${url}`,
       jar: jar,

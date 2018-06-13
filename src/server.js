@@ -216,8 +216,7 @@ function (
 
   });
 
-
-  app.get('/businesses/:googleId', async function(req, res) {
+  app.get('/businesses/:id', async function(req, res) {
     const isMobile = req.headers.host.startsWith('mobile.');
 
     let user = null;
@@ -225,38 +224,40 @@ function (
     if (userId) {
       user = await database.getUserById(req.signedCookies['userId'])
     }
-    const googleId = req.params.googleId;
-    const reviewedBusiness = await database.getBusinessByGoogleId(googleId);
 
-    let business = await cache.get(googleId);
-    if (!business) {
-      business = await googlePlacesClient.getBusinessById(googleId);
-      await cache.set(googleId, business, 3600);
+    let googleId, existingBusiness;
+    if (isGoogleId(req.params.id)) {
+      googleId = req.params.id;
+      existingBusiness = await database.getBusinessByGoogleId(googleId);
+    } else {
+      existingBusiness = await database.getBusinessById(req.params.id);
+      googleId = existingBusiness.googleId;
     }
 
-    let ratingBreakdown = {};
+    let googleBusiness;
+    if (googleId) {
+      googleBusiness = await cache.get(googleId);
+      if (!googleBusiness) {
+        googleBusiness = await googlePlacesClient.getBusinessById(googleId);
+        await cache.set(googleId, googleBusiness, 3600);
+      }
+    }
+
+    let ratingBreakdown = null;
     let reviews = [];
-    if (reviewedBusiness) {
-      reviews = await database.getBusinessReviewsById(reviewedBusiness.id);
+    if (existingBusiness) {
+      reviews = await database.getBusinessReviewsById(existingBusiness.id);
       for (review of reviews) {
         const date = (new Date(review.timestamp)).toDateString();
         review.date = date;
       }
 
-      ratingBreakdown = await database.getBusinessRatingBreakdown(reviewedBusiness.id);
-
-      business.overallRating = reviewedBusiness.overallRating;
-      business.reviewCount = reviewedBusiness.reviewCount;
-
-      business.fatAverageRating = reviewedBusiness.fatAverageRating;
-      business.fatRatingCount = reviewedBusiness.fatRatingCount;
-      business.transAverageRating = reviewedBusiness.transAverageRating;
-      business.transRatingCount = reviewedBusiness.transRatingCount;
-      business.disabledAverageRating = reviewedBusiness.disabledAverageRating;
-      business.disabledRatingCount = reviewedBusiness.disabledRatingCount;
-      business.tags = reviewedBusiness.tags;
+      ratingBreakdown = await database.getBusinessRatingBreakdown(existingBusiness.id);
     }
-    const photoReference = business.photos && business.photos[0].photo_reference;
+
+    const photoReference = googleBusiness
+      ? googleBusiness.photos && googleBusiness.photos[0].photo_reference
+      : null;
 
     const reviewUserIds = [];
     let hasReviewedThisBusiness = false;
@@ -266,6 +267,32 @@ function (
 
     if (user && reviewUserIds.includes(user.id)) {
       hasReviewedThisBusiness = true;
+    }
+
+    let business;
+    if (existingBusiness) {
+      business = {
+        id: existingBusiness.id,
+        name: existingBusiness.name,
+        address: existingBusiness.address,
+        phone: existingBusiness.phone,
+        overallRating : existingBusiness.overallRating,
+        reviewCount : existingBusiness.reviewCount,
+        fatAverageRating : existingBusiness.fatAverageRating,
+        fatRatingCount : existingBusiness.fatRatingCount,
+        transAverageRating : existingBusiness.transAverageRating,
+        transRatingCount : existingBusiness.transRatingCount,
+        disabledAverageRating : existingBusiness.disabledAverageRating,
+        disabledRatingCount : existingBusiness.disabledRatingCount,
+        tags : existingBusiness.tags
+      };
+    } else {
+      business = {
+        id: googleBusiness.place_id,
+        name: googleBusiness.name,
+        address: googleBusiness.formatted_address,
+        phone: googleBusiness.formatted_phone_number
+      }
     }
 
     res.render('business',
@@ -284,40 +311,49 @@ function (
     );
   });
 
-  app.get('/businesses/:googleId/reviews/new', async function(req, res) {
+  app.get('/businesses/:id/reviews/new', async function(req, res) {
     const userId = req.signedCookies['userId'];
     if (!userId) {
       res.redirect('/login?referer=' + req.url);
-    } else {
-      const user = await database.getUserById(userId);
-      const googleId = req.params.googleId;
-      let business = await cache.get(req.params.googleId);
-      if (!business) {
-        business = await googlePlacesClient.getBusinessById(googleId);
-        await cache.set(googleId, business, 3600);
-      }
-      res.render('new_review', {
-        name: business.name,
-        googleId: googleId,
-        formatted_address: business.formatted_address,
-        formatted_phone_number: business.formatted_phone_number,
-        location: business.geometry.location,
-        photos: business.photos,
-        rating: business.rating,
-        reviewerId: req.signedCookies["userId"],
-        childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
-        user: user,
-        allTags: await database.getApprovedTags(),
-        CRITERIA_DESCRIPTIONS
-      })
+      return;
     }
+
+    const user = await database.getUserById(userId);
+
+    let googleId;
+
+    if (isGoogleId(req.params.id)) {
+      googleId = req.params.id;
+    } else {
+      const business = await database.getBusinessById(req.params.id);
+      googleId = business.googleId;
+    }
+
+    let business = await cache.get(req.params.id);
+    if (!business) {
+      business = await googlePlacesClient.getBusinessById(googleId);
+      await cache.set(googleId, business, 3600);
+    }
+
+    res.render('new_review', {
+      name: business.name,
+      googleId: googleId,
+      formatted_address: business.formatted_address,
+      formatted_phone_number: business.formatted_phone_number,
+      location: business.geometry.location,
+      reviewerId: userId,
+      childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
+      user: user,
+      allTags: await database.getApprovedTags(),
+      CRITERIA_DESCRIPTIONS
+    })
   });
 
-  app.get('/businesses/:googleId/reviews/:reviewId/edit', async function(req, res) {
+  app.get('/businesses/:id/reviews/:reviewId/edit', async function(req, res) {
     const userId = req.signedCookies['userId'];
     const user = await database.getUserById(userId);
     const review = await database.getReviewById(req.params.reviewId);
-    const business = await database.getBusinessByGoogleId(req.params.googleId);
+    const business = await database.getBusinessById(req.params.id);
 
     if (review.user.id === parseInt(userId)) {
       res.render('edit-review', {
@@ -333,9 +369,9 @@ function (
     }
   });
 
-  app.post('/businesses/:googleId/reviews/:reviewId', async function(req, res) {
+  app.post('/businesses/:id/reviews/:reviewId', async function(req, res) {
     await database.updateReview(req.params.reviewId, reviewFromRequest(req.body));
-    res.redirect(`/businesses/${req.params.googleId}`);
+    res.redirect(`/businesses/${req.params.id}`);
   });
 
   app.post('/businesses/:googleId/reviews', async function(req, res) {
@@ -364,7 +400,7 @@ function (
 
     const userId = req.signedCookies['userId'];
     await database.createReview(userId, businessId, reviewFromRequest(req.body));
-    res.redirect(`/businesses/${googleId}`)
+    res.redirect(`/businesses/${businessId}`)
   });
 
   app.post('/businesses', async function(req, res) {
@@ -392,8 +428,7 @@ function (
       }
       );
 
-      console.log(businessId);
-      res.redirect(`/`)
+      res.redirect(`/businesses/${businessId}`)
     } else {
       res.render('404-error', {user});
     }
@@ -429,6 +464,10 @@ function (
   });
 
   return app;
+}
+
+function isGoogleId(id) {
+  return /[a-z]/i.test(id)
 }
 
 function abbreviateAddress(address) {
