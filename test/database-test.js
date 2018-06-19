@@ -641,4 +641,50 @@ describe("database", () => {
       });
     });
   });
+
+  describe(".searchAddedBusinesses(query)", () => {
+    it("finds non-google businesses that match the given query", async () => {
+      const googleBusinessId = await database.createBusiness({
+        googleId: "id-1",
+        name: 'hands on medicine',
+        address: '1 One St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      });
+
+      const addedBusinessId1 = await database.createBusiness({
+        googleId: null,
+        name: 'hands on medicine',
+        address: '2 Two St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      });
+
+      const addedBusinessId2 = await database.createBusiness({
+        googleId: null,
+        name: 'Another name',
+        address: '3 Three St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      });
+
+      let businesses = await database.searchAddedBusinesses('medicinal hand');
+      assert.equal(businesses.length, 1);
+      assert.equal(businesses[0].id, addedBusinessId1);
+
+      businesses = await database.searchAddedBusinesses('hands-on');
+      assert.equal(businesses.length, 1);
+      assert.equal(businesses[0].id, addedBusinessId1);
+
+      businesses = await database.searchAddedBusinesses('hands && on');
+      assert.equal(businesses.length, 1);
+      assert.equal(businesses[0].id, addedBusinessId1);
+
+      businesses = await database.searchAddedBusinesses('&&&& / .^^%%');
+      assert.equal(businesses.length, 0);
+    });
+  });
 });

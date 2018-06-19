@@ -107,6 +107,18 @@ exports.getBusinessesByCategoryandLocation = async function(
   return businessesFromRows(db, businessRows);
 };
 
+exports.searchAddedBusinesses = async function(query) {
+  query = query.replace(/[^\w\s]/g, ' ').trim().split(/\s+/).join(' & ');
+  if (query === '') return []
+  const rows = await db.query(`
+    select *
+    from businesses
+    where to_tsvector('english', name) @@ to_tsquery('english', $1) and
+    google_id is null;
+  `, [query]);
+  return businessesFromRows(db, rows);
+};
+
 async function businessesFromRows(tx, rows) {
   if (rows.length === 0) return [];
 
