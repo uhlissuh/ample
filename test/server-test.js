@@ -145,32 +145,6 @@ describe("server", () => {
       assert.equal(response.headers.location, '/login?referer=/businesses/567/reviews/new')
     });
 
-    it("shows the review form if the user is logged in", async () => {
-      logIn(userId);
-
-      googlePlacesClient.getBusinessById = async function (id) {
-        assert.equal(id, 'WX-YZ');
-        return {
-          name: 'the-business',
-          formatted_address: '123 Example St',
-          geometry: {}
-        }
-      };
-
-      let response = await get('businesses/WX-YZ/reviews/new');
-      assert.equal(response.statusCode, 200);
-      assert(response.body.includes('the-business'));
-
-      const businessId = await database.createBusiness({
-        name: 'something',
-        googleId: 'WX-YZ'
-      });
-
-      response = await get(`businesses/${businessId}/reviews/new`);
-      assert.equal(response.statusCode, 200);
-      assert(response.body.includes('the-business'));
-    });
-
     it("can add tags to the business", async () => {
       logIn(userId);
 

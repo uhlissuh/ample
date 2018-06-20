@@ -107,15 +107,17 @@ exports.getBusinessesByCategoryandLocation = async function(
   return businessesFromRows(db, businessRows);
 };
 
-exports.searchAddedBusinesses = async function(query) {
+exports.searchAddedBusinesses = async function(query, lat, lng) {
   query = query.replace(/[^\w\s]/g, ' ').trim().split(/\s+/).join(' & ');
   if (query === '') return []
   const rows = await db.query(`
     select *
     from businesses
     where to_tsvector('english', name) @@ to_tsquery('english', $1) and
-    google_id is null;
-  `, [query]);
+    google_id is null and
+    ST_DistanceSphere(businesses.coordinates, ST_MakePoint($2, $3)) <= 75000
+    ;
+  `, [query, lat, lng]);
   return businessesFromRows(db, rows);
 };
 
@@ -202,8 +204,8 @@ function roundRating(rating) {
 exports.createBusiness = async function(business) {
   const rows = await db.query(
     "insert into businesses " +
-      "(name, google_id, address, phone, user_id, coordinates) values " +
-      "($1, $2, $3, $4, $5, ST_MakePoint($6, $7)) returning id",
+      "(name, google_id, address, phone, user_id, coordinates, category_ids) values " +
+      "($1, $2, $3, $4, $5, ST_MakePoint($6, $7), $8::int[]) returning id",
     [
       business.name,
       business.googleId,
@@ -212,7 +214,7 @@ exports.createBusiness = async function(business) {
       business.userId,
       parseFloat(business.latitude),
       parseFloat(business.longitude),
-
+      (business.categories || []).map(getCategoryId)
     ]
   );
   return rows[0].id;

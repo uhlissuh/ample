@@ -38,7 +38,8 @@ class BusinessSearch {
         name: googleBusiness.name,
         photoURL: photoReference ? this.googlePlacesClient.getPhotoURL(photoReference, 300, 300) : null,
         address: googleBusiness.vicinity,
-        reviewCount: 0
+        reviewCount: 0,
+        overallRating: 0
       }, ratedBusiness);
     });
 
@@ -54,10 +55,19 @@ class BusinessSearch {
           results.push(nearbyBusiness);
         }
       }
+    } else {
+      const addedBusinesses = await database.searchAddedBusinesses(term, lat, lng);
+      for (const business of addedBusinesses) {
+        results.push(business);
+      }
     }
 
-    return results.sort((a, b) =>
-      (b.overallRating || -Infinity) - (a.overallRating || -Infinity)
-    );
+    return results.sort((a, b) => {
+      if (a.overallRating > b.overallRating) return -1;
+      if (b.overallRating > a.overallRating) return 1;
+      if (!a.googleId && b.googleId) return -1;
+      if (!b.googleId && a.googleId) return 1;
+      return 0;
+    });
   }
 };

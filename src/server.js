@@ -317,14 +317,12 @@ function (
     const name = req.query.name;
     const address = req.query.address;
 
-
     if (!userId) {
       res.redirect('/login?referer=' + req.url);
       return;
     }
 
     const user = await database.getUserById(userId);
-
 
     res.render('new_review', {
       id: req.params.id,
@@ -411,16 +409,22 @@ function (
 
       const geometry = await googlePlacesClient.getCoordinatesForLocationName(formattedAddress);
       console.log(geometry);
-      businessId = await database.createBusiness(
-        {
-          name: req.body.name,
-          latitude: geometry.lat,
-          longitude: geometry.lng,
-          phone: req.body.phone,
-          address: formattedAddress,
-          userId
+
+      let business = {
+        name: req.body.name,
+        latitude: geometry.lat,
+        longitude: geometry.lng,
+        phone: req.body.phone,
+        address: formattedAddress,
+        userId,
+        categories: [req.body['parent-category']]
       }
-      );
+
+      if (req.body['child-category']) {
+        business.categories.push(req.body['child-category']);
+      }
+
+      businessId = await database.createBusiness(business);
 
       res.redirect(`/businesses/${businessId}`)
     } else {

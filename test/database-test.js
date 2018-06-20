@@ -671,19 +671,19 @@ describe("database", () => {
         longitude: -122.42821739746094
       });
 
-      let businesses = await database.searchAddedBusinesses('medicinal hand');
+      let businesses = await database.searchAddedBusinesses('medicinal hand', 37.7676, -122.428217);
       assert.equal(businesses.length, 1);
       assert.equal(businesses[0].id, addedBusinessId1);
 
-      businesses = await database.searchAddedBusinesses('hands-on');
+      businesses = await database.searchAddedBusinesses('hands-on', 37.7676, -122.428217);
       assert.equal(businesses.length, 1);
       assert.equal(businesses[0].id, addedBusinessId1);
 
-      businesses = await database.searchAddedBusinesses('hands && on');
+      businesses = await database.searchAddedBusinesses('hands && on', 37.7676, -122.428217);
       assert.equal(businesses.length, 1);
       assert.equal(businesses[0].id, addedBusinessId1);
 
-      businesses = await database.searchAddedBusinesses('&&&& / .^^%%');
+      businesses = await database.searchAddedBusinesses('&&&& / .^^%%', 37.7676, -122.428217);
       assert.equal(businesses.length, 0);
     });
   });
