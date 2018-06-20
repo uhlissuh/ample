@@ -16,7 +16,7 @@ We’re excited! We’ve reworked our search algorithms on Ample so that users c
 
 ![Image Description: A screenshot of the new ‘Add a Business’ interface, which appears as a web form where the Ample user can input the name and contact information of a business. At the bottom, there are drop menus to categorize the type of business. Overlain on the screenshot is a cartoon graphic of a fat, blonde, feminine-presenting person with the Ample peach logo is on her shirt. She is smiling and leaning into the frame to gesture to the new ‘Add a Business’ interface. Blue stars surround her, to convey the celebration of something new.]({{ "/assets/img/add-business-1.png" | absolute_url }})
 
-Here’s how it works: Go ahead and search for the business you’re looking for! If none of the search results are the one you’re looking for, you’ll see an option to ‘Add the business here’ at the bottom of the results page.
+**Here’s how it works: Go ahead and search for the business you’re looking for!** If none of the search results are the one you’re looking for, you’ll see an option to ‘Add the business here’ at the bottom of the results page.
 
 ![Image description: A screenshot of an example search result page. Underneath the search results is a section that reads, “Missing the business you were looking for? Add the business here.” Overlain on the screenshot is a cartoon graphic of a very fat, masculine PoC, who is smiling and gesturing to the ‘Add the business here’ hyperlink. Blue stars surround the section, to convey the celebration of something new.]({{ "/assets/img/add-business-2.png" | absolute_url }})
 
