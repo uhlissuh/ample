@@ -278,6 +278,14 @@
   font-family: 'Lilita One', cursive;
 }
 
+.team-page-title {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #EB6E79;
+  font-family: 'Lilita One', cursive;
+  font-size: 30px;
+}
+
 .star-rating-label {
   color: #EB6E79;
 }
@@ -470,6 +478,9 @@ a:hover {
 .founder-img {
   border-radius: 50%;
   margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .about-us-title {
@@ -505,6 +516,15 @@ a:hover {
 
 .add-business-link {
   font-size: 14pt
+}
+
+.navbar-bottom {
+  background-color: #FBD2D7;
+}
+
+.facebook-button {
+  background-image: url('/static/facebook.png');
+  height: 50px;
 }
 
 @media screen and (max-width: 800px) {
