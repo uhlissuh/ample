@@ -467,6 +467,44 @@ exports.getMostRecentReviews = async function() {
   });
 }
 
+exports.getAllReviewsForMap = async function() {
+  const rows = await db.query(
+    `select
+      *,
+      ST_x(businesses.coordinates) as latitude,
+      ST_y(businesses.coordinates) as longitude,
+      users.name as user_name,
+      reviews.id as review_id
+    from
+      reviews, users, businesses
+    where
+      reviews.user_id = users.id and
+      reviews.business_id = businesses.id`
+  );
+
+  return rows.map(row => {
+    return {
+      id: row.review_id,
+      content: row.content,
+      businessGoogleId: row.google_id,
+      businessId: row.business_id,
+      businessName: row.name,
+      businessAddress: row.address,
+      businessLatitude: row.latitude,
+      businessLongitude: row.longitude,
+      timestamp: row.timestamp.getTime(),
+      fatRating: row.fat_rating,
+      transRating: row.trans_rating,
+      disabledRating: row.disabled_rating,
+      pocRating: row.poc_rating,
+      user: {
+        id: row.user_id,
+        name: row.user_name
+      },
+    };
+  });
+}
+
 exports.updateBusinessScore = async function(businessId, score) {
   const oldScore = (await db.query(
     "select score from businesses where id = $1",

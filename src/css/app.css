@@ -157,7 +157,7 @@
 
 .cards-background {
   height: 450px;
-  background-color: #FFD4D3;
+  background-color: #FBF1BF;
 }
 
 .cards-title {
@@ -527,6 +527,24 @@ a:hover {
   height: 50px;
 }
 
+.map {
+  height: 400px;
+}
+
+.map-row {
+  height: 500px;
+}
+
+.map-blurb {
+  color: #EB6E79;
+  font-family: 'Roboto', sans-serif;
+  font-size: 40px;
+}
+
+.map-background {
+  background-color: #FFD4D3;
+}
+
 @media screen and (max-width: 800px) {
   .founder-img-second {
     padding-top: 15px;
@@ -644,7 +662,6 @@ a:hover {
 
   .cards-background {
     height: 900px;
-    background-color: #FFD4D3;
   }
 
   .score-grouping {

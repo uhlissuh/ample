@@ -54,9 +54,6 @@
   </div>
 </div>
 
-<% if (isMobile) { %>
-<% } else { %>
-<% } %>
 
 <div class="confettibackground">
   <div class="container">
@@ -70,6 +67,22 @@
       <% } %>
     </div>
   </div>
+</div>
+
+<div class="row map-background">
+  <div class="container">
+    <div class="row map-row">
+      <div class="col-md-4 align-self-center">
+        <p class="map-blurb">
+          We're worldwide. Explore the map.
+        </p>
+      </div>
+      <div class="col-md-8 align-self-center">
+        <div id="map" class="map"></div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 
@@ -103,11 +116,36 @@
       <% } %>
     </div>
   </div>
-
 </div>
 
+
 <%- contentFor('scripts') -%>
+
 <script>
+let map;
+const reviews = <%- JSON.stringify(allReviews) %>
+
+function initMap() {
+
+  map = new google.maps.Map(document.getElementById('map'), {
+   center: {lat: 20, lng: -20},
+   zoom: 2
+  });
+
+  for (review of reviews) {
+    let marker = new google.maps.Marker(
+      {
+        position: {lat: review.businessLatitude, lng: review.businessLongitude},
+        map: map,
+        title: review.businessName
+      }
+    );
+  }
+
+}
+
+
+
 ample.setUpStarRatings();
 
 for (const card of document.getElementsByClassName('card-text')) {
@@ -157,6 +195,11 @@ if (charDiv) {
 }
 
 </script>
+
+<meta name="viewport" content="initial-scale=1.0">
+<meta charset="utf-8">
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHYOZDKGQIm4oxgu148sFTaDZ-0v50icI&callback=initMap"
+    async defer></script>
 
 <%- contentFor('title') -%>
 Ample | Welcome

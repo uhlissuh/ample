@@ -58,13 +58,16 @@ function (
 
     const categories = await database.getAllCategories();
 
+    const allReviews = await database.getAllReviewsForMap();
+
     res.render('index',
       {
         user,
         recentReviews: recentReviews ? recentReviews : null,
         categories,
         isMobile,
-        abbreviateAddress
+        abbreviateAddress,
+        allReviews
       }
     )
   });
