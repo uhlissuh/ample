@@ -44,6 +44,11 @@
         <% } %>
       </div>
 
+      <div class="row">
+        <div class="col-12">
+          <a id="add-photo-link" href="#" data-toggle="modal" data-target="#add-photo-modal">Add a Photo</a>
+        </div>
+      </div>
 
       <div class="row tags-row">
         <div class="col-12">
@@ -160,17 +165,51 @@
   </div>
 </div>
 
+<div class="modal fade" id="add-photo-modal" tabindex="-1" role="dialog" aria-labelledby="add-photo-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-photo-modal-label">Add a Photo for <%- business.name %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="add-photo-file-input">
+          <label class="custom-file-label" for="add-photo-file-input">Choose file</label>
+        </div>
+
+        <img id="add-photo-preview" src="/images/default.png">
+      </div>
+
+      <div class="modal-footer">
+        <form method="POST" action="/businesses/<%- business.id -%>/photos">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <input class="btn" type="hidden" id="add-photo-url-input" name="avatar-url" value="/images/default.png">
+          <input class="btn btn-primary" type="submit" value="Upload Photo">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <%- contentFor('scripts') -%>
 <script>
   ample.setUpStarRatings();
   ample.collapseNoAnimate();
+  ample.fileUpload(
+    document.getElementById('add-photo-file-input'),
+    document.getElementById('add-photo-url-input'),
+    document.getElementById('add-photo-preview')
+  )
 
   const scoreRow = document.getElementById('score-row');
 
   if (<%-JSON.stringify(reviews)%>.length == 0)  {
     scoreRow.classList.add('no-reviews');
   }
-
 </script>
 
 <%- contentFor('title') -%>
