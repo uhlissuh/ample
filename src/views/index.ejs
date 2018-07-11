@@ -55,34 +55,49 @@
 </div>
 
 
-<div class="confettibackground">
+<div class="row map-background">
   <div class="container">
-    <div class="row characters-row">
-      <% if (isMobile) { %>
-        <div id="chars-mobile" class="chars-mobile char1">
-
+    <% if (isMobile) { %>
+      <div id="map" class="map"></div>
+    <% } else { %>
+      <div class="row map-row">
+          <div class="col-md-4 align-self-center">
+            <p class="map-blurb">
+              We're worldwide. Explore the map.
+            </p>
+          </div>
+        <div class="col-md-8 align-self-center">
+          <div id="map" class="map"></div>
         </div>
-      <% } else { %>
-        <div class="characters-big"></div>
-      <% } %>
-    </div>
+      </div>
+    <% } %>
   </div>
 </div>
 
-<div class="row map-background">
-  <div class="container">
-    <div class="row map-row">
-      <div class="col-md-4 align-self-center">
-        <p class="map-blurb">
-          We're worldwide. Explore the map.
-        </p>
+<div class="container info-area">
+  <div class="row info-area-row">
+    <div class="col-md-4 align-self-center">
+      <div class="snowflake-img">
       </div>
-      <div class="col-md-8 align-self-center">
-        <div id="map" class="map"></div>
+      <p>
+        Is that doctor familiar with Health at Every Size? Is that restaurant wheelchair accessible? Does that venue have all gender bathrooms? Is that business BIPOC-owned?
+      </p>
+    </div>
+    <div class="col-md-4 align-self-center">
+      <div class="eye-img">
       </div>
+      <p>
+        Review a business through four different lenses: the fat, trans, disabled, and BIPOC perspective.
+      </p>
+    </div>
+    <div class="col-md-4 align-self-center">
+      <div class="megaphone-img">
+      </div>
+      <p>
+        Ample is activism. This is a grassroots effort to make our communities more inclusive. Make a review today.
+      </p>
     </div>
   </div>
-
 </div>
 
 
@@ -91,8 +106,7 @@
   <div class="container cards">
     <div class="row">
       <div class="col-12">
-        <h5 class="cards-title">Check out the most
-          recently-reviewed businesses from around the world</h5>
+        <h5 class="cards-title">Check out these recently-reviewed businesses</h5>
       </div>
     </div>
     <div class="row">
@@ -101,8 +115,9 @@
         <% if (!review) break; %>
 
         <div class="col-md-4">
-          <div class="card recent-review-card">
+          <div class="card recent-review-card bg-light mb-3">
             <a href="/businesses/<%- review.businessId -%>">
+              <img class="card-img-top" src='<%- review.photoURL -%>' alt="Card image cap">
               <div class="card-body">
                 <div class="card-top">
                   <h5 class="card-title"><%- review.businessName -%></h5>
@@ -123,28 +138,39 @@
 
 <script>
 let map;
+
 const reviews = <%- JSON.stringify(allReviews) %>
 
 function initMap() {
-
   map = new google.maps.Map(document.getElementById('map'), {
-   center: {lat: 20, lng: -20},
+   center: {lat: 22, lng: -109},
    zoom: 2
   });
+
+  let infoWindow = new google.maps.InfoWindow();
 
   for (review of reviews) {
     let marker = new google.maps.Marker(
       {
         position: {lat: review.businessLatitude, lng: review.businessLongitude},
         map: map,
-        title: review.businessName
+        title: review.businessName,
+        info: review.content
       }
     );
+
+    marker.addListener('click', function() {
+      infoWindow.setOptions(
+        {
+          content: this.info,
+          maxWidth: 300
+        }
+      );
+      infoWindow.open( map, marker);
+    });
+
   }
-
 }
-
-
 
 ample.setUpStarRatings();
 

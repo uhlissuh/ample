@@ -93,49 +93,6 @@
   font-size: 25px;
 }
 
-.char1 {
-  height: 350px;
-  width: 350px;
-  background-image: url('/static/chars1.svg');
-  background-repeat: no-repeat;
-  margin: 0 auto;
-  /* background-position: bottom; */
-  margin-top: 50px;
-
-}
-
-.char2 {
-  height: 350px;
-  width: 350px;
-  background-image: url('/static/chars2.svg');
-  background-repeat: no-repeat;
-  margin: 0 auto;
-  vertical-align:bottom;
-  /* background-position: bottom; */
-  margin-top: 50px;
-}
-
-.characters-big {
-  background-image: url('/static/chars-big.svg');
-  background-repeat: no-repeat;
-  height: 700px;
-  width: 700px;
-  margin: 0 auto;
-  vertical-align: bottom;
-  margin-top: 70px;
-}
-
-.characters-row {
-}
-
-.confettibackground {
-  background-repeat: repeat;
-  background-image: url('/static/confettibackground.svg');
-  background-size: 200px;
-  height: 435px;
-}
-
-
 .go-button {
   background-color: #EB6E79;
   color: white;
@@ -157,7 +114,6 @@
 
 .cards-background {
   height: 450px;
-  background-color: #FBF1BF;
 }
 
 .cards-title {
@@ -165,6 +121,7 @@
   font-family: 'Roboto', sans-serif;
   margin-bottom: 20px;
 }
+
 
 .review-biz-name {
   font-family: 'Roboto', sans-serif;
@@ -389,20 +346,29 @@ a:hover {
   margin-bottom: 15px;
 }
 
+.card {
+  background-color: #FFFOED !important;
+}
+
 .card-title {
-  color: #A9A9A9;
+  color: black;
   font-size: 18px;
   margin-bottom: 8px;
 }
 
 .card-text {
-  height: 150px;
+  height: 75px;
   color: black;
   overflow: hidden;
 }
 
 .card-top {
   height: 80px;
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
 }
 
 .business-overall-rating {
@@ -542,7 +508,43 @@ a:hover {
 }
 
 .map-background {
-  background-color: #FFD4D3;
+
+}
+
+.info-area {
+  border-top: .5px solid #d3d3d3;
+  border-bottom: .5px solid #d3d3d3;
+}
+
+.info-area-row {
+  height: 300px;
+}
+
+.snowflake-img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  background-image: url('/static/snowflake.svg');
+  height: 50px;
+  width: 50px;
+}
+
+.eye-img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  background-image: url('/static/eye.svg');
+  height: 50px;
+  width: 50px;
+}
+
+.megaphone-img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  background-image: url('/static/megaphone.svg');
+  height: 50px;
+  width: 50px;
 }
 
 @media screen and (max-width: 800px) {

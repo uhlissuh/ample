@@ -54,11 +54,35 @@ function (
     if (userId) {
       user = await database.getUserById(userId);
     }
-    const recentReviews = await database.getMostRecentReviews();
 
     const categories = await database.getAllCategories();
 
-    const allReviews = await database.getAllReviewsForMap();
+    let allReviews = await cache.get("reviews");
+    if (!allReviews) {
+      allReviews = await database.getAllReviewsForMap();
+      await cache.set("reviews", allReviews, 3600);
+    }
+
+
+    let recentReviews = [];
+
+    for (let review of allReviews) {
+      if (review.businessGoogleId) {
+        let googleBusiness = await cache.get(review.businessGoogleId);
+        if (!googleBusiness) {
+          googleBusiness = await googlePlacesClient.getBusinessById(review.businessGoogleId);
+        }
+        if (googleBusiness.photos) {
+          review["photoURL"] = googlePlacesClient.getPhotoURL(googleBusiness.photos[0].photo_reference, 500, 500);
+          recentReviews.push(review);
+          if (recentReviews.length == 3) {
+            break;
+          }
+        }
+      }
+    }
+
+    console.log(recentReviews);
 
     res.render('index',
       {

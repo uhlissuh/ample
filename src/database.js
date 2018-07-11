@@ -479,7 +479,9 @@ exports.getAllReviewsForMap = async function() {
       reviews, users, businesses
     where
       reviews.user_id = users.id and
-      reviews.business_id = businesses.id`
+      reviews.business_id = businesses.id
+      order by reviews.timestamp desc
+      `
   );
 
   return rows.map(row => {
