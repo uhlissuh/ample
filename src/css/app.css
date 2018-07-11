@@ -530,7 +530,11 @@ a:hover {
 }
 
 .info-area-row {
-  height: 300px;
+  height: 250px;
+}
+
+.info-picture-row {
+  height: 85px;
 }
 
 .snowflake-img {
@@ -562,8 +566,12 @@ a:hover {
 
 @media screen and (max-width: 767px) {
   .info-area-row {
-    height: 500px;
+    height: 530px;
     background-color: #FFF0ED;
+  }
+
+  .info-picture-row {
+    height: 75px;
   }
 
   .founder-img-second {
