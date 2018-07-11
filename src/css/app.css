@@ -371,6 +371,13 @@ a:hover {
   object-fit: cover;
 }
 
+.bottom-nav {
+  margin-top: 20px;
+  padding-top: 10px;
+  background-color: #F5DCDE;
+  height: 70px;
+}
+
 .business-overall-rating {
   display: inline;
   vertical-align: top;

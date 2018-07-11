@@ -119,17 +119,6 @@ function (
     });
   });
 
-  app.get('/followus', async (req, res) => {
-    let user = null;
-    if (req.signedCookies['userId']) {
-      user = await database.getUserById(req.signedCookies['userId']);
-    }
-
-    res.render('followus', {
-      user: user,
-    });
-  });
-
   app.get('/team', async (req, res) => {
     let user = null;
     if (req.signedCookies['userId']) {
