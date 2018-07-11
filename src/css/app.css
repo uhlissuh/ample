@@ -18,6 +18,15 @@
     height: 500px;
 }
 
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.push {
+  height: 90px;
+}
+
 .summary-item {
   vertical-align: middle;
   font-size: 40px;
@@ -368,10 +377,14 @@ a:hover {
 }
 
 .bottom-nav {
-  margin-top: 20px;
-  padding-top: 10px;
+  padding-top: 15px;
   background-color: #F5DCDE;
-  height: 70px;
+  height: 80px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
 }
 
 .business-overall-rating {
@@ -487,9 +500,6 @@ a:hover {
   font-size: 14pt
 }
 
-.navbar-bottom {
-  background-color: #FBD2D7;
-}
 
 .facebook-button {
   background-image: url('/static/facebook.png');

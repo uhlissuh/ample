@@ -60,6 +60,7 @@ function (
     let allReviews = await cache.get("reviews");
     if (!allReviews) {
       allReviews = await database.getAllReviewsForMap();
+      console.log(allReviews);
       await cache.set("reviews", allReviews, 3600);
     }
 
