@@ -4,7 +4,7 @@
 
 <script>
 const MOBILE_REGEX = /^mobile\./;
-if (screen.width < 800) {
+if (screen.width < 767) {
   if (!MOBILE_REGEX.test(location.host)) {
     location.host = 'mobile.' + location.host;
   }

@@ -113,7 +113,7 @@
 }
 
 .cards-background {
-  height: 450px;
+  height: 500px;
 }
 
 .cards-title {
@@ -346,10 +346,6 @@ a:hover {
   margin-bottom: 15px;
 }
 
-.card {
-  background-color: #FFFOED !important;
-}
-
 .card-title {
   color: black;
   font-size: 18px;
@@ -554,7 +550,12 @@ a:hover {
   width: 50px;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 767px) {
+  .info-area-row {
+    height: 500px;
+    background-color: #FFF0ED;
+  }
+
   .founder-img-second {
     padding-top: 15px;
   }
@@ -564,7 +565,7 @@ a:hover {
   }
 
   .card-text {
-    height: 120px;
+    height: 90px;
   }
 
   .card-top {
@@ -670,7 +671,7 @@ a:hover {
   }
 
   .cards-background {
-    height: 900px;
+    height: 1390px;
   }
 
   .score-grouping {
