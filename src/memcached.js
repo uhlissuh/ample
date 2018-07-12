@@ -20,7 +20,7 @@ class Memcached {
 
   set(key, value, lifetime) {
     return new Promise((resolve, reject) => {
-      this.client.set(key, JSON.stringify(value), lifetime, (err) => {
+      this.client.set(key, JSON.stringify(value), {expires: lifetime}, (err) => {
         if (err) {
           reject(err);
         } else {
