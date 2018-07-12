@@ -76,7 +76,7 @@
 
 <div class="container info-area">
   <div class="row info-area-row">
-    <div class="col-md-4">
+    <div class="col-md-4 info-col">
       <div class="row info-picture-row">
         <div class="col-12 align-self-end">
           <div class="eye-img">
@@ -177,12 +177,22 @@ function initMap() {
   let infoWindow = new google.maps.InfoWindow();
 
   for (review of reviews) {
+    console.log(review);
+    const previewContent = review.content.split(".")[0];
     let marker = new google.maps.Marker(
       {
         position: {lat: review.businessLatitude, lng: review.businessLongitude},
         map: map,
-        title: review.businessName,
-        info: review.content
+        info:
+          `<a style="color: black;" href="/businesses/${review.businessId}">
+          <h6>${review.businessName}</h6>
+          <p style="color: #A9A9A9;">${review.businessAddress}</p>
+          <div>
+            ${previewContent}
+          </div>
+          <a style="float: right;" href="/businesses/${review.businessId}">see more</a>
+          </a>
+          `
       }
     );
 
