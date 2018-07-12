@@ -167,15 +167,13 @@
 let map;
 
 const reviews = <%- JSON.stringify(allReviews) %>
-const lat = <%- JSON.stringify(lat) %>
-const lng = <%- JSON.stringify(lng) %>
-
-console.log(lat, lng);
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-   center: {lat, lng},
-   zoom: 3
+   center: {lat: 22, lng: -109},
+   zoom: 2,
+   mapTypeControl: false,
+   clickableIcons: false
   });
 
   let infoWindow = new google.maps.InfoWindow();

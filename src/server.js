@@ -81,17 +81,6 @@ function (
       }
     }
 
-    const ip = req.headers['x-forwarded-for'];
-    const lookup = GeoIP.lookup(ip);
-    let lat, lng
-    if (lookup) {
-      lat = lookup.ll[0];
-      lng = lookup.ll[1];
-    } else {
-      lat = 22;
-      lng = -109;
-    }
-
     res.render('index',
       {
         user,
@@ -99,9 +88,7 @@ function (
         categories,
         isMobile,
         abbreviateAddress,
-        allReviews,
-        lat,
-        lng
+        allReviews
       }
     )
   });
