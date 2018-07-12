@@ -180,6 +180,7 @@ function initMap() {
 
   let infoWindow = new google.maps.InfoWindow();
 
+  let markers = [];
   for (review of reviews) {
     const previewContent = review.content.split(".")[0];
     let marker = new google.maps.Marker(
@@ -199,6 +200,8 @@ function initMap() {
       }
     );
 
+    markers.push(marker);
+
     marker.addListener('click', function() {
       infoWindow.setOptions(
         {
@@ -208,8 +211,10 @@ function initMap() {
       );
       infoWindow.open( map, marker);
     });
-
   }
+
+  var markerCluster = new MarkerClusterer(map, markers,
+   {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 }
 
 ample.setUpStarRatings();
@@ -250,6 +255,7 @@ ample.locationField(document.getElementById("business-location"));
 <meta charset="utf-8">
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHYOZDKGQIm4oxgu148sFTaDZ-0v50icI&callback=initMap"
     async defer></script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 
 <%- contentFor('title') -%>
 Ample | Welcome
