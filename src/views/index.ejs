@@ -101,7 +101,7 @@
       <div class="row">
         <div class="col-12">
           <p>
-            Is that doctor familiar with Health at Every Size&#174? Does that venue have all gender bathrooms? Is that restaurant wheelchair accessible? Is that business BIPOC-owned?
+            Is that doctor familiar with Health at Every Size&#174? Does that venue have all gender bathrooms? Is that restaurant wheelchair accessible? Is that business POC-owned?
           </p>
         </div>
       </div>
@@ -167,17 +167,20 @@
 let map;
 
 const reviews = <%- JSON.stringify(allReviews) %>
+const lat = <%- JSON.stringify(lat) %>
+const lng = <%- JSON.stringify(lng) %>
+
+console.log(lat, lng);
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-   center: {lat: 22, lng: -109},
+   center: {lat, lng},
    zoom: 2
   });
 
   let infoWindow = new google.maps.InfoWindow();
 
   for (review of reviews) {
-    console.log(review);
     const previewContent = review.content.split(".")[0];
     let marker = new google.maps.Marker(
       {
@@ -240,22 +243,6 @@ ample.autocomplete('#business-search-term', {
 
 ample.locationField(document.getElementById("business-location"));
 
-const charDiv = document.getElementById('chars-mobile');
-if (charDiv) {
-  function timeoutLoop () {
-    setTimeout(function () {
-      if (charDiv.classList.contains('char1')) {
-        charDiv.classList.remove('char1');
-        charDiv.classList.add('char2');
-      } else {
-        charDiv.classList.remove('char2');
-        charDiv.classList.add('char1');
-      }
-      timeoutLoop();
-    }, 3000);
-  }
-  timeoutLoop()
-}
 
 </script>
 

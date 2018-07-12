@@ -60,10 +60,8 @@ function (
     let allReviews = await cache.get("reviews");
     if (!allReviews) {
       allReviews = await database.getAllReviewsForMap();
-      console.log(allReviews);
-      await cache.set("reviews", allReviews, 3600);
+      await cache.set("reviews", allReviews, 900);
     }
-
 
     let recentReviews = [];
 
@@ -83,7 +81,16 @@ function (
       }
     }
 
-    console.log(recentReviews);
+    const ip = req.headers['x-forwarded-for'];
+    const lookup = GeoIP.lookup(ip);
+    let lat, lng
+    if (lookup) {
+      lat = lookup.ll[0];
+      lng = lookup.ll[1];
+    } else {
+      lat = 22;
+      lng = -109;
+    }
 
     res.render('index',
       {
@@ -92,7 +99,9 @@ function (
         categories,
         isMobile,
         abbreviateAddress,
-        allReviews
+        allReviews,
+        lat,
+        lng
       }
     )
   });
