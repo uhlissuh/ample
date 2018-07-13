@@ -180,7 +180,7 @@ function initMap() {
 
   let markers = [];
   for (review of reviews) {
-    const previewContent = review.content.split(".")[0];
+    const previewContent = review.content.split(".")[0] + "...";
     let marker = new google.maps.Marker(
       {
         position: {lat: review.businessLatitude, lng: review.businessLongitude},
