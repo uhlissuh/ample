@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "New Feature Rollout: Add a Business!"
+title: "Explore a Map Filled with Inclusive and Accessible Businesses Worldwide"
 thumbnail: "assets/img/screenshot-usmap-with-markers.png"
 author: Alissa Sobo
 excerpt_separator: <!--more-->
