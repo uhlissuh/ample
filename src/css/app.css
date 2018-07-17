@@ -564,6 +564,11 @@ a:hover {
   width: 50px;
 }
 
+.pledge-row {
+  border-top: .5px solid #d3d3d3;
+  padding-top: 25px;
+}
+
 @media screen and (max-width: 767px) {
   .info-area-row {
     height: 570px;

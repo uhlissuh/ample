@@ -336,6 +336,24 @@ function (
     );
   });
 
+  app.get('/businesses/:id/claim', async function(req, res) {
+    const userId = req.signedCookies['userId'];
+    const user = await database.getUserById(userId);
+    const businessId = req.params.id;
+    res.render('claim-business',
+      {
+        user,
+        businessId
+      }
+    );
+  });
+
+  app.post('/businesses/:id/claim', async function(req, res) {
+    
+    console.log(req.body);
+    res.redirect(`/businesses/${req.params.id}`);
+  });
+
   app.get('/businesses/:id/reviews/new', async function(req, res) {
     const userId = req.signedCookies['userId'];
 

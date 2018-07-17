@@ -1,0 +1,64 @@
+
+<div class="container">
+  <div class="form-row">
+    <div class="col-md-10 offset-md-1">
+      <h3 class="add-business-title">Claim a Business and Take the Pledge</h3>
+    </div>
+  </div>
+
+  <form class="add-business-form"  method="POST" action="/businesses/<%- businessId %>/claim">
+    <div class="col-lg-10 offset-md-1 inner-form">
+      <div class="form-row">
+        <div class="col-12">
+          <h5>Do you own this business?</h5>
+          <p>
+            By claiming, you will soon be able to
+            receive optional notifications when your business has been reviewed
+            and be able to respond to reviews. Our team will verify you have a
+            valid claim to this page before approving your ownership.
+          </p>
+          <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="claim" name="owns-business">
+              <label class="form-check-label" for="claim">
+                I own this business.
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row pledge-row">
+        <div class="col-12">
+          <h5>Take the Pledge</h5>
+          <p>
+            By taking the pledge, you will appear on our world map of inclusive
+            doctors, businesses, and services and appear in search results regardless
+            of if you have been reviewed. This is a great way to promote your business
+            to those searching for friendly businesses.
+          </p>
+          <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="pledge" name="taken-pledge">
+              <label class="form-check-label" for="pledge">
+                I pledge to treat people of all genders, body sizes, races, and abilities equally.
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="row form-group">
+        <div class="col-md-12">
+          <button type="submit" class="btn review-submit-button" >Apply for Ownership</button>
+        </div>
+      </div>
+    </div>
+  </form>
+<div class="push">
+</div>
+
+<%- contentFor('title') -%>
+Ample | Claim Business

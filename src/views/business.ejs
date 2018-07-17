@@ -77,7 +77,7 @@
       <h3 class="review">Reviews</h3>
     </div>
 
-    <div class="col-8 col-lg-3">
+    <div class="col-6 col-lg-3">
       <% if (!hasReviewedThisBusiness) { %>
         <form method="GET" action="/businesses/<%- business.id -%>/reviews/new">
           <input name="name" type="hidden" value="<%- business.name -%>"/>
@@ -90,6 +90,13 @@
           href=""
           role="button">Reviewed</a>
       <% } %>
+    </div>
+    <div class="col-2">
+      <form method="GET" action="/businesses/<%- business.id -%>/claim">
+        <input name="name" type="hidden" value="<%- business.name -%>"/>
+        <input name="address" type="hidden" value="<%- business.address -%>"/>
+        <input type="submit" value="Claim Business" class="btn btn-info review-button"/>
+      </form>
     </div>
   </div>
 
