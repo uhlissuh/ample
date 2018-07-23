@@ -12,7 +12,7 @@ tags: [fat, trans, disabilities, BIPOC, collaborations]
 
 ![Image Description: A graphic of the Ample logo, a heart, and the NAAFA logo]({{ "/assets/img/naafa.png" | absolute_url }})
 
-Founded in 1969, the National Association to Advance Fat Acceptance (NAAFA) is a non-profit, all volunteer, civil rights organization dedicated to protecting the rights and improving the quality of life for fat people. NAAFA works to eliminate discrimination based on body size and provide fat people with the tools for self-empowerment through advocacy, public education, and support.
+Founded in 1969, the National Association to Advance Fat Acceptance (NAAFA) is a non-profit, all volunteer, civil rights organization dedicated to protecting the rights and improving the quality of life for fat people. [NAAFA](https://www.naafaonline.com/dev2/ "NAAFA Home Page") works to eliminate discrimination based on body size and provide fat people with the tools for self-empowerment through advocacy, public education, and support.
 <!--more-->
 NAAFA spearheaded the Size Savvy project four years ago. The goal of the Size Savvy project was to provide reviews of businesses and healthcare providers where one would be made to feel welcome and accommodated regardless of body size.  
 
