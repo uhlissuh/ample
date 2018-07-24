@@ -135,7 +135,12 @@ async function businessesFromRows(tx, rows) {
       phone: row.phone,
       reviewCount: row.review_count,
       categories: row.category_ids.map(getCategoryTitle),
-      userId: row.user_id
+      userId: row.user_id,
+      ownerId: row.owner_id,
+      takenPledge: row.taken_pledge,
+      ownerStatement: row.owner_statement,
+      ownershipConfirmed: row.owner_is_confirmed
+
     };
 
     let combinedRatingCount = 0;
@@ -315,6 +320,32 @@ async function removeTagsFromReview(tx, reviewId, tags) {
       review_id = $1 and
       tag_id = ANY ($2::int[])
   `, [reviewId, tagIds]);
+}
+
+exports.claimBusiness = async function(userId, businessId, takenPledge, ownerStatement) {
+  await db.query(
+    `
+      update businesses
+      set
+        owner_id = $1,
+        taken_pledge = $2,
+        owner_statement = $3,
+        owner_is_confirmed = false
+      where
+        id = $4
+    `, [userId, takenPledge, ownerStatement, businessId]
+  )
+}
+
+exports.confirmBusinessOwner = async function(businessId) {
+  await db.query(
+    `
+    update businesses
+      set owner_is_confirmed = true
+    where
+      id = $1
+    `, [businessId]
+  )
 }
 
 exports.createReview = async function(userId, businessId, review) {

@@ -40,7 +40,11 @@ describe("database", () => {
         disabledRatingCount: 0,
         pocAverageRating: null,
         pocRatingCount: 0,
-        userId: null
+        userId: null,
+        ownerId: null,
+        ownerStatement: null,
+        ownershipConfirmed: null,
+        takenPledge: null
       })
 
       assert.deepEqual(await database.getBusinessByGoogleId('5'), business)
@@ -84,7 +88,11 @@ describe("database", () => {
         disabledRatingCount: 0,
         pocAverageRating: null,
         pocRatingCount: 0,
-        userId: userId
+        userId: userId,
+        ownerId: null,
+        ownerStatement: null,
+        ownershipConfirmed: null,
+        takenPledge: null
       })
     })
   });
@@ -641,6 +649,42 @@ describe("database", () => {
       });
     });
   });
+
+  describe("claim business", () => {
+    it("allows a logged in user to claim a business", async () => {
+      const businessId = await database.createBusiness({
+        googleId: null,
+        name: 'hands on medicine',
+        address: '2 Two St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      });
+
+      const userId = await database.createUser({
+        facebookId: '567',
+        name: 'Bob Carlson',
+        email: 'bob@example.com'
+      })
+
+      await database.claimBusiness(userId, businessId, true, "I'm so inclusive!");
+
+      let business = await database.getBusinessById(businessId);
+
+      console.log(business);
+
+      assert.equal(business.ownerId, userId);
+      assert.equal(business.takenPledge, true);
+      assert.equal(business.ownershipConfirmed, false);
+
+      await database.confirmBusinessOwner(businessId);
+
+      business = await database.getBusinessById(businessId);
+
+      assert.equal(business.ownershipConfirmed, true);
+
+    });
+  })
 
   describe(".searchAddedBusinesses(query)", () => {
     it("finds non-google businesses that match the given query", async () => {
