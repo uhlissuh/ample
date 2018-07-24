@@ -7,7 +7,7 @@ excerpt_separator: <!--more-->
 
 
 date: 2018-07-22
-tags: [fat, trans, disabilities, BIPOC, collaborations]
+tags: [fat, collaborations]
 ---
 
 ![Image Description: A graphic of the Ample logo, a heart, and the NAAFA logo]({{ "/assets/img/naafa.png" | absolute_url }})
