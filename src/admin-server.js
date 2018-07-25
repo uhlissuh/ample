@@ -29,14 +29,25 @@ function (users) {
   app.get('/', async (req, res) => {
     const pendingTags = await database.getPendingTags();
     const allReviews = await database.getAllReviews();
+    const businessesWithUnconfirmedOwners = await database.getBusinessesWithUnconfirmedOwners();
+    console.log(businessesWithUnconfirmedOwners);
     allReviews.map(review => review.date = new Date(review.timestamp).toDateString())
-    res.render('admin/admin-dashboard', { pendingTags, user: null, allReviews });
+    res.render('admin/admin-dashboard', { pendingTags, user: null, allReviews, businessesWithUnconfirmedOwners });
   });
 
   app.post('/approve-tag', async (req, res) => {
     const tag = req.body.tag;
     assert(tag.length > 0);
     await database.approveTag(tag);
+    res.redirect('/admin');
+  });
+
+  app.post('/approve-owner', async (req, res) => {
+    console.log("getting post");
+    console.log("body", req.body);
+    const businessId = req.body.businessId;
+
+    await database.approveOwner(businessId);
     res.redirect('/admin');
   });
 

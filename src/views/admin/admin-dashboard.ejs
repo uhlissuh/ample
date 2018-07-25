@@ -1,13 +1,48 @@
 <div class="container">
-  <h2>Pending tags:</h2>
 
-  <ul>
+
+  <ul class="list-group">
+    <h2>Pending tags:</h2>
     <% for (const tag of pendingTags) { %>
-      <li>
+      <li class="list-group-item">
         <%- tag -%>
         <a class="btn btn-primary approve-tag" data-tag="<%- tag -%>">Approve</a>
       </li>
     <% } %>
+  </ul>
+
+  <ul class="list-group">
+    <h2> Businesses awaiting ownership approval:</h2>
+    <% for (const business of businessesWithUnconfirmedOwners) { %>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-4">
+            BUSINESS NAME: <%- business.business_name -%>
+          </div>
+          <div class="col-4">
+            <%- business.address -%>
+          </div>
+          <div class="col-4">
+            OWNER: <%- business.owner_name -%>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-4">
+            OWNER EMAIL: <%- business.email -%>
+          </div>
+          <div class="col-4">
+            TAKEN PLEDGE? : <%- business.taken_pledge -%>
+          </div>
+          <div class="col-4">
+            OWNER STATEMENT: <%- business.owner_statement -%>
+          </div>
+        </div>
+        <a class="btn btn-primary approve-owner" data-business-id="<%- business.business_id -%>" data-ownerId="<%- business.ownerId -%>">Approve</a>
+
+      </li>
+    <% } %>
+
   </ul>
 
   <h2> All Reviews:</h2>
@@ -48,6 +83,10 @@
   <input name="tag" id='approve-tag-input' type="hidden" />
 </form>
 
+<form id='approve-owner-form' method="POST" action='/admin/approve-owner'>
+  <input name="businessId" id='approve-owner-businessId' type="hidden" />
+</form>
+
 <%- contentFor('title') -%>
 Ample | Admin
 
@@ -60,6 +99,12 @@ document.addEventListener('click', event => {
     if (confirm(`Are you sure you want to approve the tag '${tag}'`)) {
       document.getElementById('approve-tag-input').value = tag;
       document.getElementById('approve-tag-form').submit();
+    }
+  } else if (event.target.classList.contains('approve-owner')){
+    const {businessId} = event.target.dataset;
+    if (confirm(`Are you sure you want to approve the owner?`)) {
+      document.getElementById('approve-owner-businessId').value = businessId;
+      document.getElementById('approve-owner-form').submit();
     }
   }
 });

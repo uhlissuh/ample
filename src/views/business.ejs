@@ -8,8 +8,14 @@
         <p class="business-by-line"> <%- business.phone -%></p>
 
       <div id="score-row" class="row score-row">
+        <div class="col-4 rating-doodad">
+          <img src="/static/badge.png" class="indicator" />
+          <br />
+          <span>Taken Pledge</span>
+        </div>
+
         <% if (reviews.length != 0) { %>
-          <div class="col-6 rating-doodad">
+          <div class="col-4 rating-doodad">
             <span class="summary-item">
               <%- business.overallRating -%>
             </span>
@@ -18,7 +24,7 @@
             <span>Overall Rating</span>
           </div>
 
-          <div class="col-6 rating-doodad">
+          <div class="col-4 rating-doodad">
             <span class="summary-item">
               <%- business.reviewCount -%>
             </span>
@@ -59,6 +65,12 @@
   <% if (reviews.length === 0) { %>
     <div class="section-separator">
       <br />
+    </div>
+  <% } %>
+
+  <% if (business.ownerId) { %>
+    <div class="owner-section">
+      OWNERERERERERRRRRR
     </div>
   <% } %>
 

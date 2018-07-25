@@ -309,7 +309,11 @@ function (
         transRatingCount : existingBusiness.transRatingCount,
         disabledAverageRating : existingBusiness.disabledAverageRating,
         disabledRatingCount : existingBusiness.disabledRatingCount,
-        tags : existingBusiness.tags
+        tags : existingBusiness.tags,
+        ownerId: existingBusiness.ownerId,
+        takenPledge: existingBusiness.takenPledge,
+        ownershipConfirmed: existingBusiness.ownershipConfirmed,
+        ownerStatement: existingBusiness.ownerStatement
       };
     } else {
       business = {
@@ -338,8 +342,16 @@ function (
 
   app.get('/businesses/:id/claim', async function(req, res) {
     const userId = req.signedCookies['userId'];
+
+    if (!userId) {
+      res.redirect('/login?referer=' + req.url);
+      return;
+    }
+
     const user = await database.getUserById(userId);
+
     const businessId = req.params.id;
+
     res.render('claim-business',
       {
         user,
@@ -349,9 +361,41 @@ function (
   });
 
   app.post('/businesses/:id/claim', async function(req, res) {
-    
-    console.log(req.body);
-    res.redirect(`/businesses/${req.params.id}`);
+    const userId = req.signedCookies['userId'];
+    const user = await database.getUserById(userId);
+
+    if (!userId) {
+      res.redirect('/login?referer=' + req.url);
+      return;
+    }
+
+    let businessId;
+    if (isGoogleId(req.params.id)) {
+      const googleBusiness = await googlePlacesClient.getBusinessById(req.params.id)
+      businessId = await database.createBusiness({
+        googleId: req.params.id,
+        name: googleBusiness.name,
+        latitude: googleBusiness.geometry.location.lat,
+        longitude: googleBusiness.geometry.location.lng,
+        phone: googleBusiness.formatted_phone_number,
+        address: googleBusiness.formatted_address
+      })
+    } else {
+      businessId = req.params.id;
+    }
+
+    let takenPledge
+    if (req.body.ownsBusiness.length >= 0) {
+      if (req.body.takenPledge.length >= 0) {
+        takenPledge = true;
+      } else {
+        takenPledge = false;
+      }
+      await database.claimBusiness(userId, businessId, takenPledge, req.body.ownerStatement);
+      res.redirect(`/businesses/${businessId}`);
+    } else {
+      res.render('error', {user});
+    }
   });
 
   app.get('/businesses/:id/reviews/new', async function(req, res) {

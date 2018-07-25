@@ -671,8 +671,6 @@ describe("database", () => {
 
       let business = await database.getBusinessById(businessId);
 
-      console.log(business);
-
       assert.equal(business.ownerId, userId);
       assert.equal(business.takenPledge, true);
       assert.equal(business.ownershipConfirmed, false);

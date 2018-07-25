@@ -653,6 +653,7 @@ exports.getPendingTags = async function() {
   return rows.map(row => row.name);
 };
 
+
 exports.createApprovedTags = async function(tags) {
   await db.query(`
     insert into tags
@@ -670,6 +671,26 @@ exports.approveTag = async function(tag) {
     set is_pending = false
     where name = $1
   `, [tag]);
+};
+
+exports.getBusinessesWithUnconfirmedOwners = async function() {
+  const rows = await db.query(
+    `select *, businesses.id as business_id, users.name as owner_name, users.id as owner_id, businesses.name as business_name
+     from businesses, users
+     where
+     businesses.owner_id = users.id and
+     businesses.owner_is_confirmed = false
+     `
+   );
+  return rows;
+};
+
+exports.approveOwner = async function(businessId) {
+  await db.query(`
+    update businesses
+    set owner_is_confirmed = true
+    where id = $1
+  `, [businessId]);
 };
 
 exports.getBusinessRatingBreakdown = async function(businessId) {
