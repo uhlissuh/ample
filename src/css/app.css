@@ -40,11 +40,6 @@ html {
   display: block;
 }
 
-.indicator {
-  display: inline;
-  vertical-align: middle;
-}
-
 .review-count-check-mark {
   font-family: "Times", "Times New Roman", "serif";
   font-weight: 500;
@@ -110,11 +105,12 @@ html {
 
 .business-header {
   margin-top: 30px;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 }
 
 .section-separator {
   border-top: .5px solid #d3d3d3;
+  height: 1px;
 }
 
 .cards {
@@ -139,16 +135,40 @@ html {
 }
 
 .biz-name {
+  display: inline-block;
   font-size: 30px;
   color: #A9A9A9;
   font-family: 'Roboto', sans-serif;
 }
 
-.business-by-line {
+.business-phone {
   font-size: 20px;
   margin-bottom: 0px;
+  margin-bottom: 0;
+  display: inline;
+  margin-right: 10px;
+  vertical-align: middle;
 }
 
+.business-address {
+  font-size: 20px;
+  margin-bottom: 0px;
+  margin-bottom: 0;
+}
+
+.phone-and-claim {
+  display: inline;
+}
+
+.badge {
+  background-color: #6BCFFB;
+  vertical-align: middle;
+}
+
+.statement-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .no-reviews-yet {
   margin-top: 50px;
   font-size: 20px;
@@ -161,6 +181,7 @@ html {
 
 .review-button {
   background-color: #EB6E79;
+  border-color: #EB6E79;
   color: white;
   width: 100%;
 }
@@ -272,7 +293,7 @@ html {
 }
 
 .reviews-header {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .review {
@@ -320,10 +341,6 @@ a:hover {
   object-fit: cover;
   width:80px;
   height:80px;
-}
-
-.address {
-  margin-bottom: 0;
 }
 
 .search-result-title {
@@ -447,6 +464,7 @@ a:hover {
   margin-top: 5px;
 }
 
+
 .feedback-row {
   margin-top: 100px;
   font-size: 30px;
@@ -569,10 +587,31 @@ a:hover {
   padding-top: 25px;
 }
 
+.business-badge {
+  display: block;
+  text-align: center;
+  float: left;
+  padding-top: 5px;
+}
+
+.owner-statement-profile {
+  margin-top: 10px;
+}
+
+.indicator {
+  display: inline;
+  vertical-align: middle;
+  text-align: center;
+}
+
 @media screen and (max-width: 767px) {
   .info-area-row {
     height: 570px;
     background-color: #FFF0ED;
+  }
+
+  .reviews-header {
+    margin-top: 10px;
   }
 
   .info-picture-row {
@@ -725,12 +764,12 @@ a:hover {
     text-align: center;
   }
 
-  .confettibackground {
-    background-repeat: repeat;
-    background-image: url('/static/confettibackground.svg');
-    background-size: 160px;
-    height: 335px;
+  .business-badge {
+    display: block;
+    text-align: center;
+    width: 120;
   }
+
 
   .feedback-row {
     margin-top: 100px;

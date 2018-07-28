@@ -4,18 +4,17 @@
     <div class="col-12 col-lg-8 align-self-end order-12">
 
         <h1 class="biz-name"><%- business.name -%></h1>
-        <p class="business-by-line address"> <%- business.address -%></p>
-        <p class="business-by-line"> <%- business.phone -%></p>
-
-      <div id="score-row" class="row score-row">
-        <div class="col-4 rating-doodad">
-          <img src="/static/badge.png" class="indicator" />
-          <br />
-          <span>Taken Pledge</span>
+        <p class="business-address"> <%- business.address -%></p>
+        <div class="phone-and-claim">
+          <div class="business-phone"> <%- business.phone -%></div>
+          <% if (!business.ownershipConfirmed) { %>
+          <a href="/businesses/<%- business.id -%>/claim" class="badge badge-info">claim</a>
+          <% } %>
         </div>
 
+      <div id="score-row" class="row score-row">
         <% if (reviews.length != 0) { %>
-          <div class="col-4 rating-doodad">
+          <div class="col-4 col-lg-3 rating-doodad">
             <span class="summary-item">
               <%- business.overallRating -%>
             </span>
@@ -24,13 +23,23 @@
             <span>Overall Rating</span>
           </div>
 
-          <div class="col-4 rating-doodad">
+          <div class="col-4 col-lg-3 rating-doodad">
             <span class="summary-item">
               <%- business.reviewCount -%>
             </span>
             <img src="/static/checkmark.png" class="indicator" />
             <br />
             <span>Total reviews</span>
+          </div>
+        <% } %>
+
+        <% if (business.ownershipConfirmed && business.takenPledge) { %>
+          <div class="col-4 col-lg-3 rating-doodad align-self-end">
+            <div class="business-badge">
+              <img src="/static/badge.png"/>
+              <br />
+              <span>Taken Pledge</span>
+            </div>
           </div>
         <% } %>
       </div>
@@ -62,15 +71,20 @@
     </div>
   </div>
 
-  <% if (reviews.length === 0) { %>
-    <div class="section-separator">
-      <br />
+  <% if (business.ownerStatement && business.ownershipConfirmed && business.takenPledge) { %>
+    <div class="row section-separator">
+    </div>
+
+    <div class="row statement-row">
+      <div class="col-12">
+        <strong>Owner Statement:</strong> "<%- business.ownerStatement -%>"
+      </div>
     </div>
   <% } %>
 
-  <% if (business.ownerId) { %>
-    <div class="owner-section">
-      OWNERERERERERRRRRR
+  <% if (reviews.length === 0) { %>
+    <div class="section-separator">
+      <br />
     </div>
   <% } %>
 
@@ -83,6 +97,7 @@
     <% } %>
 
   <% } %>
+
 
   <div class="row reviews-header">
     <div class="col-4 col-lg-2">
@@ -102,13 +117,6 @@
           href=""
           role="button">Reviewed</a>
       <% } %>
-    </div>
-    <div class="col-2">
-      <form method="GET" action="/businesses/<%- business.id -%>/claim">
-        <input name="name" type="hidden" value="<%- business.name -%>"/>
-        <input name="address" type="hidden" value="<%- business.address -%>"/>
-        <input type="submit" value="Claim Business" class="btn btn-info review-button"/>
-      </form>
     </div>
   </div>
 
