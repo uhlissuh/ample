@@ -348,6 +348,18 @@ exports.confirmBusinessOwner = async function(businessId) {
   )
 }
 
+exports.findOwnedBusinesses = async function(userId) {
+  const rows = await db.query(
+    `select *
+    from businesses
+    where
+    owner_id = $1
+    `,
+    [userId]
+  )
+  return businessesFromRows(db, rows);
+}
+
 exports.createReview = async function(userId, businessId, review) {
   return this.tx(async tx => {
     const businessRow = await getFullBusinessById(tx, businessId);

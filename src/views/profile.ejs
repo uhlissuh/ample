@@ -1,5 +1,41 @@
 
 <div class="container">
+  <% if (ownedBusinesses) { %>
+    <div class="row">
+      <div class="col-12 col-lg-8 offset-lg-2">
+        <h3>Businesses You Own</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-lg-8 offset-lg-2">
+        <ul class="list-group">
+        <% for (business of ownedBusinesses) { %>
+          <li class="list-group-item">
+            <div class="row biz-name">
+              <div class="col-12">
+                <%- business.name -%>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 business-address">
+                <%- business.address -%>
+              </div>
+            </div>
+            <div class="section-separator">
+            </div>
+            <div class="row">
+              <div class="col-12 owner-statement-profile">
+                <span><strong>Your owner statement:</strong> <%- business.ownerStatement -%></span>
+              </div>
+            </div>
+          </li>
+        <% } %>
+        </ul>
+      </div>
+    </div>
+  <% } %>
+
+
   <div class="row">
     <div class="col-12 col-lg-6 offset-lg-3 text-center">
       <h3 class="profile-name-row">You're logged in as <%- user.name -%>.</h3>

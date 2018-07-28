@@ -173,8 +173,13 @@ function (
   app.get('/profiles/:userId', async function(req, res) {
     if (req.signedCookies["userId"]) {
       const user = await database.getUserById(req.params.userId)
+
+      const ownedBusinesses = await database.findOwnedBusinesses(req.params.userId);
+      console.log(ownedBusinesses);
+
       res.render('profile', {
-        user: user
+        user,
+        ownedBusinesses
       });
     } else {
       res.redirect('/login');
