@@ -594,6 +594,8 @@ exports.addBusinessPhoto = async function(businessId, userId, {url, width, heigh
 }
 
 exports.getBusinessPhotosById = async function(id) {
+  id = parseInt(id)
+  if (Number.isNaN(id)) return []
   const rows = await db.query(
     `select * from business_photos where business_id = $1`,
     [id]

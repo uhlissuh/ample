@@ -277,8 +277,9 @@ describe("server", () => {
       let uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
         'photo-url': photoURL1
       });
-      assert.equal(uploadPhotoResponse.statusCode, 200)
       const business = await database.getBusinessByGoogleId('WX-YZ')
+      assert.equal(uploadPhotoResponse.statusCode, 302);
+      assert.equal(uploadPhotoResponse.headers.location, `/businesses/${business.id}`)
       assert.deepEqual(await database.getBusinessPhotosById(business.id), [
         {userId, url: photoURL1, width: 250, height: 250},
       ]);
@@ -287,7 +288,8 @@ describe("server", () => {
       uploadPhotoResponse = await post(`businesses/${business.id}/photos`, {
         'photo-url': photoURL2
       });
-      assert.equal(uploadPhotoResponse.statusCode, 200)
+      assert.equal(uploadPhotoResponse.statusCode, 302);
+      assert.equal(uploadPhotoResponse.headers.location, `/businesses/${business.id}`)
       assert.deepEqual(await database.getBusinessPhotosById(business.id), [
         {userId, url: photoURL1, width: 250, height: 250},
         {userId, url: photoURL2, width: 250, height: 252},

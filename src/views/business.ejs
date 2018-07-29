@@ -62,16 +62,10 @@
     </div>
 
     <div class="col-12 col-lg-4 align-self-end order-1 order-lg-12 biz-image-col">
-      <% if (photoURL) { %>
-      <img
-      class="img-fluid biz-img"
-      src="<%- photoURL -%>"
-      />
+      <% if (photos.length > 0) { %>
+        <img class="img-fluid biz-img" src="<%- photos[0].url -%>"/>
       <% } else { %>
-      <img
-      class="img-fluid biz-img"
-      src="/static/placeholder-wide.png"
-      />
+        <img class="img-fluid biz-img" src="/static/placeholder-wide.png"/>
       <% } %>
     </div>
   </div>

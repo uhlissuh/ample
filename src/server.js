@@ -284,10 +284,6 @@ function (
       ratingBreakdown = await database.getBusinessRatingBreakdown(existingBusiness.id);
     }
 
-    const photoReference = googleBusiness
-      ? googleBusiness.photos && googleBusiness.photos[0].photo_reference
-      : null;
-
     const reviewUserIds = [];
     let hasReviewedThisBusiness = false;
     for (const review of reviews) {
@@ -328,21 +324,30 @@ function (
       }
     }
 
-    res.render('business',
-      {
-        googleId,
-        photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 900, 900),
-        photos: await database.getBusinessPhotosById(business.id),
-        reviews,
-        ratingBreakdown,
-        user,
-        isMobile,
-        pluralize,
-        CRITERIA_DESCRIPTIONS,
-        business,
-        hasReviewedThisBusiness
-      }
-    );
+    const photos = await database.getBusinessPhotosById(business.id);
+
+    if (googleBusiness && googleBusiness.photos) {
+      const googlePhoto = googleBusiness.photos[0].photo_reference;
+      photos.push({
+        userId: null,
+        width: 900,
+        height: 900,
+        url: googlePlacesClient.getPhotoURL(googlePhoto, 900, 900)
+      })
+    }
+
+    res.render('business', {
+      googleId,
+      photos,
+      reviews,
+      ratingBreakdown,
+      user,
+      isMobile,
+      pluralize,
+      CRITERIA_DESCRIPTIONS,
+      business,
+      hasReviewedThisBusiness
+    });
   });
 
   app.get('/businesses/:id/claim', async function(req, res) {
@@ -545,7 +550,7 @@ function (
       width: photoInfo.width,
       height: photoInfo.height
     })
-    res.end()
+    res.redirect(`/businesses/${businessId}`);
   });
 
   app.post('/businesses', async function(req, res) {
