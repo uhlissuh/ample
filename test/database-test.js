@@ -291,6 +291,59 @@ describe("database", () => {
     });
   })
 
+  describe('.addBusinessPhoto', () => {
+    let userId, businessId
+
+    beforeEach(async () => {
+      userId = await database.createUser({
+        facebookId: '567',
+        name: 'Bob Carlson',
+        email: 'bob@example.com'
+      })
+
+      businessId = await database.createBusiness({
+        googleId: "dr-brain",
+        name: 'Dr Brain',
+        address: '123 Main St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      })
+    })
+
+    it('adds a photo for the business', async () => {
+      assert.deepEqual(await database.getBusinessPhotosById(null), [])
+      assert.deepEqual(await database.getBusinessPhotosById(businessId), [])
+
+      await database.addBusinessPhoto(businessId, userId, {
+        url: 'the-url',
+        width: 250,
+        height: 300
+      });
+
+      await database.addBusinessPhoto(businessId, userId, {
+        url: 'the-other-url',
+        width: 350,
+        height: 400
+      });
+
+      assert.deepEqual(await database.getBusinessPhotosById(businessId), [
+        {
+          userId,
+          url: 'the-url',
+          width: 250,
+          height: 300
+        },
+        {
+          userId,
+          url: 'the-other-url',
+          width: 350,
+          height: 400
+        }
+      ])
+    });
+  });
+
   describe(".getBusinessRatingBreakdown", () => {
     it("returns the number of users who gave the business each possible rating in each criteria", async () => {
       const userId1 = await database.createUser({
