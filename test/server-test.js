@@ -18,6 +18,7 @@ const cache = {
   get() { return null },
   set(key, value) {}
 }
+const s3Client = {};
 
 const server = require('../src/server')(
   cookieSigningSecret,
@@ -25,6 +26,7 @@ const server = require('../src/server')(
   googleOauthClient,
   googlePlacesClient,
   cache,
+  s3Client,
   {}
 );
 
@@ -222,8 +224,6 @@ describe("server", () => {
         'parent-category': 'Doctors'
       });
 
-
-
       const business = await database.getBusinessByGoogleId('WX-YZ');
       const reviews = await database.getBusinessReviewsById(business.id);
 
@@ -249,6 +249,49 @@ describe("server", () => {
       logOut();
       getBusinessResponse = await get(`businesses/${business.id}`);
       assert(getBusinessResponse.body.includes('I like this business. A lot.'));
+    });
+  });
+
+  describe("add a photo for a business", () => {
+    it("shows that photo on the business page afterward", async () => {
+      logIn(userId);
+
+      googlePlacesClient.getBusinessById = async function (id) {
+        assert.equal(id, 'WX-YZ');
+        return {
+          name: 'the-business',
+          formatted_address: '123 Example St',
+          geometry: {
+            location: {
+              lat: 42,
+              lng: -122
+            }
+          }
+        }
+      };
+
+      const photoURL1 = `http://localhost:${port}/static/alissa.jpg`
+      const photoURL2 = `http://localhost:${port}/static/el.jpg`
+
+      // Add a photo for a business that does not yet exist in the database
+      let uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
+        'photo-url': photoURL1
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 200)
+      const business = await database.getBusinessByGoogleId('WX-YZ')
+      assert.deepEqual(await database.getBusinessPhotosById(business.id), [
+        {userId, url: photoURL1, width: 250, height: 250},
+      ]);
+
+      // Add another photo; this time the business *does* exist in the database
+      uploadPhotoResponse = await post(`businesses/${business.id}/photos`, {
+        'photo-url': photoURL2
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 200)
+      assert.deepEqual(await database.getBusinessPhotosById(business.id), [
+        {userId, url: photoURL1, width: 250, height: 250},
+        {userId, url: photoURL2, width: 250, height: 252},
+      ])
     });
   });
 

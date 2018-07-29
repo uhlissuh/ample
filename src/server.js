@@ -10,6 +10,7 @@ const catchErrors = require('./catch-errors');
 const pluralize = require('pluralize');
 const sslRedirect = require('heroku-ssl-redirect');
 const GeoIP = require('geoip-lite');
+const probeImage = require('probe-image-size');
 const countriesStates = require('./countries-states.json');
 
 const CRITERIA_DESCRIPTIONS = {
@@ -26,7 +27,8 @@ function (
   googleOauthClient,
   googlePlacesClient,
   cache,
-  users
+  s3Client,
+  users,
 ) {
   const app = express();
   catchErrors(app);
@@ -104,7 +106,6 @@ function (
     });
   });
 
-
   app.get('/feedback', async (req, res) => {
     let user = null;
     if (req.signedCookies['userId']) {
@@ -126,7 +127,6 @@ function (
       user: user,
     });
   });
-
 
   app.get('/login', (req, res) => {
     res.render('login', {
@@ -332,6 +332,7 @@ function (
       {
         googleId,
         photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 900, 900),
+        photos: await database.getBusinessPhotosById(business.id),
         reviews,
         ratingBreakdown,
         user,
@@ -377,7 +378,7 @@ function (
     const businessId = req.params.id;
 
     const business = await database.getBusinessById(businessId);
-    
+
     if (business.ownerId === parseInt(userId)) {
       res.render('edit-claim-business',
         {
@@ -388,10 +389,7 @@ function (
     } else {
       res.render('404-error', {user})
     }
-
-
   });
-
 
   app.post('/businesses/:id/claim', async function(req, res) {
     const userId = req.signedCookies['userId'];
@@ -515,6 +513,41 @@ function (
     res.redirect(`/businesses/${businessId}`)
   });
 
+  app.post('/businesses/:id/photos', async function(req, res) {
+    let businessId
+
+    if (isGoogleId(req.params.id)) {
+      const googleId = req.params.id;
+      let googleBusiness = await cache.get(googleId);
+      if (!googleBusiness) {
+        googleBusiness = await googlePlacesClient.getBusinessById(googleId);
+        await cache.set(googleId, googleBusiness, 3600);
+      }
+
+      businessId = await database.createBusiness({
+        googleId: googleId,
+        name: googleBusiness.name,
+        latitude: googleBusiness.geometry.location.lat,
+        longitude: googleBusiness.geometry.location.lng,
+        phone: googleBusiness.formatted_phone_number,
+        address: googleBusiness.formatted_address
+      })
+    } else {
+      businessId = req.params.id
+    }
+
+    const userId = req.signedCookies['userId'];
+    const photoURL = req.body['photo-url']
+    const photoInfo = await probeImage(photoURL)
+
+    await database.addBusinessPhoto(businessId, userId, {
+      url: photoURL,
+      width: photoInfo.width,
+      height: photoInfo.height
+    })
+    res.end()
+  });
+
   app.post('/businesses', async function(req, res) {
     const userId = req.signedCookies['userId'];
     const user = await database.getUserById(userId);
@@ -551,6 +584,13 @@ function (
       res.render('404-error', {user});
     }
 
+  });
+
+  app.get('/sign-s3', async function(req, res) {
+    const fileName = req.query['file-name'];
+    const fileType = req.query['file-type'];
+    const data = await s3Client.getSignedURL(fileName, fileType);
+    res.end(JSON.stringify(data));
   });
 
   function reviewFromRequest(body) {

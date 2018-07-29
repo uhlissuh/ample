@@ -181,13 +181,13 @@
           <label class="custom-file-label" for="add-photo-file-input">Choose file</label>
         </div>
 
-        <img id="add-photo-preview" src="/images/default.png">
+        <img id="add-photo-preview" src="/static/placeholder.png">
       </div>
 
       <div class="modal-footer">
         <form method="POST" action="/businesses/<%- business.id -%>/photos">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <input class="btn" type="hidden" id="add-photo-url-input" name="avatar-url" value="/images/default.png">
+          <input class="btn" type="hidden" id="add-photo-url-input" name="photo-url">
           <input class="btn btn-primary" type="submit" value="Upload Photo">
         </form>
       </div>
@@ -210,6 +210,8 @@
   if (<%-JSON.stringify(reviews)%>.length == 0)  {
     scoreRow.classList.add('no-reviews');
   }
+
+  console.log(<%- JSON.stringify(photos) -%>);
 </script>
 
 <%- contentFor('title') -%>

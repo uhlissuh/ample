@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "autocomplete.js": "^0.29.0",
+    "aws-sdk": "^2.282.1",
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-beta.3",
     "clamp-js": "^0.7.0",
@@ -29,6 +30,7 @@
     "memjs": "^1.2.0",
     "pg-promise": "^5.9.5",
     "pluralize": "^7.0.0",
+    "probe-image-size": "^4.0.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"
   },
