@@ -519,8 +519,12 @@ function (
   });
 
   app.post('/businesses/:id/photos', async function(req, res) {
-    let businessId
+    const userId = req.signedCookies['userId'];
+    if (!userId) {
+      return res.redirect(`/login?referer=/businesses/${req.params.id}`);
+    }
 
+    let businessId
     if (isGoogleId(req.params.id)) {
       const googleId = req.params.id;
       let googleBusiness = await cache.get(googleId);
@@ -528,7 +532,6 @@ function (
         googleBusiness = await googlePlacesClient.getBusinessById(googleId);
         await cache.set(googleId, googleBusiness, 3600);
       }
-
       businessId = await database.createBusiness({
         googleId: googleId,
         name: googleBusiness.name,
@@ -541,7 +544,6 @@ function (
       businessId = req.params.id
     }
 
-    const userId = req.signedCookies['userId'];
     const photoURL = req.body['photo-url']
     const photoInfo = await probeImage(photoURL)
 
@@ -592,6 +594,10 @@ function (
   });
 
   app.get('/sign-s3', async function(req, res) {
+    if (!req.signedCookies['userId']) {
+      return res.end(401);
+    }
+
     const fileName = req.query['file-name'];
     const fileType = req.query['file-type'];
     const data = await s3Client.getSignedURL(fileName, fileType);

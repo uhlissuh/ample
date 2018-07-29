@@ -254,8 +254,6 @@ describe("server", () => {
 
   describe("add a photo for a business", () => {
     it("shows that photo on the business page afterward", async () => {
-      logIn(userId);
-
       googlePlacesClient.getBusinessById = async function (id) {
         assert.equal(id, 'WX-YZ');
         return {
@@ -273,8 +271,17 @@ describe("server", () => {
       const photoURL1 = `http://localhost:${port}/static/alissa.jpg`
       const photoURL2 = `http://localhost:${port}/static/el.jpg`
 
-      // Add a photo for a business that does not yet exist in the database
+      // Can't add a photo if you're not logged in
       let uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
+        'photo-url': photoURL1
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 302);
+      assert.equal(uploadPhotoResponse.headers.location, '/login?referer=/businesses/WX-YZ')
+
+      logIn(userId);
+
+      // Add a photo for a business that does not yet exist in the database
+      uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
         'photo-url': photoURL1
       });
       const business = await database.getBusinessByGoogleId('WX-YZ')
