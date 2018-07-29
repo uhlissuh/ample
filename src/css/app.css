@@ -604,6 +604,12 @@ a:hover {
   text-align: center;
 }
 
+.businesses-you-own {
+  margin-top: 20px;
+  font-family: 'Lilita One', cursive;
+  color: #EB6E79;
+}
+
 @media screen and (max-width: 767px) {
   .info-area-row {
     height: 570px;

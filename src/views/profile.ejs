@@ -1,8 +1,20 @@
 
 <div class="container">
+  <div class="row">
+    <div class="col-12 col-lg-8 offset-lg-2 text-center">
+      <h3 class="profile-name-row">You're logged in as <%- user.name -%>.</h3>
+      <form class="profile-form" method="POST" action="/logout">
+          <button type="submit" class="btn review-submit-button">Logout</button>
+      </form>
+      <div class="alert alert-info profile-alert" role="alert">
+        More coming soon to Profiles!
+      </div>
+    </div>
+  </div>
+
   <% if (ownedBusinesses) { %>
     <div class="row">
-      <div class="col-12 col-lg-8 offset-lg-2">
+      <div class="col-12 col-lg-8 offset-lg-2 businesses-you-own">
         <h3>Businesses You Own</h3>
       </div>
     </div>
@@ -19,13 +31,20 @@
             <div class="row">
               <div class="col-12 business-address">
                 <%- business.address -%>
+                <% if (business.ownershipConfirmed) { %>
+                <div class="badge badge-success">confirmed</div>
+                <% } else { %>
+                  <div class="badge badge-success">unconfirmed</div>
+                <% } %>
               </div>
+
+
             </div>
-            <div class="section-separator">
-            </div>
+      
             <div class="row">
               <div class="col-12 owner-statement-profile">
                 <span><strong>Your owner statement:</strong> <%- business.ownerStatement -%></span>
+                <a href="/businesses/<%- business.id -%>/claim/edit">edit</a>
               </div>
             </div>
           </li>
@@ -35,18 +54,6 @@
     </div>
   <% } %>
 
-
-  <div class="row">
-    <div class="col-12 col-lg-6 offset-lg-3 text-center">
-      <h3 class="profile-name-row">You're logged in as <%- user.name -%>.</h3>
-      <form class="profile-form" method="POST" action="/logout">
-          <button type="submit" class="btn review-submit-button">Logout</button>
-      </form>
-      <div class="alert alert-info profile-alert" role="alert">
-        More coming soon to Profiles!
-      </div>
-    </div>
-  </div>
 </div>
 
 
