@@ -175,7 +175,6 @@ function (
       const user = await database.getUserById(req.params.userId)
 
       const ownedBusinesses = await database.findOwnedBusinesses(req.params.userId);
-      console.log(ownedBusinesses);
 
       res.render('profile', {
         user,
@@ -364,6 +363,35 @@ function (
       }
     );
   });
+
+  app.get('/businesses/:id/claim/edit', async function(req, res) {
+    const userId = req.signedCookies['userId'];
+
+    if (!userId) {
+      res.redirect('/login?referer=' + req.url);
+      return;
+    }
+
+    const user = await database.getUserById(userId);
+
+    const businessId = req.params.id;
+
+    const business = await database.getBusinessById(businessId);
+    
+    if (business.ownerId === parseInt(userId)) {
+      res.render('edit-claim-business',
+        {
+          user,
+          business
+        }
+      );
+    } else {
+      res.render('404-error', {user})
+    }
+
+
+  });
+
 
   app.post('/businesses/:id/claim', async function(req, res) {
     const userId = req.signedCookies['userId'];
