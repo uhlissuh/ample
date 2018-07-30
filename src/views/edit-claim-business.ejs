@@ -28,32 +28,36 @@
         </div>
       </div>
 
-      <div class="form-row pledge-row">
-        <div class="col-12">
-          <h5>Take the Pledge</h5>
-          <p>
-            By taking the pledge, you will appear on our world map of inclusive
-            doctors, businesses, and services and appear in search results regardless
-            of if you have been reviewed. This is a great way to promote your business
-            to those searching for friendly businesses.
-          </p>
-          <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="pledge" name="takenPledge">
-              <label class="form-check-label" for="pledge">
-                I pledge to treat people of all genders, body sizes, races, and abilities equally.
-              </label>
+      <div class="form-row">
+        <div class=" col-lg-12 pledge-box">
+          <div class="col-12">
+            <h5 class="pledge-title">Take the Pledge</h5><span>(Optional, but highly encouraged)</span>
+            <p class="pledge-explainer">
+              By taking the pledge, you will appear on our world map of inclusive
+              doctors, businesses, and services and appear in search results regardless
+              of if you have been reviewed. This is a great way to promote your business
+              to those searching for friendly businesses.
+            </p>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="pledge" name="takenPledge">
+                <label class="form-check-label" for="pledge">
+                  I pledge to treat people of all genders, body sizes, races, and abilities equally.
+                  I will keep an open and eager mind towards learning how I might improve accessibility
+                  on an ongoing basis. To the best of my ability, I will seek to create a space
+                  and/or service that is inclusive, safe, and comfortable.
+                </label>
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-              <h5>Owner's Statement</h5>
-              <p>
-                If you take our pledge of inclusivity, you can upload a statement describing your business's philosophy.
-                Your statement can also speak to specific efforts made to make your space accessible to all.
-                This statement will be displayed on your business page.
-              </p>
-
-              <textarea class="form-control" id="owner-statement" name="ownerStatement" rows="5"><%- business.ownerStatement -%></textarea>
+            <div class="form-group">
+                <h5>Owner's Statement</h5>
+                <p>
+                  If you take our pledge of inclusivity, you can upload a statement describing your business's philosophy.
+                  Your statement can also speak to specific efforts made to make your space accessible to all.
+                  This statement will be displayed on your business page.
+                </p>
+                <textarea class="form-control" id="owner-statement" name="ownerStatement" rows="5"><%- business.ownerStatement -%></textarea>
+            </div>
           </div>
         </div>
       </div>
