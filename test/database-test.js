@@ -651,7 +651,8 @@ describe("database", () => {
   });
 
   describe("claim business", () => {
-    it("allows a logged in user to claim a business", async () => {
+
+    it("allows a logged in user to claim and update a business", async () => {
       const businessId = await database.createBusiness({
         googleId: null,
         name: 'hands on medicine',
@@ -674,6 +675,8 @@ describe("database", () => {
       assert.equal(business.ownerId, userId);
       assert.equal(business.takenPledge, true);
       assert.equal(business.ownershipConfirmed, false);
+      assert.equal(business.ownerStatement, "I'm so inclusive!");
+
 
       await database.confirmBusinessOwner(businessId);
 
@@ -681,7 +684,15 @@ describe("database", () => {
 
       assert.equal(business.ownershipConfirmed, true);
 
+      await database.updateClaimBusiness(userId, businessId, false, "I HATE INCLUSION");
+
+      business = await database.getBusinessById(businessId);
+
+      assert.equal(business.takenPledge, false);
+      assert.equal(business.ownerStatement, "I HATE INCLUSION");
+
     });
+
   })
 
   describe(".searchAddedBusinesses(query)", () => {

@@ -377,7 +377,7 @@ function (
     const businessId = req.params.id;
 
     const business = await database.getBusinessById(businessId);
-    
+
     if (business.ownerId === parseInt(userId)) {
       res.render('edit-claim-business',
         {
@@ -388,10 +388,7 @@ function (
     } else {
       res.render('404-error', {user})
     }
-
-
   });
-
 
   app.post('/businesses/:id/claim', async function(req, res) {
     const userId = req.signedCookies['userId'];
@@ -417,14 +414,20 @@ function (
       businessId = req.params.id;
     }
 
+    const business = await database.getBusinessById(businessId);
     let takenPledge
+
     if (req.body.ownsBusiness.length >= 0) {
       if (req.body.takenPledge.length >= 0) {
         takenPledge = true;
       } else {
         takenPledge = false;
       }
-      await database.claimBusiness(userId, businessId, takenPledge, req.body.ownerStatement);
+      if (!business.ownerId) {
+        await database.claimBusiness(userId, businessId, takenPledge, req.body.ownerStatement);
+      } else {
+        await database.updateClaimBusiness(userId, businessId, takenPledge, req.body.ownerStatement);
+      }
       res.redirect(`/businesses/${businessId}`);
     } else {
       res.render('error', {user});
