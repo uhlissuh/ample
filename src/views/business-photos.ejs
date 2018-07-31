@@ -1,0 +1,11 @@
+<div class=container>
+  <% for (const photo of photos) { %>
+    <div class=row>
+      <img src="<%- photo.url %>" height=500 />
+    </div>
+  <% } %>
+</div>
+
+
+<%- contentFor('title') -%>
+Ample | <%- business.name -%>

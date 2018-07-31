@@ -63,7 +63,7 @@
 
     <div class="col-12 col-lg-4 align-self-end order-1 order-lg-12 biz-image-col">
       <% if (photos.length > 0) { %>
-        <img class="img-fluid biz-img" src="<%- photos[0].url -%>"/>
+        <a href="/businesses/<%- business.id %>/photos"><img class="img-fluid biz-img" src="<%- photos[0].url -%>"/></a>
       <% } else { %>
         <img class="img-fluid biz-img" src="/static/placeholder-wide.png"/>
       <% } %>

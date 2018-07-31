@@ -518,6 +518,29 @@ function (
     res.redirect(`/businesses/${businessId}`)
   });
 
+  app.get('/businesses/:id/photos', async function(req, res) {
+    let user = null;
+    const userId = req.signedCookies['userId'];
+    if (userId) {
+      user = await database.getUserById(userId)
+    }
+
+    let business;
+    if (isGoogleId(req.params.id)) {
+      business = await database.getBusinessByGoogleId(req.params.id);
+    } else {
+      business = await database.getBusinessById(req.params.id);
+    }
+
+    const photos = await database.getBusinessPhotosById(business.id);
+
+    res.render('business-photos', {
+      business,
+      photos,
+      user
+    });
+  });
+
   app.post('/businesses/:id/photos', async function(req, res) {
     const userId = req.signedCookies['userId'];
     if (!userId) {
