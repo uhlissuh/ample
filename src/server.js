@@ -603,7 +603,7 @@ function (
 
   });
 
-  app.get('/sign-s3', async function(req, res) {
+  app.get('/signed-upload-url', async function(req, res) {
     if (!req.signedCookies['userId']) {
       res.status(401);
       res.end('You must be logged in to add photos of businesses');

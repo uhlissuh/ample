@@ -13,7 +13,7 @@ module.exports = function(fileInput, imageURLHiddenInput, previewImage) {
 
   function getSignedRequest(file) {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+    xhr.open('GET', `/signed-upload-url?file-name=${file.name}&file-type=${file.type}`);
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
