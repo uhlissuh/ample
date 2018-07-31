@@ -604,7 +604,9 @@ function (
   });
 
   app.get('/signed-upload-url', async function(req, res) {
-    if (!req.signedCookies['userId']) {
+    const userId = req.signedCookies['userId'];
+
+    if (!userId) {
       res.status(401);
       res.end('You must be logged in to add photos of businesses');
       return
@@ -612,7 +614,8 @@ function (
 
     const fileName = req.query['file-name'];
     const fileType = req.query['file-type'];
-    const data = await s3Client.getSignedURL(fileName, fileType);
+    const key = `${userId}-${new Date().getTime()}-${fileName.slice(0, 32)}`
+    const data = await s3Client.getSignedURL(key, fileType);
     res.end(JSON.stringify(data));
   });
 
