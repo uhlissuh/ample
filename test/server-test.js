@@ -253,7 +253,7 @@ describe("server", () => {
   });
 
   describe("add a photo for a business", () => {
-    it("shows that photo on the business page afterward", async () => {
+    beforeEach(() => {
       googlePlacesClient.getBusinessById = async function (id) {
         assert.equal(id, 'WX-YZ');
         return {
@@ -267,7 +267,9 @@ describe("server", () => {
           }
         }
       };
+    })
 
+    it("shows that photo on the business page afterward", async () => {
       const photoURL1 = `http://localhost:${port}/static/alissa.jpg`
       const photoURL2 = `http://localhost:${port}/static/el.jpg`
 
@@ -302,6 +304,24 @@ describe("server", () => {
         {userId, url: photoURL2, width: 250, height: 252},
       ])
     });
+
+    it("only allows JPG and PNG files", async () => {
+      logIn(userId);
+
+      // Can't upload a non-image file
+      let uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
+        'photo-url': `http://localhost:${port}/static/bundle.js`
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 422);
+      assert.equal(uploadPhotoResponse.body, 'Business photos need to be JPEG or PNG files')
+
+      // Can't upload an SVG
+      uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
+        'photo-url': `http://localhost:${port}/static/snowflake.svg`
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 422);
+      assert.equal(uploadPhotoResponse.body, 'Business photos need to be JPEG or PNG files')
+    })
   });
 
   function get(url, headers) {

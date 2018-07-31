@@ -20,7 +20,7 @@ module.exports = function(fileInput, imageURLHiddenInput, previewImage) {
           const response = JSON.parse(xhr.responseText);
           uploadFile(file, response.uploadURL, response.downloadURL);
         } else {
-          alert('Could not get signed URL.');
+          alert('Error - ' + xhr.responseText);
         }
       }
     };

@@ -545,7 +545,17 @@ function (
     }
 
     const photoURL = req.body['photo-url']
-    const photoInfo = await probeImage(photoURL)
+
+    let photoInfo
+    try {
+      photoInfo = await probeImage(photoURL)
+    } catch (_) {}
+
+    if (!photoInfo || !['png', 'jpg'].includes(photoInfo.type)) {
+      res.status(422);
+      res.end('Business photos need to be JPEG or PNG files');
+      return;
+    }
 
     await database.addBusinessPhoto(businessId, userId, {
       url: photoURL,
@@ -595,7 +605,9 @@ function (
 
   app.get('/sign-s3', async function(req, res) {
     if (!req.signedCookies['userId']) {
-      return res.end(401);
+      res.status(401);
+      res.end('You must be logged in to add photos of businesses');
+      return
     }
 
     const fileName = req.query['file-name'];
