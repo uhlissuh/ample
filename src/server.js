@@ -328,7 +328,7 @@ function (
 
     if (googleBusiness && googleBusiness.photos) {
       const googlePhoto = googleBusiness.photos[0].photo_reference;
-      photos.push({
+      photos.unshift({
         userId: null,
         width: 900,
         height: 900,
