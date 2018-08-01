@@ -19,7 +19,7 @@ Each listing on Ample now has a link for the business owner or service provider 
 
 Optionally, but importantly, business owners can take a pledge to treat people of all genders, body sizes, races, and abilities equally. By taking the pledge, businesses and providers will appear on our world map of inclusive providers. They will also appear near the top of returned search results, regardless of whether they have been reviewed. This is a great way to promote your business or service to those searching for inclusive and friendly establishments. A badge will appear on the business’ page indicating that the the owner has taken the pledge.
 
-![Image Description: An image of the Ample Pledge of Inclusivity Badge. Dark pink shield shape with globe in the center.]({{ "/assets/img/badge-blog.png" | absolute_url }})
+![Image Description: An image of the Ample Pledge of Inclusivity Badge. Dark pink shield shape with globe in the center.]({{ "/assets/img/badge-pledge-blog.png" | absolute_url }})
 
 Another perk of taking the pledge is the opportunity to upload a statement of business philosophy. This may also include mention of specific efforts towards making the space or service accessible to all. This statement will be displayed on the listing for the business along with the pledge badge.
 
