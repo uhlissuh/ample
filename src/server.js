@@ -59,15 +59,16 @@ function (
 
     const categories = await database.getAllCategories();
 
-    let allReviews = await cache.get("reviews");
-    if (!allReviews) {
-      allReviews = await database.getAllReviewsForMap();
-      await cache.set("reviews", allReviews, 900);
+
+    let allBusinessesForMap = await cache.get("allBusinessesForMap");
+    if (!allBusinessesForMap) {
+      allBusinessesForMap = await database.getAllBusinessesForMap();
+      await cache.set("allBusinessesForMap", allBusinessesForMap, 900);
     }
 
-    let recentReviews = [];
-
-    for (let review of allReviews) {
+    const recentReviews = await database.getMostRecentReviews();
+    let reviewsForCards = []
+    for (let review of recentReviews) {
       if (review.businessGoogleId) {
         let googleBusiness = await cache.get(review.businessGoogleId);
         if (!googleBusiness) {
@@ -75,8 +76,8 @@ function (
         }
         if (googleBusiness.photos) {
           review["photoURL"] = googlePlacesClient.getPhotoURL(googleBusiness.photos[0].photo_reference, 500, 500);
-          recentReviews.push(review);
-          if (recentReviews.length == 3) {
+          reviewsForCards.push(review);
+          if (reviewsForCards.length == 3) {
             break;
           }
         }
@@ -86,11 +87,11 @@ function (
     res.render('index',
       {
         user,
-        recentReviews: recentReviews ? recentReviews : null,
+        recentReviews: reviewsForCards ? reviewsForCards : null,
         categories,
         isMobile,
         abbreviateAddress,
-        allReviews
+        allBusinessesForMap
       }
     )
   });
@@ -365,7 +366,8 @@ function (
     res.render('claim-business',
       {
         user,
-        businessId
+        businessId,
+        childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
       }
     );
   });
@@ -388,7 +390,9 @@ function (
       res.render('edit-claim-business',
         {
           user,
-          business
+          business,
+          childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
+
         }
       );
     } else {
@@ -405,29 +409,45 @@ function (
       return;
     }
 
+    let categories = [req.body['parent-category']];
+    if (req.body['child-category']) {
+      categories.push(req.body['child-category']);
+    }
+
     let businessId;
     if (isGoogleId(req.params.id)) {
       const googleBusiness = await googlePlacesClient.getBusinessById(req.params.id)
-      businessId = await database.createBusiness({
+      const businessForSubmission = {
         googleId: req.params.id,
         name: googleBusiness.name,
         latitude: googleBusiness.geometry.location.lat,
         longitude: googleBusiness.geometry.location.lng,
         phone: googleBusiness.formatted_phone_number,
-        address: googleBusiness.formatted_address
-      })
+        address: googleBusiness.formatted_address,
+        categories: categories
+      }
+
+
+
+      businessId = await database.createBusiness(businessForSubmission)
     } else {
       businessId = req.params.id;
     }
 
+    const business = await database.getBusinessById(businessId);
     let takenPledge
+
     if (req.body.ownsBusiness.length >= 0) {
       if (req.body.takenPledge.length >= 0) {
         takenPledge = true;
       } else {
         takenPledge = false;
       }
-      await database.claimBusiness(userId, businessId, takenPledge, req.body.ownerStatement);
+      if (!business.ownerId) {
+        await database.claimBusiness(userId, businessId, takenPledge, req.body.ownerStatement);
+      } else {
+        await database.updateClaimBusiness(userId, businessId, takenPledge, req.body.ownerStatement, categories);
+      }
       res.redirect(`/businesses/${businessId}`);
     } else {
       res.render('error', {user});

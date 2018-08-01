@@ -304,6 +304,10 @@ html {
   color: #EB6E79;
 }
 
+.taken-pledge-words {
+  color: #6BCFFB;
+}
+
 .login-button {
   padding-top: 100px;
 }
@@ -582,15 +586,27 @@ a:hover {
   width: 50px;
 }
 
-.pledge-row {
-  border-top: .5px solid #d3d3d3;
-  padding-top: 25px;
+
+.pledge-box {
+  background-color: #EBEBEB;
+  border-radius: 8px;
+  padding-top: 10px;
+  margin-bottom: 10px;
 }
 
 .business-badge {
   display: block;
   text-align: center;
   float: left;
+  padding-top: 5px;
+}
+
+.pledge-title {
+  display: inline;
+  margin-right: 5px;
+}
+
+.pledge-explainer {
   padding-top: 5px;
 }
 
@@ -651,7 +667,7 @@ a:hover {
 
   .business-header {
     margin-top: 0px;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
     border-bottom: 0px;
     padding-bottom: 0px;
   }

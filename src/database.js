@@ -337,6 +337,28 @@ exports.claimBusiness = async function(userId, businessId, takenPledge, ownerSta
   )
 }
 
+exports.updateClaimBusiness = async function(userId, businessId, takenPledge, ownerStatement, categories) {
+  await db.query(
+    `
+      update businesses
+      set
+        owner_id = $1,
+        taken_pledge = $2,
+        owner_statement = $3,
+        category_ids = $4::int[]
+      where
+        id = $5
+    `,
+    [
+      userId,
+      takenPledge,
+      ownerStatement,
+      (categories || []).map(getCategoryId),
+      businessId
+    ]
+  )
+};
+
 exports.confirmBusinessOwner = async function(businessId) {
   await db.query(
     `
@@ -479,7 +501,8 @@ exports.getMostRecentReviews = async function() {
     select
       *,
       users.name as user_name,
-      reviews.id as review_id
+      reviews.id as review_id,
+      businesses.google_id as business_google_id
     from
       reviews, users, businesses
     where
@@ -488,13 +511,14 @@ exports.getMostRecentReviews = async function() {
     order by
       reviews.timestamp
       desc
-    limit 3`
+    limit 15`
   );
+
   return rows.map(row => {
     return {
       id: row.review_id,
       content: row.content,
-      businessGoogleId: row.google_id,
+      businessGoogleId: row.business_google_id,
       businessId: row.business_id,
       businessName: row.name,
       businessAddress: row.address,
@@ -510,44 +534,45 @@ exports.getMostRecentReviews = async function() {
   });
 }
 
-exports.getAllReviewsForMap = async function() {
+exports.getAllBusinessesForMap = async function() {
   const rows = await db.query(
     `select
       *,
       ST_x(businesses.coordinates) as latitude,
-      ST_y(businesses.coordinates) as longitude,
-      users.name as user_name,
-      reviews.id as review_id
+      ST_y(businesses.coordinates) as longitude
     from
-      reviews, users, businesses
-    where
-      reviews.user_id = users.id and
-      reviews.business_id = businesses.id
-      order by reviews.timestamp desc
-      `
+      businesses
+    order by
+      businesses.id desc
+    `
   );
 
-  return rows.map(row => {
-    return {
-      id: row.review_id,
-      content: row.content,
-      businessGoogleId: row.google_id,
-      businessId: row.business_id,
-      businessName: row.name,
-      businessAddress: row.address,
-      businessLatitude: row.latitude,
-      businessLongitude: row.longitude,
-      timestamp: row.timestamp.getTime(),
-      fatRating: row.fat_rating,
-      transRating: row.trans_rating,
-      disabledRating: row.disabled_rating,
-      pocRating: row.poc_rating,
-      user: {
-        id: row.user_id,
-        name: row.user_name
-      },
-    };
-  });
+  const result = [];
+
+  for (let row of rows) {
+    console.log(row.id);
+    if (row.review_count > 0 || (row.taken_pledge && row.owner_is_confirmed)) {
+      result.push({
+        id: row.id,
+        googleId: row.google_id,
+        name: row.name,
+        businessAddress: row.address,
+        businessLatitude: row.latitude,
+        businessLongitude: row.longitude,
+        reviewCount: row.review_count,
+        fatRating: row.fat_rating,
+        transRating: row.trans_rating,
+        disabledRating: row.disabled_rating,
+        pocRating: row.poc_rating,
+        ownerId: row.owner_id,
+        takenPledge: row.taken_pledge,
+        ownerStatement: row.owner_statement,
+        ownershipConfirmed: row.owner_is_confirmed
+      });
+    }
+  };
+
+  return result;
 }
 
 exports.updateBusinessScore = async function(businessId, score) {

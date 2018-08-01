@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <form class="add-business-form"  method="POST" action="/businesses/<%- business.id %>/claim/edit">
+  <form class="add-business-form"  method="POST" action="/businesses/<%- business.id %>/claim">
     <div class="col-lg-10 offset-md-1 inner-form">
       <div class="form-row">
         <div class="col-12">
@@ -28,32 +28,51 @@
         </div>
       </div>
 
-      <div class="form-row pledge-row">
-        <div class="col-12">
-          <h5>Take the Pledge</h5>
-          <p>
-            By taking the pledge, you will appear on our world map of inclusive
-            doctors, businesses, and services and appear in search results regardless
-            of if you have been reviewed. This is a great way to promote your business
-            to those searching for friendly businesses.
-          </p>
-          <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="pledge" name="takenPledge">
-              <label class="form-check-label" for="pledge">
-                I pledge to treat people of all genders, body sizes, races, and abilities equally.
-              </label>
-            </div>
-          </div>
-          <div class="form-group">
-              <h5>Owner's Statement</h5>
-              <p>
-                If you take our pledge of inclusivity, you can upload a statement describing your business's philosophy.
-                Your statement can also speak to specific efforts made to make your space accessible to all.
-                This statement will be displayed on your business page.
-              </p>
+      <div class="row form-group">
+        <div class="col-12 col-lg-5">
+          <small for="parent-category">Help us to know what kind of business this is.</small>
+          <select id="parent-category-select" class="form-control" name="parent-category">
+            <option disabled>Select a category</option>
+          </select>
+        </div>
 
-              <textarea class="form-control" id="owner-statement" name="ownerStatement" rows="5"><%- business.ownerStatement -%></textarea>
+        <div class="col-12 col-lg-5">
+          <small for="parent-category">Some subcategories...</small>
+          <select id="child-category-select" class="form-control" name="child-category">
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class=" col-lg-12 pledge-box">
+          <div class="col-12">
+            <h5 class="pledge-title">Take the Pledge</h5><span>(Optional, but highly encouraged)</span>
+            <p class="pledge-explainer">
+              By taking the pledge, you will appear on our world map of inclusive
+              doctors, businesses, and services and appear in search results regardless
+              of if you have been reviewed. This is a great way to promote your business
+              to those searching for friendly businesses.
+            </p>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="pledge" name="takenPledge">
+                <label class="form-check-label" for="pledge">
+                  I pledge to treat people of all genders, body sizes, races, and abilities equally.
+                  I will keep an open and eager mind towards learning how I might improve accessibility
+                  on an ongoing basis. To the best of my ability, I will seek to create a space
+                  and/or service that is inclusive, safe, and comfortable.
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+                <h5>Owner's Statement</h5>
+                <p>
+                  If you take our pledge of inclusivity, you can upload a statement describing your business's philosophy.
+                  Your statement can also speak to specific efforts made to make your space accessible to all.
+                  This statement will be displayed on your business page.
+                </p>
+                <textarea class="form-control" id="owner-statement" name="ownerStatement" rows="5"><%- business.ownerStatement -%></textarea>
+            </div>
           </div>
         </div>
       </div>
@@ -66,6 +85,7 @@
       </div>
     </div>
   </form>
+</div>
 <div class="push">
 </div>
 
@@ -73,6 +93,41 @@
   const business = <%- JSON.stringify(business) %>;
   if (business.takenPledge) {
     document.getElementById('pledge').checked = true;
+  }
+
+  const childCategoriesByParentCategory = <%- JSON.stringify(childCategoriesByParentCategory) %>;
+  const initialCategories = <%- JSON.stringify(business.categories) %>;
+
+  const parentCategorySelect = document.getElementById('parent-category-select');
+  const childCategorySelect = document.getElementById('child-category-select');
+
+  for (const parentCategory in childCategoriesByParentCategory) {
+    const option = document.createElement('option');
+    option.value = parentCategory;
+    option.innerText = parentCategory;
+    if (parentCategory === initialCategories[0]) {
+      option.selected = 'selected';
+    }
+    parentCategorySelect.appendChild(option);
+  }
+
+  parentCategorySelect.addEventListener('change', () => populateChildCategories());
+  populateChildCategories(initialCategories[1]);
+
+  function populateChildCategories(selectedChildCategory) {
+    const parentCategory = parentCategorySelect.value;
+    const childCategories = childCategoriesByParentCategory[parentCategory];
+    childCategorySelect.innerHTML = '<option></option>';
+
+    for (const childCategory of childCategories) {
+      const option = document.createElement('option');
+      if (childCategory === selectedChildCategory) {
+        option.selected = 'selected';
+      }
+      option.value = childCategory;
+      option.innerText = childCategory;
+      childCategorySelect.appendChild(option);
+    }
   }
 </script>
 

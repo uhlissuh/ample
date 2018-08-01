@@ -166,7 +166,7 @@
 <script>
 let map;
 
-const reviews = <%- JSON.stringify(allReviews) %>
+const businesses = <%- JSON.stringify(allBusinessesForMap) %>
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -179,20 +179,27 @@ function initMap() {
   let infoWindow = new google.maps.InfoWindow();
 
   let markers = [];
-  for (review of reviews) {
-    const previewContent = review.content.split(".")[0] + "...";
+  let previewContent
+  for (business of businesses) {
+    if (business.reviewCount) {
+      previewContent = business.reviewCount + " reviews"
+    } else {
+      if (business.takenPledge && business.ownershipConfirmed) {
+        previewContent = "This business hasn't been reviewed yet, but they've taken our Pledge of Inclusivity!"
+      }
+    }
     let marker = new google.maps.Marker(
       {
-        position: {lat: review.businessLatitude, lng: review.businessLongitude},
+        position: {lat: business.businessLatitude, lng: business.businessLongitude},
         map: map,
         info:
-          `<a style="color: black;" href="/businesses/${review.businessId}">
-          <h6>${review.businessName}</h6>
-          <p style="color: #A9A9A9;">${review.businessAddress}</p>
+          `<a style="color: black;" href="/businesses/${business.id}">
+          <h6>${business.name}</h6>
+          <p style="color: #A9A9A9;">${business.businessAddress}</p>
           <div>
             ${previewContent}
           </div>
-          <a style="float: right;" href="/businesses/${review.businessId}">see more</a>
+          <a style="float: right;" href="/businesses/${business.id}">see more</a>
           </a>
           `
       }
@@ -207,7 +214,7 @@ function initMap() {
           maxWidth: 300
         }
       );
-      infoWindow.open( map, marker);
+      infoWindow.open(map, marker);
     });
   }
 

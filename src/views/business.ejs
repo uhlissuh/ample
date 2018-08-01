@@ -14,7 +14,7 @@
 
       <div id="score-row" class="row score-row">
         <% if (reviews.length != 0) { %>
-          <div class="col-4 col-lg-3 rating-doodad">
+          <div class="col-lg-3 rating-doodad">
             <span class="summary-item">
               <%- business.overallRating -%>
             </span>
@@ -23,7 +23,7 @@
             <span>Overall Rating</span>
           </div>
 
-          <div class="col-4 col-lg-3 rating-doodad">
+          <div class="col-lg-3 rating-doodad">
             <span class="summary-item">
               <%- business.reviewCount -%>
             </span>
@@ -36,7 +36,7 @@
         <% if (business.ownershipConfirmed && business.takenPledge) { %>
           <div class="col-4 col-lg-3 rating-doodad align-self-end">
             <div class="business-badge">
-              <img src="/static/badge.png"/>
+              <img src="/static/pledgeBadge.png"/>
               <br />
               <span>Taken Pledge</span>
             </div>
@@ -50,15 +50,15 @@
         </div>
       </div>
 
-      <div class="row tags-row">
-        <div class="col-12">
-          <% if (business.tags && business.tags.length != 0) { %>
-            <% for (const tag of business.tags.slice(0, 6)) { %>
-              <span class="tag-list-item tag-list-item-display"><%- tag -%></span>
-            <% } %>
-          <% } %>
+      <% if (business.tags && business.tags.length != 0) { %>
+        <div class="row tags-row">
+          <div class="col-12">
+              <% for (const tag of business.tags.slice(0, 6)) { %>
+                <span class="tag-list-item tag-list-item-display"><%- tag -%></span>
+              <% } %>
+          </div>
         </div>
-      </div>
+      <% } %>
     </div>
 
     <div class="col-12 col-lg-4 align-self-end order-1 order-lg-12 biz-image-col">
@@ -200,6 +200,18 @@
   )
 
   const scoreRow = document.getElementById('score-row');
+
+  const ratingDoodads = document.getElementsByClassName('rating-doodad');
+  if (<%-JSON.stringify(business.ownershipConfirmed)%> && <%-JSON.stringify(business.takenPledge)%>) {
+    for (let ratingDoodad of ratingDoodads) {
+      ratingDoodad.classList.add('col-4');
+    }
+  } else {
+    for (let ratingDoodad of ratingDoodads) {
+      ratingDoodad.classList.add('col-6');
+    }
+  }
+
 
   if (<%-JSON.stringify(reviews)%>.length == 0)  {
     scoreRow.classList.add('no-reviews');

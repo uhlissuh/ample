@@ -65,6 +65,7 @@ class BusinessSearch {
     return results.sort((a, b) => {
       if (a.overallRating > b.overallRating) return -1;
       if (b.overallRating > a.overallRating) return 1;
+      if (a.takenPledge && !b.takenPledge) return -1;
       if (!a.googleId && b.googleId) return -1;
       if (!b.googleId && a.googleId) return 1;
       return 0;
