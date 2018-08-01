@@ -312,6 +312,11 @@ html {
   padding-top: 100px;
 }
 
+#add-photo-preview {
+  margin-top: 20px;
+  max-width: 100%;
+}
+
 a {
   color: #FDA972;
 }
