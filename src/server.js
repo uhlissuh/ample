@@ -360,7 +360,8 @@ function (
     res.render('claim-business',
       {
         user,
-        businessId
+        businessId,
+        childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
       }
     );
   });
@@ -383,7 +384,9 @@ function (
       res.render('edit-claim-business',
         {
           user,
-          business
+          business,
+          childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory(),
+
         }
       );
     } else {
@@ -400,17 +403,27 @@ function (
       return;
     }
 
+    let categories = [req.body['parent-category']];
+    if (req.body['child-category']) {
+      categories.push(req.body['child-category']);
+    }
+
     let businessId;
     if (isGoogleId(req.params.id)) {
       const googleBusiness = await googlePlacesClient.getBusinessById(req.params.id)
-      businessId = await database.createBusiness({
+      const businessForSubmission = {
         googleId: req.params.id,
         name: googleBusiness.name,
         latitude: googleBusiness.geometry.location.lat,
         longitude: googleBusiness.geometry.location.lng,
         phone: googleBusiness.formatted_phone_number,
-        address: googleBusiness.formatted_address
-      })
+        address: googleBusiness.formatted_address,
+        categories: categories
+      }
+
+
+
+      businessId = await database.createBusiness(businessForSubmission)
     } else {
       businessId = req.params.id;
     }
@@ -427,7 +440,7 @@ function (
       if (!business.ownerId) {
         await database.claimBusiness(userId, businessId, takenPledge, req.body.ownerStatement);
       } else {
-        await database.updateClaimBusiness(userId, businessId, takenPledge, req.body.ownerStatement);
+        await database.updateClaimBusiness(userId, businessId, takenPledge, req.body.ownerStatement, categories);
       }
       res.redirect(`/businesses/${businessId}`);
     } else {

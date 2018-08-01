@@ -28,6 +28,25 @@
         </div>
       </div>
 
+      <div class="row form-group">
+        <div class="col-12 col-lg-6">
+          <small for="parent-category">Help us to know what kind of business this is.</small>
+          <select id="parent-category-select" class="form-control" name="parent-category">
+            <option disabled selected="selected" value="">Select a category</option>
+            <% for (const category in childCategoriesByParentCategory) { %>
+              <option value="<%- category -%>"><%- category -%></option>
+            <% } %>
+          </select>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <small for="parent-category">Optionally, add a subcategory.</small>
+          <select id="child-category-select" class="form-control" name="child-category">
+          </select>
+        </div>
+      </div>
+
+
       <div class="form-row">
         <div class=" col-lg-12 pledge-box">
           <div class="col-12">
@@ -72,6 +91,26 @@
   </form>
 <div class="push">
 </div>
+
+<script>
+const childCategoriesByParentCategory = <%- JSON.stringify(childCategoriesByParentCategory) %>;
+
+const parentCategorySelect = document.getElementById('parent-category-select');
+const childCategorySelect = document.getElementById('child-category-select');
+parentCategorySelect.addEventListener('change', (event) => {
+  const parentCategory = parentCategorySelect.value;
+  const childCategories = childCategoriesByParentCategory[parentCategory];
+  childCategorySelect.innerHTML = '<option></option>';
+
+  for (const childCategory of childCategories) {
+    const option = document.createElement('option');
+    option.innerText = childCategory;
+    option.value = childCategory;
+    childCategorySelect.appendChild(option);
+  }
+});
+
+</script>
 
 <%- contentFor('title') -%>
 Ample | Claim Business

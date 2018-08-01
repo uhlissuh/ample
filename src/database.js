@@ -337,17 +337,25 @@ exports.claimBusiness = async function(userId, businessId, takenPledge, ownerSta
   )
 }
 
-exports.updateClaimBusiness = async function(userId, businessId, takenPledge, ownerStatement) {
+exports.updateClaimBusiness = async function(userId, businessId, takenPledge, ownerStatement, categories) {
   await db.query(
     `
       update businesses
       set
         owner_id = $1,
         taken_pledge = $2,
-        owner_statement = $3
+        owner_statement = $3,
+        category_ids = $4::int[]
       where
-        id = $4
-    `, [userId, takenPledge, ownerStatement, businessId]
+        id = $5
+    `,
+    [
+      userId,
+      takenPledge,
+      ownerStatement,
+      (categories || []).map(getCategoryId),
+      businessId
+    ]
   )
 };
 
