@@ -77,6 +77,12 @@ header {
     }
 }
 
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 // Responsive scrolling
 .feature-image header {
     @media screen and (max-width: $break) {
