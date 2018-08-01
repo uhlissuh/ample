@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Claim Your Business and Take our Inclusivity Pledge"
-thumbnail: "assets/img/woman-at-laptop-claim.jpg"
+thumbnail: "assets/img/woman-at-laptop-ample.jpg"
 author: El Poché and Alissa Sobo
 excerpt_separator: <!--more-->
 
@@ -9,7 +9,7 @@ excerpt_separator: <!--more-->
 date: 2018-08-01
 tags: [new features]
 ---
-![Image Description: A woman with African American identity sits at a laptop. She is smiling and wearing a pink sweater.]({{ "/assets/img/woman-at-laptop-claim.jpg" | absolute_url }})
+![Image Description: A woman with African American identity sits at a laptop. She is smiling and wearing a pink sweater.]({{ "/assets/img/woman-at-laptop-ample.jpg" | absolute_url }})
 
 Each listing on Ample now has a link for the business owner or service provider to claim their page on the Ample platform. To claim, click the blue claim button near the business title. You will then be prompted to fill out a small online form so Ample can verify the legitimacy of the claim. There are perks to claiming your business.
 
