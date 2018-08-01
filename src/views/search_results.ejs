@@ -80,7 +80,8 @@
                       <div class="star-rating search-results-star-rating" data-value= "<%=business.overallRating %>" data-size="small"></div>
                       <span class="review-count">(<%= business.reviewCount %>)</span>
                     </div>
-
+                  <% } else if (business.takenPledge && business.ownershipConfirmed) { %>
+                    <span class="score-grouping"><a class="taken-pledge-words" href="<%- businessURL -%>">Taken the Inclusivity Pledge!</a></span>
                   <% } else { %>
                     <span class="score-grouping"><a class="be-first-words" href="<%- businessURL -%>">Be the first to review</a></span>
                   <% } %>
