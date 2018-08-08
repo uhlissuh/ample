@@ -66,19 +66,14 @@ function (
 
     const recentReviews = await database.getMostRecentReviews();
 
-    console.log('========================');
-    console.log('recent', recentReviews.map(r => [r.id, r.businessGoogleId]));
-
     let reviewsForCards = []
     for (let review of recentReviews) {
       if (review.businessGoogleId) {
         let googleBusiness = await cache.get(review.businessGoogleId);
         if (!googleBusiness) {
-          console.log('cache miss', review.id);
           googleBusiness = await googlePlacesClient.getBusinessById(review.businessGoogleId);
           cache.set(review.businessGoogleId, googleBusiness, 10)
         } else {
-          console.log('cache hit', review.id);
         }
         if (googleBusiness.photos) {
           review["photoURL"] = googlePlacesClient.getPhotoURL(googleBusiness.photos[0].photo_reference, 500, 500);
@@ -89,8 +84,6 @@ function (
         }
       }
     }
-
-    console.log('cards', reviewsForCards.map(r => r.id));
 
     res.render('index',
       {
