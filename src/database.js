@@ -550,7 +550,6 @@ exports.getAllBusinessesForMap = async function() {
   const result = [];
 
   for (let row of rows) {
-    console.log(row.id);
     if (row.review_count > 0 || (row.taken_pledge && row.owner_is_confirmed)) {
       result.push({
         id: row.id,
