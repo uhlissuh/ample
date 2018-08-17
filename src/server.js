@@ -548,7 +548,6 @@ function (
          city +  ", "  + req.body.state +  ", " + req.body.country;
 
       const geometry = await googlePlacesClient.getCoordinatesForLocationName(formattedAddress);
-      console.log(geometry);
 
       let business = {
         name: req.body.name,
