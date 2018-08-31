@@ -24,7 +24,7 @@ html {
 }
 
 .push {
-  height: 90px;
+  height: 110px;
 }
 
 .summary-item {
@@ -400,12 +400,21 @@ a:hover {
 .bottom-nav {
   padding-top: 15px;
   background-color: #F5DCDE;
-  height: 80px;
+  height: 100px;
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
   overflow: hidden;
+}
+
+.privacy-pol {
+  color: #EB6E79;
+  font-size: 11px;
+}
+
+.privacy {
+  margin-top: 40px;
 }
 
 .business-overall-rating {

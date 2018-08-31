@@ -108,6 +108,17 @@ function (
     });
   });
 
+  app.get('/privacypolicy', async (req, res) => {
+    let user = null;
+    if (req.signedCookies['userId']) {
+      user = await database.getUserById(req.signedCookies['userId']);
+    }
+
+    res.render('privacy-policy', {
+      user: user,
+    });
+  });
+
 
   app.get('/feedback', async (req, res) => {
     let user = null;
