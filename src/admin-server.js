@@ -30,9 +30,9 @@ function (users) {
     const pendingTags = await database.getPendingTags();
     const allReviews = await database.getAllReviews();
     const businessesWithUnconfirmedOwners = await database.getBusinessesWithUnconfirmedOwners();
-    console.log(businessesWithUnconfirmedOwners);
+
     allReviews.map(review => review.date = new Date(review.timestamp).toDateString())
-    res.render('admin/admin-dashboard', { pendingTags, user: null, allReviews, businessesWithUnconfirmedOwners });
+    res.render('admin/admin-dashboard', { pendingTags, user: null, allReviews, businessesWithUnconfirmedOwners});
   });
 
   app.post('/approve-tag', async (req, res) => {
@@ -43,12 +43,24 @@ function (users) {
   });
 
   app.post('/approve-owner', async (req, res) => {
-    console.log("getting post");
-    console.log("body", req.body);
     const businessId = req.body.businessId;
 
     await database.approveOwner(businessId);
     res.redirect('/admin');
+  });
+
+  app.post('/amplify', async (req, res) => {
+    const email = req.body.email;
+
+    const result = await database.setAmplifierStatus(email, true);
+
+    if (result == false) {
+      res.send('there is no email existing');
+    } else {
+      console.log("email good");
+      res.redirect('/admin');
+    }
+
   });
 
   return app;

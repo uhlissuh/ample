@@ -267,6 +267,7 @@ function (
     const userId = req.signedCookies['userId'];
     if (userId) {
       user = await database.getUserById(req.signedCookies['userId'])
+      
     }
 
     let googleId, existingBusiness;
@@ -332,14 +333,19 @@ function (
         ownerId: existingBusiness.ownerId,
         takenPledge: existingBusiness.takenPledge,
         ownershipConfirmed: existingBusiness.ownershipConfirmed,
-        ownerStatement: existingBusiness.ownerStatement
+        ownerStatement: existingBusiness.ownerStatement,
+        amplifierId: existingBusiness.amplifierId
       };
     } else {
       business = {
         id: googleBusiness.place_id,
         name: googleBusiness.name,
         address: googleBusiness.formatted_address,
-        phone: googleBusiness.formatted_phone_number
+        phone: googleBusiness.formatted_phone_number,
+        ownershipConfirmed: false,
+        takenPledge: false,
+        ownerStatement: false,
+        reviewCount: 0
       }
     }
 
