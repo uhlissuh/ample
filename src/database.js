@@ -782,6 +782,7 @@ exports.getUserById = async function(id) {
       facebookId: row.facebook_id,
       googleId: row.google_id,
       email: row.email,
+      isAmplifier: row.is_amplifier
     }
   }
 };
@@ -867,6 +868,25 @@ exports.getProfileInformationForUser = async function(userId) {
     select * from reviews where user_id = $1
   `, [userId]);
   return {reviews: await reviewsFromRows(db, reviewRows)};
+}
+
+exports.setAmplifierStatus = async function(email, bool) {
+  const row = await db.query(`select * from users where email = $1`, [email])
+
+  if (row.length == 0) {
+    return false;
+  } else {
+      await db.query(`
+        update users
+        set is_amplifier = $1
+        where email = $2
+        `, [
+          bool,
+          email
+        ]
+      );
+      return true;
+  }
 }
 
 const RATING_BREAKDOWN_QUERY_COLUMNS = [];

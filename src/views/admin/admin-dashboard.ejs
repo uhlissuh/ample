@@ -1,5 +1,13 @@
 <div class="container">
 
+  <div class="row">
+    <h2>Add Amplifier Status to a User</h2>
+
+    <form id="create-amplifier-form" class="col-8" method="POST" action="/admin/amplify">
+      <input name="email" class="form-control" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="email" placeholder="Enter email">
+      <a class="btn btn-primary create-amplifier">Amplify</a>
+    </form>
+  </div>
 
   <ul class="list-group">
     <h2>Pending tags:</h2>
@@ -105,6 +113,10 @@ document.addEventListener('click', event => {
     if (confirm(`Are you sure you want to approve the owner?`)) {
       document.getElementById('approve-owner-businessId').value = businessId;
       document.getElementById('approve-owner-form').submit();
+    }
+  } else if (event.target.classList.contains('create-amplifier')){
+    if (confirm(`Are you sure you want to make this person an amplifier?`)) {
+      document.getElementById('create-amplifier-form').submit();
     }
   }
 });
