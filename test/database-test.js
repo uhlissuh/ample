@@ -532,6 +532,7 @@ describe("database", () => {
         googleId: null,
         name: 'John Smith',
         email: 'john@example.com',
+        isAmplifier: null
       })
     });
   });
@@ -603,7 +604,8 @@ describe("database", () => {
           facebookId: '123',
           googleId: null,
           name: 'Harold',
-          email: 'harold@example.com'
+          email: 'harold@example.com',
+          isAmplifier: null
         });
       });
 
@@ -627,6 +629,7 @@ describe("database", () => {
           googleId: null,
           name: 'Shmarold',
           email: 'shmarold@example.com',
+          isAmplifier: null
         });
       });
 
@@ -650,6 +653,7 @@ describe("database", () => {
           googleId: '123',
           name: 'Shmarold',
           email: 'harold@example.com',
+          isAmplifier: null
         });
       });
     });
@@ -675,6 +679,7 @@ describe("database", () => {
           googleId: '456',
           name: 'Shmarold',
           email: 'harold@example.com',
+          isAmplifier: null
         });
       });
 
@@ -698,6 +703,7 @@ describe("database", () => {
           facebookId: null,
           name: 'Shmarold',
           email: 'shmarold@example.com',
+          isAmplifier: null
         });
       });
     });
@@ -793,4 +799,42 @@ describe("database", () => {
       assert.equal(businesses.length, 0);
     });
   });
+
+  describe("amplifiers", () => {
+    let userId, businessId
+
+    beforeEach(async () => {
+      userId = await database.createUser({
+        facebookId: '567',
+        name: 'Bob Carlisle',
+        email: 'bobcar@example.com',
+
+      })
+
+      businessId = await database.createBusiness({
+        googleId: "dr-brain",
+        name: 'Dr Brain',
+        address: '123 Main St',
+        phone: '555-555-5555',
+        latitude: 37.767423217936834,
+        longitude: -122.42821739746094
+      })
+    });
+
+    it.only("adds amplifier status to a user", async () => {
+      const result1 = await database.setAmplifierStatus('bobcar@example.com', true);
+
+      const user1 = await database.getUserById(userId);
+
+      assert.equal(result1, true);
+      assert.equal(user1.isAmplifier, true);
+
+      const result2 = await database.setAmplifierStatus('wackyemail@example.com')
+
+      assert.equal(result2, false);
+
+
+    });
+  });
+
 });

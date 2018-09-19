@@ -5,11 +5,20 @@
 
         <h1 class="biz-name"><%- business.name -%></h1>
         <p class="business-address"> <%- business.address -%></p>
-        <div class="phone-and-claim">
-          <div class="business-phone"> <%- business.phone -%></div>
-          <% if (!business.ownershipConfirmed) { %>
-          <a href="/businesses/<%- business.id -%>/claim" class="badge badge-info">claim</a>
-          <% } %>
+        <div class="row">
+          <div class="col-5 col-lg-3 phone-number-col">
+            <div class="business-phone"> <%- business.phone -%></div>
+          </div>
+          <div class="col-2 col-lg-2 claim-button-col">
+            <% if (!business.ownershipConfirmed) { %>
+            <a href="/businesses/<%- business.id -%>/claim" class="claim-button float-left">Claim</a>
+            <% } %>
+          </div>
+          <div class="col-5 col-lg-2 amplify-button-col">
+            <% if (user && user.isAmplifier && !business.amplifierId) { %>
+              <a href="/businesses/<%- business.id -%>/amplify" class="amplify-button">Amplify</a>
+            <% } %>
+          </div>
         </div>
 
       <div id="score-row" class="row score-row">
@@ -96,10 +105,10 @@
 
   <div class="row reviews-header">
     <div class="col-4 col-lg-2">
-      <h3 class="review">Reviews</h3>
+      <h3 class="reviews-title">Reviews</h3>
     </div>
 
-    <div class="col-6 col-lg-3">
+    <div class="col-8 col-lg-3">
       <% if (!hasReviewedThisBusiness) { %>
         <form method="GET" action="/businesses/<%- business.id -%>/reviews/new">
           <input name="name" type="hidden" value="<%- business.name -%>"/>
@@ -148,6 +157,7 @@
           </ul>
       <% } else { %>
         <div class="no-reviews-yet">This establishment has no reviews on Ample yet!</div>
+
       <% } %>
     </div>
   </div>

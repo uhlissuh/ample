@@ -67,12 +67,15 @@ function (
     }
 
     const recentReviews = await database.getMostRecentReviews();
+
     let reviewsForCards = []
     for (let review of recentReviews) {
       if (review.businessGoogleId) {
         let googleBusiness = await cache.get(review.businessGoogleId);
         if (!googleBusiness) {
           googleBusiness = await googlePlacesClient.getBusinessById(review.businessGoogleId);
+          cache.set(review.businessGoogleId, googleBusiness, 10)
+        } else {
         }
         if (googleBusiness.photos) {
           review["photoURL"] = googlePlacesClient.getPhotoURL(googleBusiness.photos[0].photo_reference, 500, 500);
@@ -106,6 +109,18 @@ function (
       user: user,
     });
   });
+
+  app.get('/privacypolicy', async (req, res) => {
+    let user = null;
+    if (req.signedCookies['userId']) {
+      user = await database.getUserById(req.signedCookies['userId']);
+    }
+
+    res.render('privacy-policy', {
+      user: user,
+    });
+  });
+
 
   app.get('/feedback', async (req, res) => {
     let user = null;
@@ -253,6 +268,7 @@ function (
     const userId = req.signedCookies['userId'];
     if (userId) {
       user = await database.getUserById(req.signedCookies['userId'])
+      
     }
 
     let googleId, existingBusiness;
@@ -314,14 +330,19 @@ function (
         ownerId: existingBusiness.ownerId,
         takenPledge: existingBusiness.takenPledge,
         ownershipConfirmed: existingBusiness.ownershipConfirmed,
-        ownerStatement: existingBusiness.ownerStatement
+        ownerStatement: existingBusiness.ownerStatement,
+        amplifierId: existingBusiness.amplifierId
       };
     } else {
       business = {
         id: googleBusiness.place_id,
         name: googleBusiness.name,
         address: googleBusiness.formatted_address,
-        phone: googleBusiness.formatted_phone_number
+        phone: googleBusiness.formatted_phone_number,
+        ownershipConfirmed: false,
+        takenPledge: false,
+        ownerStatement: false,
+        reviewCount: 0
       }
     }
 
@@ -621,7 +642,6 @@ function (
          city +  ", "  + req.body.state +  ", " + req.body.country;
 
       const geometry = await googlePlacesClient.getCoordinatesForLocationName(formattedAddress);
-      console.log(geometry);
 
       let business = {
         name: req.body.name,

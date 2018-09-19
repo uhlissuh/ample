@@ -79,7 +79,8 @@ describe("server", () => {
           email: 'bob@example.com',
           name: 'Bob',
           facebookId: '12345',
-          googleId: null
+          googleId: null,
+          isAmplifier: null
         });
 
         assert.equal(response.statusCode, 302);
