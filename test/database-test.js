@@ -44,7 +44,8 @@ describe("database", () => {
         ownerId: null,
         ownerStatement: null,
         ownershipConfirmed: null,
-        takenPledge: null
+        takenPledge: null,
+        amplifierId: null
       })
 
       assert.deepEqual(await database.getBusinessByGoogleId('5'), business)
@@ -92,7 +93,8 @@ describe("database", () => {
         ownerId: null,
         ownerStatement: null,
         ownershipConfirmed: null,
-        takenPledge: null
+        takenPledge: null,
+        amplifierId: null
       })
     })
   });
@@ -821,7 +823,7 @@ describe("database", () => {
       })
     });
 
-    it.only("adds amplifier status to a user", async () => {
+    it("adds amplifier status to a user", async () => {
       const result1 = await database.setAmplifierStatus('bobcar@example.com', true);
 
       const user1 = await database.getUserById(userId);
@@ -835,6 +837,25 @@ describe("database", () => {
 
 
     });
+
+    it("changes amplification status of a business", async () => {
+      let business = await database.getBusinessById(businessId);
+
+      assert.equal(business.amplifierId, null);
+
+      await database.setBusinessAmplifierId(businessId, userId);
+
+      business = await database.getBusinessById(businessId);
+
+      assert.equal(business.amplifierId, userId);
+
+      await database.setBusinessAmplifierId(businessId, null);
+
+      business = await database.getBusinessById(businessId);
+
+      assert.equal(business.amplifierId, null);
+
+    })
   });
 
 });

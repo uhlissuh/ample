@@ -193,22 +193,83 @@ html {
   padding-right: 0px;
 }
 
-
 .amplify-button {
-  background-color: #FAC476;
+  background-color: #6BCFFB;
   vertical-align: middle;
-  height: 25px;
   margin-bottom: 5px;
+  margin-top: 5px;
   color: white;
   display: inline-block;
-  padding: 0.25em 0.4em;
-  font-size: 75%;
-  font-weight: 700;
+  padding: 5px;
   white-space: nowrap;
   text-align: center;
   border-radius: 0.25rem;
   text-decoration: none;
   width: 100%;
+}
+
+.review-button {
+  background-color: #EB6E79;
+  border-color: #EB6E79;
+  color: white;
+  width: 100%;
+  text-decoration: none;
+  border-width: 0px;
+  padding: 5px;
+}
+
+.review-button.disabled {
+  background-color: grey;
+  border-color: grey;
+}
+
+.add-photo-button {
+  background-color: #EB6E79;
+  vertical-align: middle;
+  color: white;
+  display: inline-block;
+  padding: 5px;
+  border-width: 1px;
+  white-space: nowrap;
+  text-align: center;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  width: 100%;
+  line-height: 1.5;
+}
+
+.add-photo-col {
+  padding-right: 3px;
+  margin-top: 5px;
+}
+
+.add-review-col {
+  padding-left: 3px;
+  margin-top: 5px;
+}
+
+.add-review-col-lg {
+  padding-left: 3px;
+  padding-right: 4px;
+  margin-top: 5px;
+}
+
+.amplify-col {
+  padding-left: 2px;
+}
+
+.photo-number {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+}
+
+.image-photo-count {
+  position: relative;
+  display: inline-block;
 }
 
 .badge {
@@ -222,6 +283,7 @@ html {
 .no-reviews-yet {
   margin-top: 50px;
   font-size: 20px;
+  margin-bottom: 60px;
   color: #A9A9A9;
 }
 
@@ -229,17 +291,6 @@ html {
   padding-top: 10px;
 }
 
-.review-button {
-  background-color: #EB6E79;
-  border-color: #EB6E79;
-  color: white;
-  width: 100%;
-}
-
-.review-button.disabled {
-  background-color: grey;
-  border-color: grey;
-}
 
 .tag-input {
   border: 0px;
@@ -533,7 +584,8 @@ a:hover {
   font-size: 30px;
   color: #A9A9A9;
   font-family: 'Roboto', sans-serif;
-  margin-top: 5px;
+  margin-top: 7px;
+  margin-bottom: 0px;
 }
 
 

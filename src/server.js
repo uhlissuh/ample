@@ -268,7 +268,7 @@ function (
     const userId = req.signedCookies['userId'];
     if (userId) {
       user = await database.getUserById(req.signedCookies['userId'])
-      
+
     }
 
     let googleId, existingBusiness;
@@ -331,7 +331,7 @@ function (
         takenPledge: existingBusiness.takenPledge,
         ownershipConfirmed: existingBusiness.ownershipConfirmed,
         ownerStatement: existingBusiness.ownerStatement,
-        amplifierId: existingBusiness.amplifierId
+        amplifierId: existingBusiness.amplifierId,
       };
     } else {
       business = {
@@ -339,6 +339,8 @@ function (
         name: googleBusiness.name,
         address: googleBusiness.formatted_address,
         phone: googleBusiness.formatted_phone_number,
+        latitude: googleBusiness.geometry.location.lat,
+        longitude: googleBusiness.geometry.location.lng,
         ownershipConfirmed: false,
         takenPledge: false,
         ownerStatement: false,
@@ -368,8 +370,52 @@ function (
       pluralize,
       CRITERIA_DESCRIPTIONS,
       business,
-      hasReviewedThisBusiness
+      hasReviewedThisBusiness,
+      childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory()
     });
+  });
+
+  app.post('/businesses/:id/amplify', async function(req,res) {
+    const userId = req.signedCookies['userId'];
+    const user = await database.getUserById(userId);
+
+    let categories = [req.body['parent-category']];
+    if (req.body['child-category']) {
+      categories.push(req.body['child-category']);
+    }
+
+    if (user.isAmplifier) {
+      let businessId;
+      if (isGoogleId(id)) {
+        let business = await cache.get(googleId);
+        if (!business) {
+          business = await googlePlacesClient.getBusinessById(req.params.id);
+        }
+        const businessForSubmission = {
+          googleId: req.params.id,
+          name: googleBusiness.name,
+          latitude: googleBusiness.geometry.location.lat,
+          longitude: googleBusiness.geometry.location.lng,
+          phone: googleBusiness.formatted_phone_number,
+          address: googleBusiness.formatted_address,
+          categories: categories
+
+        }
+        businessId = await database.createBusiness(businessForSubmission);
+      } else {
+        businessId = req.params.id
+      }
+
+      await database.setBusinessAmplifierId(businessId, userId);
+
+      res.redirect('/');
+
+
+    } else {
+      res.render('404-error', {user});
+    }
+
+
   });
 
   app.get('/businesses/:id/claim', async function(req, res) {

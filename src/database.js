@@ -259,6 +259,19 @@ async function updateBusinessAfterReview(tx, businessId, businessRow) {
   )
 }
 
+exports.setBusinessAmplifierId = async function(businessId, userId) {
+  const businessRow = await getBusinessById(business);
+  await db.query(`
+    update businesses
+    set
+    amplifier_id = $1
+    where
+    id= $2`
+    ,
+    [userId, businessId]
+  )
+}
+
 function getCategoryId(title) {
   const result = CATEGORY_IDS_BY_TITLE[title.toLowerCase()];
   if (!result) throw new Error(`Invalid category '${title}'`);
