@@ -9,5 +9,6 @@ ample = {
   autocomplete: require('autocomplete.js'),
   locationField: require('./location-field'),
   enableSubmitButton: require('./enable-submit-button'),
-  tagInput: require('./tag-input')
+  tagInput: require('./tag-input'),
+  fileUpload: require('./file-upload'),
 };

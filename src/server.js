@@ -10,6 +10,7 @@ const catchErrors = require('./catch-errors');
 const pluralize = require('pluralize');
 const sslRedirect = require('heroku-ssl-redirect');
 const GeoIP = require('geoip-lite');
+const probeImage = require('probe-image-size');
 const countriesStates = require('./countries-states.json');
 
 const CRITERIA_DESCRIPTIONS = {
@@ -26,7 +27,8 @@ function (
   googleOauthClient,
   googlePlacesClient,
   cache,
-  users
+  s3Client,
+  users,
 ) {
   const app = express();
   catchErrors(app);
@@ -141,7 +143,6 @@ function (
       user: user,
     });
   });
-
 
   app.get('/login', (req, res) => {
     res.render('login', {
@@ -267,7 +268,7 @@ function (
     const userId = req.signedCookies['userId'];
     if (userId) {
       user = await database.getUserById(req.signedCookies['userId'])
-      
+
     }
 
     let googleId, existingBusiness;
@@ -300,10 +301,6 @@ function (
       ratingBreakdown = await database.getBusinessRatingBreakdown(existingBusiness.id);
     }
 
-    const photoReference = googleBusiness
-      ? googleBusiness.photos && googleBusiness.photos[0].photo_reference
-      : null;
-
     const reviewUserIds = [];
     let hasReviewedThisBusiness = false;
     for (const review of reviews) {
@@ -334,7 +331,7 @@ function (
         takenPledge: existingBusiness.takenPledge,
         ownershipConfirmed: existingBusiness.ownershipConfirmed,
         ownerStatement: existingBusiness.ownerStatement,
-        amplifierId: existingBusiness.amplifierId
+        amplifierId: existingBusiness.amplifierId,
       };
     } else {
       business = {
@@ -342,6 +339,8 @@ function (
         name: googleBusiness.name,
         address: googleBusiness.formatted_address,
         phone: googleBusiness.formatted_phone_number,
+        latitude: googleBusiness.geometry.location.lat,
+        longitude: googleBusiness.geometry.location.lng,
         ownershipConfirmed: false,
         takenPledge: false,
         ownerStatement: false,
@@ -349,20 +348,75 @@ function (
       }
     }
 
-    res.render('business',
-      {
-        googleId,
-        photoURL: photoReference && googlePlacesClient.getPhotoURL(photoReference, 900, 900),
-        reviews,
-        ratingBreakdown,
-        user,
-        isMobile,
-        pluralize,
-        CRITERIA_DESCRIPTIONS,
-        business,
-        hasReviewedThisBusiness
+    const photos = await database.getBusinessPhotosById(business.id);
+
+    if (googleBusiness && googleBusiness.photos) {
+      const googlePhoto = googleBusiness.photos[0].photo_reference;
+      photos.unshift({
+        userId: null,
+        width: 900,
+        height: 900,
+        url: googlePlacesClient.getPhotoURL(googlePhoto, 900, 900)
+      })
+    }
+
+    res.render('business', {
+      googleId,
+      photos,
+      reviews,
+      ratingBreakdown,
+      user,
+      isMobile,
+      pluralize,
+      CRITERIA_DESCRIPTIONS,
+      business,
+      hasReviewedThisBusiness,
+      childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory()
+    });
+  });
+
+  app.post('/businesses/:id/amplify', async function(req,res) {
+    const userId = req.signedCookies['userId'];
+    const user = await database.getUserById(userId);
+
+    let categories = [req.body['parent-category']];
+    if (req.body['child-category']) {
+      categories.push(req.body['child-category']);
+    }
+
+    if (user.isAmplifier) {
+      let businessId;
+      if (isGoogleId(req.params.id)) {
+        let business = await cache.get(req.params.id);
+        if (!business) {
+          console.log("this business wasn't cached!!!!");
+          business = await googlePlacesClient.getBusinessById(req.params.id);
+        }
+        const businessForSubmission = {
+          googleId: req.params.id,
+          name: business.name,
+          latitude: business.geometry.location.lat,
+          longitude: business.geometry.location.lng,
+          phone: business.formatted_phone_number,
+          address: business.formatted_address,
+          categories: categories
+
+        }
+        businessId = await database.createBusiness(businessForSubmission);
+      } else {
+        businessId = req.params.id
       }
-    );
+
+      await database.setBusinessAmplifierId(businessId, userId);
+
+      res.redirect('/');
+
+
+    } else {
+      res.render('404-error', {user});
+    }
+
+
   });
 
   app.get('/businesses/:id/claim', async function(req, res) {
@@ -552,6 +606,76 @@ function (
     res.redirect(`/businesses/${businessId}`)
   });
 
+  app.get('/businesses/:id/photos', async function(req, res) {
+    let user = null;
+    const userId = req.signedCookies['userId'];
+    if (userId) {
+      user = await database.getUserById(userId)
+    }
+
+    let business;
+    if (isGoogleId(req.params.id)) {
+      business = await database.getBusinessByGoogleId(req.params.id);
+    } else {
+      business = await database.getBusinessById(req.params.id);
+    }
+
+    const photos = await database.getBusinessPhotosById(business.id);
+
+    res.render('business-photos', {
+      business,
+      photos,
+      user
+    });
+  });
+
+  app.post('/businesses/:id/photos', async function(req, res) {
+    const userId = req.signedCookies['userId'];
+    if (!userId) {
+      return res.redirect(`/login?referer=/businesses/${req.params.id}`);
+    }
+
+    let businessId
+    if (isGoogleId(req.params.id)) {
+      const googleId = req.params.id;
+      let googleBusiness = await cache.get(googleId);
+      if (!googleBusiness) {
+        googleBusiness = await googlePlacesClient.getBusinessById(googleId);
+        await cache.set(googleId, googleBusiness, 3600);
+      }
+      businessId = await database.createBusiness({
+        googleId: googleId,
+        name: googleBusiness.name,
+        latitude: googleBusiness.geometry.location.lat,
+        longitude: googleBusiness.geometry.location.lng,
+        phone: googleBusiness.formatted_phone_number,
+        address: googleBusiness.formatted_address
+      })
+    } else {
+      businessId = req.params.id
+    }
+
+    const photoURL = req.body['photo-url']
+
+    let photoInfo
+    try {
+      photoInfo = await probeImage(photoURL)
+    } catch (_) {}
+
+    if (!photoInfo || !['png', 'jpg'].includes(photoInfo.type)) {
+      res.status(422);
+      res.end('Business photos need to be JPEG or PNG files');
+      return;
+    }
+
+    await database.addBusinessPhoto(businessId, userId, {
+      url: photoURL,
+      width: photoInfo.width,
+      height: photoInfo.height
+    })
+    res.redirect(`/businesses/${businessId}`);
+  });
+
   app.post('/businesses', async function(req, res) {
     const userId = req.signedCookies['userId'];
     const user = await database.getUserById(userId);
@@ -587,6 +711,22 @@ function (
       res.render('404-error', {user});
     }
 
+  });
+
+  app.get('/signed-upload-url', async function(req, res) {
+    const userId = req.signedCookies['userId'];
+
+    if (!userId) {
+      res.status(401);
+      res.end('You must be logged in to add photos of businesses');
+      return
+    }
+
+    const fileName = req.query['file-name'];
+    const fileType = req.query['file-type'];
+    const key = `${userId}-${new Date().getTime()}-${fileName.slice(0, 32)}`
+    const data = await s3Client.getSignedURL(key, fileType);
+    res.end(JSON.stringify(data));
   });
 
   function reviewFromRequest(body) {

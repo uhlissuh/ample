@@ -259,6 +259,19 @@ async function updateBusinessAfterReview(tx, businessId, businessRow) {
   )
 }
 
+exports.setBusinessAmplifierId = async function(businessId, userId) {
+  const businessRow = await this.getBusinessById(businessId);
+  await db.query(`
+    update businesses
+    set
+    amplifier_id = $1
+    where
+    id= $2`
+    ,
+    [userId, businessId]
+  )
+}
+
 function getCategoryId(title) {
   const result = CATEGORY_IDS_BY_TITLE[title.toLowerCase()];
   if (!result) throw new Error(`Invalid category '${title}'`);
@@ -607,6 +620,30 @@ exports.getBusinessReviewsById = async function(id) {
   );
   return reviewsFromRows(db, rows);
 };
+
+exports.addBusinessPhoto = async function(businessId, userId, {url, width, height}) {
+  await db.query(`
+    insert into business_photos
+    (business_id, user_id, url, width, height)
+    values
+    ($1, $2, $3, $4, $5)
+  `, [businessId, userId, url, width, height])
+}
+
+exports.getBusinessPhotosById = async function(id) {
+  id = parseInt(id)
+  if (Number.isNaN(id)) return []
+  const rows = await db.query(
+    `select * from business_photos where business_id = $1`,
+    [id]
+  )
+  return rows.map(row => ({
+    userId: row.user_id,
+    url: row.url,
+    width: row.width,
+    height: row.height
+  }))
+}
 
 async function reviewsFromRows(tx, rows) {
   const tagRows = await tx.query(`
