@@ -260,7 +260,7 @@ async function updateBusinessAfterReview(tx, businessId, businessRow) {
 }
 
 exports.setBusinessAmplifierId = async function(businessId, userId) {
-  const businessRow = await getBusinessById(business);
+  const businessRow = await this.getBusinessById(businessId);
   await db.query(`
     update businesses
     set

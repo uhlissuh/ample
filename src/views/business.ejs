@@ -34,7 +34,7 @@
         <div class="row">
           <div class="col-12">
             <% if (user && user.isAmplifier && !business.amplifierId) { %>
-              <a href="/businesses/<%- business.id -%>/amplify" class="amplify-button">Amplify</a>
+              <a id="add-amplify-link" href="#" class="amplify-button" data-toggle="modal" data-target="#add-amplify-modal">Amplify</a>
             <% } %>
           </div>
         </div>
@@ -242,24 +242,25 @@
       </div>
 
       <div class="modal-body">
-        <small for="parent-category">Help us to know what kind of business this is.</small>
-        <select id="parent-category-select" class="form-control" name="parent-category">
-          <option disabled selected="selected" value="">Select a category</option>
-          <% for (const category in childCategoriesByParentCategory) { %>
-            <option value="<%- category -%>"><%- category -%></option>
-          <% } %>
-        </select>
-        <small for="parent-category">Optionally, add a subcategory.</small>
-        <select id="child-category-select" class="form-control" name="child-category">
-        </select>
+        <form  action="/businesses/<%- business.id -%>/amplify" method="post">
+          <small for="parent-category">Help us to know what kind of business this is.</small>
+          <select id="parent-category-select" class="form-control" name="parent-category">
+            <option disabled selected="selected" value="">Select a category</option>
+            <% for (const category in childCategoriesByParentCategory) { %>
+              <option value="<%- category -%>"><%- category -%></option>
+            <% } %>
+          </select>
+          <small for="parent-category">Optionally, add a subcategory.</small>
+          <select id="child-category-select" class="form-control" name="child-category">
+          </select>
+          <div class="modal-footer">
+            <input class="btn btn-primary review-button" type="submit" value="Amplify">
+          </div>
+        </form>
+
       </div>
 
-      <div class="modal-footer">
-        <form method="POST" action="/businesses/<%- business.id -%>/photos">
-          <input class="btn" type="hidden" id="add-photo-url-input" name="photo-url">
-          <input class="btn btn-primary review-button" type="submit" value="Amplify">
-        </form>
-      </div>
+
     </div>
   </div>
 </div>

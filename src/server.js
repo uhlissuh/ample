@@ -386,18 +386,19 @@ function (
 
     if (user.isAmplifier) {
       let businessId;
-      if (isGoogleId(id)) {
-        let business = await cache.get(googleId);
+      if (isGoogleId(req.params.id)) {
+        let business = await cache.get(req.params.id);
         if (!business) {
+          console.log("this business wasn't cached!!!!");
           business = await googlePlacesClient.getBusinessById(req.params.id);
         }
         const businessForSubmission = {
           googleId: req.params.id,
-          name: googleBusiness.name,
-          latitude: googleBusiness.geometry.location.lat,
-          longitude: googleBusiness.geometry.location.lng,
-          phone: googleBusiness.formatted_phone_number,
-          address: googleBusiness.formatted_address,
+          name: business.name,
+          latitude: business.geometry.location.lat,
+          longitude: business.geometry.location.lng,
+          phone: business.formatted_phone_number,
+          address: business.formatted_address,
           categories: categories
 
         }
