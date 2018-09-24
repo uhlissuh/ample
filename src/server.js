@@ -349,6 +349,9 @@ function (
       }
     }
 
+    console.log(business.amplifierId);
+    console.log("ihhihiihihh");
+    
     res.render('business',
       {
         googleId,

@@ -18,6 +18,9 @@
             <% if (user && user.isAmplifier && !business.amplifierId) { %>
               <a href="/businesses/<%- business.id -%>/amplify" class="amplify-button">Amplify</a>
             <% } %>
+            <% if (user && user.isAmplifier && business.amplifierId) { %>
+              <a href="#" class="amplify-button disabled">Already Amplified</a>
+            <% } %>
           </div>
         </div>
 
@@ -191,6 +194,12 @@
   if (<%-JSON.stringify(reviews)%>.length == 0)  {
     scoreRow.classList.add('no-reviews');
   }
+
+  ample.enableSubmitButton(
+    document.getElementsByTagName('form')[0],
+    (parameters) =>
+      parameters['parent-category']
+  );
 
 </script>
 
