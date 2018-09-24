@@ -3,26 +3,46 @@
 
     <div class="col-12 col-lg-8 align-self-end order-12">
 
-        <h1 class="biz-name"><%- business.name -%></h1>
-        <p class="business-address"> <%- business.address -%></p>
-        <div class="row">
-          <div class="col-5 col-lg-3 phone-number-col">
-            <div class="business-phone"> <%- business.phone -%></div>
+      <h1 class="biz-name"><%- business.name -%></h1>
+      <p class="business-address"> <%- business.address -%></p>
+      <div class="row">
+        <div class="col-5 col-lg-3 phone-number-col">
+          <div class="business-phone"> <%- business.phone -%></div>
+        </div>
+      </div>
+
+      <% if (isMobile) { %>
+        <div class="button-row row">
+          <div class="col-6 add-photo-col">
+            <a id="add-photo-link" href="#" class="add-photo-button" data-toggle="modal" data-target="#add-photo-modal">+ Add a Photo</a>
           </div>
-          <div class="col-2 col-lg-2 claim-button-col">
-            <% if (!business.ownershipConfirmed) { %>
-            <a href="/businesses/<%- business.id -%>/claim" class="claim-button float-left">Claim</a>
+          <div class="add-review-col col-6">
+            <% if (!hasReviewedThisBusiness) { %>
+              <form method="GET" action="/businesses/<%- business.id -%>/reviews/new">
+                <input name="name" type="hidden" value="<%- business.name -%>"/>
+                <input name="address" type="hidden" value="<%- business.address -%>"/>
+                <input type="submit" value="+ Add a Review" class="btn btn-info review-button"/>
+              </form>
+            <% } else { %>
+              <a
+                class="btn btn-info review-button disabled"
+                href=""
+                role="button">Reviewed</a>
             <% } %>
           </div>
-          <div class="col-5 col-lg-2 amplify-button-col">
+        </div>
+        <div class="row">
+          <div class="col-12">
             <% if (user && user.isAmplifier && !business.amplifierId) { %>
-              <a href="/businesses/<%- business.id -%>/amplify" class="amplify-button">Amplify</a>
+              <a id="add-amplify-link" href="#" class="amplify-button" data-toggle="modal" data-target="#add-amplify-modal">Amplify</a>
             <% } %>
             <% if (user && user.isAmplifier && business.amplifierId) { %>
               <a href="#" class="amplify-button disabled">Already Amplified</a>
             <% } %>
           </div>
         </div>
+      <% } %>
+
 
       <div id="score-row" class="row score-row">
         <% if (reviews.length != 0) { %>
@@ -65,20 +85,48 @@
           </div>
         </div>
       <% } %>
+
+
+      <% if (!isMobile) { %>
+        <div class="row">
+          <div class="col-md-4  add-photo-col">
+            <a id="add-photo-link" href="#" class="add-photo-button" data-toggle="modal" data-target="#add-photo-modal">+ Add a Photo</a>
+          </div>
+          <div class="add-review-col-lg col-md-4">
+            <% if (!hasReviewedThisBusiness) { %>
+              <form method="GET" action="/businesses/<%- business.id -%>/reviews/new">
+                <input name="name" type="hidden" value="<%- business.name -%>"/>
+                <input name="address" type="hidden" value="<%- business.address -%>"/>
+                <input type="submit" value="+ Add a Review" class="btn btn-info review-button"/>
+              </form>
+            <% } else { %>
+              <a
+                class="btn btn-info review-button disabled"
+                href=""
+                role="button">Reviewed</a>
+            <% } %>
+          </div>
+          <% if (user && user.isAmplifier && !business.amplifierId) { %>
+            <div class="col-md-4  amplify-col">
+              <a id="add-amplify-link" href="#" class="amplify-button" data-toggle="modal" data-target="#add-amplify-modal">Amplify</a>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+
     </div>
 
     <div class="col-12 col-lg-4 align-self-end order-1 order-lg-12 biz-image-col">
-      <% if (photoURL) { %>
-      <img
-      class="img-fluid biz-img"
-      src="<%- photoURL -%>"
-      />
-      <% } else { %>
-      <img
-      class="img-fluid biz-img"
-      src="/static/placeholder-wide.png"
-      />
-      <% } %>
+      <div class="image-photo-count">
+        <% if (photos.length > 0) { %>
+          <img class="img-fluid biz-img" src="<%- photos[0].url -%>"/>
+        <% } else { %>
+          <img class="img-fluid biz-img" src="/static/placeholder-wide.png"/>
+        <% } %>
+        <% if (photos.length > 1) { %>
+          <a class="photo-number" href="/businesses/<%- business.id %>/photos"><%= photos.length %> photos</a>
+        <% } %>
+      </div>
     </div>
   </div>
 
@@ -109,27 +157,6 @@
 
   <% } %>
 
-
-  <div class="row reviews-header">
-    <div class="col-4 col-lg-2">
-      <h3 class="reviews-title">Reviews</h3>
-    </div>
-
-    <div class="col-8 col-lg-3">
-      <% if (!hasReviewedThisBusiness) { %>
-        <form method="GET" action="/businesses/<%- business.id -%>/reviews/new">
-          <input name="name" type="hidden" value="<%- business.name -%>"/>
-          <input name="address" type="hidden" value="<%- business.address -%>"/>
-          <input type="submit" value="Add a Review" class="btn btn-info review-button"/>
-        </form>
-      <% } else { %>
-        <a
-          class="btn btn-info review-button disabled"
-          href=""
-          role="button">Reviewed</a>
-      <% } %>
-    </div>
-  </div>
 
   <div class="row reviews-body">
     <div class="col-12">
@@ -168,7 +195,76 @@
       <% } %>
     </div>
   </div>
+  <div class="col-2 col-lg-2 claim-button-col">
+    <% if (!business.ownershipConfirmed) { %>
+    <a href="/businesses/<%- business.id -%>/claim" class="claim-button float-left">Claim</a>
+    <% } %>
+  </div>
   <div class="push">
+  </div>
+</div>
+
+<div class="modal fade" id="add-photo-modal" tabindex="-1" role="dialog" aria-labelledby="add-photo-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-photo-modal-label">Add a Photo for <%- business.name %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="add-photo-file-input">
+          <label class="custom-file-label" for="add-photo-file-input">Choose file</label>
+        </div>
+
+        <img id="add-photo-preview" src="/static/placeholder.png">
+      </div>
+
+      <div class="modal-footer">
+        <form method="POST" action="/businesses/<%- business.id -%>/photos">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <input class="btn" type="hidden" id="add-photo-url-input" name="photo-url">
+          <input class="btn btn-primary" type="submit" value="Add Photo">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="add-amplify-modal" tabindex="-1" role="dialog" aria-labelledby="add-amplify-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-photo-modal-label">Amplify <%- business.name %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form  action="/businesses/<%- business.id -%>/amplify" method="post">
+          <small for="parent-category">Help us to know what kind of business this is.</small>
+          <select id="parent-category-select" class="form-control" name="parent-category">
+            <option disabled selected="selected" value="">Select a category</option>
+            <% for (const category in childCategoriesByParentCategory) { %>
+              <option value="<%- category -%>"><%- category -%></option>
+            <% } %>
+          </select>
+          <small for="parent-category">Optionally, add a subcategory.</small>
+          <select id="child-category-select" class="form-control" name="child-category">
+          </select>
+          <div class="modal-footer">
+            <input class="btn btn-primary review-button" type="submit" value="Amplify">
+          </div>
+        </form>
+
+      </div>
+
+
+    </div>
   </div>
 </div>
 
@@ -176,6 +272,11 @@
 <script>
   ample.setUpStarRatings();
   ample.collapseNoAnimate();
+  ample.fileUpload(
+    document.getElementById('add-photo-file-input'),
+    document.getElementById('add-photo-url-input'),
+    document.getElementById('add-photo-preview')
+  )
 
   const scoreRow = document.getElementById('score-row');
 
@@ -195,6 +296,22 @@
     scoreRow.classList.add('no-reviews');
   }
 
+  const childCategoriesByParentCategory = <%- JSON.stringify(childCategoriesByParentCategory) %>;
+
+  const parentCategorySelect = document.getElementById('parent-category-select');
+  const childCategorySelect = document.getElementById('child-category-select');
+  parentCategorySelect.addEventListener('change', (event) => {
+    const parentCategory = parentCategorySelect.value;
+    const childCategories = childCategoriesByParentCategory[parentCategory];
+    childCategorySelect.innerHTML = '<option></option>';
+
+    for (const childCategory of childCategories) {
+      const option = document.createElement('option');
+      option.innerText = childCategory;
+      option.value = childCategory;
+      childCategorySelect.appendChild(option);
+    }
+  });
   ample.enableSubmitButton(
     document.getElementsByTagName('form')[0],
     (parameters) =>

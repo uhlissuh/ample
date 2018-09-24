@@ -2,7 +2,8 @@ const FacebookClient = require('./facebook-client');
 const GooglePlacesClient = require('./google-places');
 const database = require('./database');
 const server = require('./server');
-const Memcached = require("./memcached")
+const Memcached = require("./memcached");
+const S3Client = require('./s3-client');
 const {OAuth2Client} = require('google-auth-library');
 
 if (process.env.NODE_ENV === 'production') {
@@ -23,6 +24,7 @@ const {
   MEMCACHEDCLOUD_SERVERS,
   MEMCACHEDCLOUD_USERNAME,
   MEMCACHEDCLOUD_PASSWORD,
+  BUSINESS_PHOTOS_S3_BUCKET,
   ADMIN_USERNAME,
   ADMIN_PASSWORD
 } = process.env;
@@ -46,6 +48,9 @@ const app = server(
     MEMCACHEDCLOUD_SERVERS,
     MEMCACHEDCLOUD_USERNAME,
     MEMCACHEDCLOUD_PASSWORD
+  ),
+  new S3Client(
+    BUSINESS_PHOTOS_S3_BUCKET
   ),
   {
     [ADMIN_USERNAME]: ADMIN_PASSWORD

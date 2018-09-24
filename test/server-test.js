@@ -18,6 +18,7 @@ const cache = {
   get() { return null },
   set(key, value) {}
 }
+const s3Client = {};
 
 const server = require('../src/server')(
   cookieSigningSecret,
@@ -25,6 +26,7 @@ const server = require('../src/server')(
   googleOauthClient,
   googlePlacesClient,
   cache,
+  s3Client,
   {}
 );
 
@@ -223,8 +225,6 @@ describe("server", () => {
         'parent-category': 'Doctors'
       });
 
-
-
       const business = await database.getBusinessByGoogleId('WX-YZ');
       const reviews = await database.getBusinessReviewsById(business.id);
 
@@ -251,6 +251,78 @@ describe("server", () => {
       getBusinessResponse = await get(`businesses/${business.id}`);
       assert(getBusinessResponse.body.includes('I like this business. A lot.'));
     });
+  });
+
+  describe("add a photo for a business", () => {
+    beforeEach(() => {
+      googlePlacesClient.getBusinessById = async function (id) {
+        assert.equal(id, 'WX-YZ');
+        return {
+          name: 'the-business',
+          formatted_address: '123 Example St',
+          geometry: {
+            location: {
+              lat: 42,
+              lng: -122
+            }
+          }
+        }
+      };
+    })
+
+    it("shows that photo on the business page afterward", async () => {
+      const photoURL1 = `http://localhost:${port}/static/alissa.jpg`
+      const photoURL2 = `http://localhost:${port}/static/el.jpg`
+
+      // Can't add a photo if you're not logged in
+      let uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
+        'photo-url': photoURL1
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 302);
+      assert.equal(uploadPhotoResponse.headers.location, '/login?referer=/businesses/WX-YZ')
+
+      logIn(userId);
+
+      // Add a photo for a business that does not yet exist in the database
+      uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
+        'photo-url': photoURL1
+      });
+      const business = await database.getBusinessByGoogleId('WX-YZ')
+      assert.equal(uploadPhotoResponse.statusCode, 302);
+      assert.equal(uploadPhotoResponse.headers.location, `/businesses/${business.id}`)
+      assert.deepEqual(await database.getBusinessPhotosById(business.id), [
+        {userId, url: photoURL1, width: 250, height: 250},
+      ]);
+
+      // Add another photo; this time the business *does* exist in the database
+      uploadPhotoResponse = await post(`businesses/${business.id}/photos`, {
+        'photo-url': photoURL2
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 302);
+      assert.equal(uploadPhotoResponse.headers.location, `/businesses/${business.id}`)
+      assert.deepEqual(await database.getBusinessPhotosById(business.id), [
+        {userId, url: photoURL1, width: 250, height: 250},
+        {userId, url: photoURL2, width: 250, height: 252},
+      ])
+    });
+
+    it("only allows JPG and PNG files", async () => {
+      logIn(userId);
+
+      // Can't upload a non-image file
+      let uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
+        'photo-url': `http://localhost:${port}/static/bundle.js`
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 422);
+      assert.equal(uploadPhotoResponse.body, 'Business photos need to be JPEG or PNG files')
+
+      // Can't upload an SVG
+      uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
+        'photo-url': `http://localhost:${port}/static/snowflake.svg`
+      });
+      assert.equal(uploadPhotoResponse.statusCode, 422);
+      assert.equal(uploadPhotoResponse.body, 'Business photos need to be JPEG or PNG files')
+    })
   });
 
   function get(url, headers) {
