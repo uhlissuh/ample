@@ -423,7 +423,7 @@ function (
 
       await database.setBusinessAmplifierId(businessId, userId);
 
-      res.redirect('/');
+      res.redirect(`/businesses/${businessId}`);
 
 
     } else {
