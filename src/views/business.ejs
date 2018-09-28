@@ -11,6 +11,8 @@
         </div>
       </div>
 
+
+
       <% if (isMobile) { %>
         <div class="button-row row">
           <div class="col-6 add-photo-col">
@@ -21,11 +23,11 @@
               <form method="GET" action="/businesses/<%- business.id -%>/reviews/new">
                 <input name="name" type="hidden" value="<%- business.name -%>"/>
                 <input name="address" type="hidden" value="<%- business.address -%>"/>
-                <input type="submit" value="+ Add a Review" class="btn btn-info review-button"/>
+                <input type="submit" value="+ Add a Review" class="btn review-button"/>
               </form>
             <% } else { %>
               <a
-                class="btn btn-info review-button disabled"
+                class="btn disabled review-button"
                 href=""
                 role="button">Reviewed</a>
             <% } %>
@@ -37,40 +39,63 @@
               <a id="add-amplify-link" href="#" class="amplify-button" data-toggle="modal" data-target="#add-amplify-modal">Amplify</a>
             <% } %>
             <% if (user && user.isAmplifier && business.amplifierId) { %>
-              <a href="#" class="amplify-button disabled">Already Amplified</a>
+              <a class="disabled amplify-button">Already Amplified</a>
             <% } %>
           </div>
         </div>
       <% } %>
 
 
+      <%
+      let className
+
+      if (badges.length === 1) {
+        className = "col-4 offset-4 col-lg-3"
+      } else if (badges.length === 2) {
+        className = "col-6 col-lg-3"
+      } else if (badges.length === 3) {
+         className = "col-4 col-lg-3"
+      } %>
+
+
+
       <div id="score-row" class="row score-row">
         <% if (reviews.length != 0) { %>
-          <div class="col-lg-3 rating-doodad">
+          <div class= "<%- className -%> rating-doodad align-self-end">
             <span class="summary-item">
               <%- business.overallRating -%>
             </span>
             <img src="/static/star-highlight-large.png" class="indicator" />
             <br />
-            <span>Overall Rating</span>
+            <span class="doodad-label">Overall Rating</span>
           </div>
 
-          <div class="col-lg-3 rating-doodad">
+          <div class="<%- className -%> rating-doodad align-self-end">
             <span class="summary-item">
               <%- business.reviewCount -%>
             </span>
             <img src="/static/checkmark.png" class="indicator" />
             <br />
-            <span>Total reviews</span>
+            <span class="doodad-label">Total reviews</span>
           </div>
         <% } %>
 
         <% if (business.ownershipConfirmed && business.takenPledge) { %>
-          <div class="col-4 col-lg-3 rating-doodad align-self-end">
+          <div class="<%- className -%> rating-doodad align-self-end">
             <div class="business-badge">
-              <img src="/static/pledgeBadge.png"/>
+              <img class="badge-img" src="/static/pledgeBadge.png"/>
               <br />
-              <span>Taken Pledge</span>
+              <span class="doodad-label">Taken Pledge</span>
+            </div>
+          </div>
+        <% } %>
+
+        <% if (business.amplifierId && reviews.length == 0) { %>
+          <div class= "<%- className -%> rating-doodad align-self-end text-center">
+            <div class="business-badge">
+              <img class="badge-imgg" src="/static/amplifier-small.png"/>
+              <br />
+              <span class="doodad-label">Amplified</span>
             </div>
           </div>
         <% } %>
@@ -97,11 +122,11 @@
               <form method="GET" action="/businesses/<%- business.id -%>/reviews/new">
                 <input name="name" type="hidden" value="<%- business.name -%>"/>
                 <input name="address" type="hidden" value="<%- business.address -%>"/>
-                <input type="submit" value="+ Add a Review" class="btn btn-info review-button"/>
+                <input type="submit" value="+ Add a Review" class="btn review-button"/>
               </form>
             <% } else { %>
               <a
-                class="btn btn-info review-button disabled"
+                class="btn review-button disabled"
                 href=""
                 role="button">Reviewed</a>
             <% } %>
@@ -109,6 +134,11 @@
           <% if (user && user.isAmplifier && !business.amplifierId) { %>
             <div class="col-md-4  amplify-col">
               <a id="add-amplify-link" href="#" class="amplify-button" data-toggle="modal" data-target="#add-amplify-modal">Amplify</a>
+            </div>
+          <% } %>
+          <% if (user && user.isAmplifier && business.amplifierId) { %>
+            <div class="col-md-4 amplify-col">
+              <a role="button" class="amplify-button disabled">Already Amplified</a>
             </div>
           <% } %>
         </div>
@@ -189,17 +219,38 @@
               </li>
             <% } %>
           </ul>
-      <% } else { %>
-        <div class="no-reviews-yet">This establishment has no reviews on Ample yet!</div>
-
+      <% } else if (reviews.length == 0 && !business.amplifierId){ %>
+        <div class="no-reviews-yet">This establishment has no reviews on Ample yet and has not been Amplified.</div>
+      <% } %>
+      <% if (business.amplifierId && !business.takenPledge && (reviews.length == 0)) { %>
+        <div class="row">
+          <div class="col-10 col-lg-6 offset-1 offset-lg-3">
+            <div class="amplified-bottom-text">
+              Though this business has not been reviewed, it has been Amplified, or tagged by an Ample super-user as a potentially inclusive business.
+            </div>
+          </div>
+        </div>
+      <% } %>
+      <% if (business.amplifierId && business.takenPledge && (reviews.length == 0)) { %>
+        <div class="row">
+          <div class="col-10 col-lg-6 offset-1 offset-lg-3">
+            <div class="amplified-bottom-text">
+              This business has been Amplified, or tagged by an Ample super-user as an inclusive business,
+              and the owner has taken our Inclusivity Pledge.
+            </div>
+          </div>
+        </div>
       <% } %>
     </div>
   </div>
-  <div class="col-2 col-lg-2 claim-button-col">
-    <% if (!business.ownershipConfirmed) { %>
-    <a href="/businesses/<%- business.id -%>/claim" class="claim-button float-left">Claim</a>
-    <% } %>
+  <div class="row">
+    <div class="col-12 col-lg-12 claim-button-col">
+      <% if (!business.ownershipConfirmed) { %>
+      <a href="/businesses/<%- business.id -%>/claim" class="claim-button">Is this your business? Claim it.</a>
+      <% } %>
+    </div>
   </div>
+
   <div class="push">
   </div>
 </div>
@@ -280,16 +331,19 @@
 
   const scoreRow = document.getElementById('score-row');
 
-  const ratingDoodads = document.getElementsByClassName('rating-doodad');
-  if (<%-JSON.stringify(business.ownershipConfirmed)%> && <%-JSON.stringify(business.takenPledge)%>) {
-    for (let ratingDoodad of ratingDoodads) {
-      ratingDoodad.classList.add('col-4');
-    }
-  } else {
-    for (let ratingDoodad of ratingDoodads) {
-      ratingDoodad.classList.add('col-6');
-    }
-  }
+
+
+  // if (<%-JSON.stringify(business.ownershipConfirmed)%> && <%-JSON.stringify(business.takenPledge)%>) {
+  //   for (let ratingDoodad of ratingDoodads) {
+  //     ratingDoodad.classList.add('col-4');
+  //   }
+  // } else {
+  //   for (let ratingDoodad of ratingDoodads) {
+  //     ratingDoodad.classList.add('col-6');
+  //   }
+  // }
+
+
 
 
   if (<%-JSON.stringify(reviews)%>.length == 0)  {
@@ -312,11 +366,11 @@
       childCategorySelect.appendChild(option);
     }
   });
-  ample.enableSubmitButton(
-    document.getElementsByTagName('form')[0],
-    (parameters) =>
-      parameters['parent-category']
-  );
+  // ample.enableSubmitButton(
+  //   document.getElementsByTagName('form')[0],
+  //   (parameters) =>
+  //     parameters['parent-category']
+  // );
 
 </script>
 

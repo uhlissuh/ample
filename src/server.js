@@ -360,6 +360,19 @@ function (
       })
     }
 
+    let badges = [];
+
+    if (reviews.length > 0) {
+      badges.push('scoreBadge');
+      badges.push('countBadge');
+    }
+    if (business.takenPledge && business.ownershipConfirmed) {
+      badges.push('pledgeBadge');
+    }
+    if (business.amplifierId && reviews.length === 0) {
+      badges.push('amplifiedBadge');
+    }
+
     res.render('business', {
       googleId,
       photos,
@@ -370,6 +383,7 @@ function (
       pluralize,
       CRITERIA_DESCRIPTIONS,
       business,
+      badges,
       hasReviewedThisBusiness,
       childCategoriesByParentCategory: await database.getChildCategoriesByParentCategory()
     });

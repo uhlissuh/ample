@@ -25,6 +25,7 @@ html {
 
 .push {
   height: 110px;
+  margin-top: 10px;
 }
 
 .summary-item {
@@ -160,29 +161,25 @@ html {
 }
 
 .claim-button {
-  background-color: #6BCFFB;
-  vertical-align: middle;
-  height: 25px;
   margin-bottom: 5px;
-  color: white;
+  margin-top: 10px;
+  color: #6BCFFB;
   display: inline-block;
-  padding: 0.25em 0.4em;
-  font-size: 75%;
-  font-weight: 700;
-  white-space: nowrap;
   text-align: center;
-  border-radius: 0.25rem;
-  text-decoration: none;
   width: 100%;
+  text-decoration: underline;
+
+
 }
 
 .claim-button:hover {
-  color: #E4F6F8;
+  color: #6BCFFB;
 }
 
 .claim-button-col {
   padding-left: 5px;
   padding-right: 5px;
+  border-top: .5px solid #d3d3d3;
 }
 
 .amplify-button-col {
@@ -208,6 +205,31 @@ html {
   width: 100%;
 }
 
+.amplify-button.disabled {
+  background-color: #6BCFFB;
+  color: white !important;
+  padding: 5px;
+  opacity: .5;
+
+}
+
+.amplified-bottom-text {
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: block;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-radius: .25rem;
+  border: 1px solid #EB6E79;
+  font-style: italic;
+  color: gray;
+  font-size: 1.0rem;
+}
+
 .review-button {
   background-color: #EB6E79;
   border-color: #EB6E79;
@@ -219,8 +241,9 @@ html {
 }
 
 .review-button.disabled {
-  background-color: grey;
+  background-color: #d3d3d;
   border-color: grey;
+  color: white;
 }
 
 .add-photo-button {
@@ -236,6 +259,10 @@ html {
   text-decoration: none;
   width: 100%;
   line-height: 1.5;
+}
+
+.add-photo-button:hover {
+  color: white;
 }
 
 .add-photo-col {
@@ -907,6 +934,19 @@ a:hover {
     padding: 0px;
   }
 
+  .summary-item {
+    font-size: 32px;
+  }
+
+  .doodad-label {
+    font-size: 14px;
+  }
+
+  .badge-img {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .tags-row {
     margin-top: 10px;
     padding-bottom: 10px;
@@ -914,6 +954,7 @@ a:hover {
 
   .rating-doodad {
     text-align: center;
+    display: block;
   }
 
   .business-badge {
