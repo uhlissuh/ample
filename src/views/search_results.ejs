@@ -53,7 +53,7 @@
             : `/businesses/${business.googleId}`;
         %>
 
-        <li class="list-group-item">
+        <li class="list-group-item search-result-list-item">
           <div class="row align-self-start">
             <div class="col-3 col-lg-3 image-column">
               <% if (business.photoURL) { %>
@@ -70,20 +70,26 @@
             </div>
             <div class="col-9 col-lg-9 search-results-business-info">
               <div class="row">
-                <div class="col-12 col-lg-8">
-                  <a href="<%- businessURL -%>"><span class="business-listing-title"><%= business.name %></span></a> </br>
-                  <span class="business-address-tag-line"><%- business.address -%></span>
+                <div class="col-9 col-lg-8 search-results-business-info-col">
+                  <a href="<%- businessURL -%>"><div class="business-listing-title"><%= business.name %></div></a>
+                  <div class="business-address-tag-line"><%- business.address -%></div>
                 </div>
-                <div class="col-12 col-lg-4 ">
+                <div class="col-3 col-lg-4 right-side-badges-col">
                   <% if (business.reviewCount > 0) { %>
                     <div class="score-grouping">
                       <div class="star-rating search-results-star-rating" data-value= "<%=business.overallRating %>" data-size="small"></div>
                       <span class="review-count">(<%= business.reviewCount %>)</span>
                     </div>
                   <% } else if (business.takenPledge && business.ownershipConfirmed) { %>
-                    <span class="score-grouping"><a class="taken-pledge-words" href="<%- businessURL -%>">Taken the Inclusivity Pledge!</a></span>
+                    <div class="score-grouping">
+                      <img class="badge-img" src="/static/pledgeBadge-smallest.png"/>
+                    </div>
+                  <% } else if (business.amplifierId && (!business.ownershipConfirmed || business.reviewCount > 0)) { %>
+                    <div class="score-grouping">
+                      <img class="badge-img" src="/static/amplifier-smallest.png"/>
+                    </div>
                   <% } else { %>
-                    <span class="score-grouping"><a class="be-first-words" href="<%- businessURL -%>">Be the first to review</a></span>
+                    <div class="score-grouping no-reviews-circle">no reviews yet</div>
                   <% } %>
                 </div>
               </div>

@@ -504,6 +504,19 @@ a:hover {
   margin-bottom:20px;
 }
 
+.no-reviews-circle {
+  border: 1px solid #EB6E79;
+  border-radius: 50%;
+  height: 45px;
+  width: 45px;
+  padding-top: 8px;
+  font-size: 10px;
+  padding-left: 2px;
+  text-align: center;
+  color: #EB6E79;
+  line-height: .8;
+}
+
 .search-bar {
   margin-top: 30px;
   margin-bottom: 30px;
@@ -744,7 +757,6 @@ a:hover {
 .business-badge {
   display: block;
   text-align: center;
-  float: left;
   padding-top: 5px;
 }
 
@@ -846,6 +858,9 @@ a:hover {
     font-size: 18px;
   }
 
+
+
+
   .add-business-link {
     font-size: 16px;
   }
@@ -855,12 +870,21 @@ a:hover {
   }
 
   .business-listing-title {
-    font-size: 16px;
+    font-size: 14px;
+    line-height: .95;
     color: #A9A9A9
   }
 
   .business-address-tag-line {
-    font-size: 13px;
+    font-size: 11px;
+  }
+
+  .search-results-business-info-col {
+    padding-right: 2px;
+  }
+
+  .right-side-badges-col {
+    padding-left: 3px;
   }
 
   .business-address {
@@ -916,9 +940,14 @@ a:hover {
   }
 
   .score-grouping {
-    float: left;
+    float: right;
     margin-top: 5px;
     display: inline-block;
+  }
+
+  .search-result-list-item {
+    padding-left: 1px;
+    padding-right: 1px;
   }
 
   .score-row {
