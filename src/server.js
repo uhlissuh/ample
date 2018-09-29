@@ -61,9 +61,10 @@ function (
 
 
     let allBusinessesForMap = await cache.get("allBusinessesForMap");
+
     if (!allBusinessesForMap) {
       allBusinessesForMap = await database.getAllBusinessesForMap();
-      await cache.set("allBusinessesForMap", allBusinessesForMap, 900);
+      await cache.set("allBusinessesForMap", allBusinessesForMap, 600);
     }
 
     const recentReviews = await database.getMostRecentReviews();

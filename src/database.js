@@ -563,7 +563,7 @@ exports.getAllBusinessesForMap = async function() {
   const result = [];
 
   for (let row of rows) {
-    if (row.review_count > 0 || (row.taken_pledge && row.owner_is_confirmed)) {
+    if (row.review_count > 0 || (row.taken_pledge && row.owner_is_confirmed) || row.amplifier_id) {
       result.push({
         id: row.id,
         googleId: row.google_id,
@@ -579,11 +579,11 @@ exports.getAllBusinessesForMap = async function() {
         ownerId: row.owner_id,
         takenPledge: row.taken_pledge,
         ownerStatement: row.owner_statement,
-        ownershipConfirmed: row.owner_is_confirmed
+        ownershipConfirmed: row.owner_is_confirmed,
+        amplifierId: row.amplifier_id
       });
     }
   };
-
   return result;
 }
 

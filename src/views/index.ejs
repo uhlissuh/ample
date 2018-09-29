@@ -181,13 +181,6 @@ function initMap() {
   let markers = [];
   let previewContent
   for (business of businesses) {
-    if (business.reviewCount) {
-      previewContent = business.reviewCount + " reviews"
-    } else {
-      if (business.takenPledge && business.ownershipConfirmed) {
-        previewContent = "This business hasn't been reviewed yet, but they've taken our Pledge of Inclusivity!"
-      }
-    }
     let marker = new google.maps.Marker(
       {
         position: {lat: business.businessLatitude, lng: business.businessLongitude},
@@ -196,9 +189,6 @@ function initMap() {
           `<a style="color: black;" href="/businesses/${business.id}">
           <h6>${business.name}</h6>
           <p style="color: #A9A9A9;">${business.businessAddress}</p>
-          <div>
-            ${previewContent}
-          </div>
           <a style="float: right;" href="/businesses/${business.id}">see more</a>
           </a>
           `
