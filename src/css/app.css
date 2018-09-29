@@ -428,6 +428,12 @@ html {
   margin-top: 30px;
 }
 
+.pledge-badge-img {
+  margin-left: auto;
+  margin-right: auto;
+  margin-right: 5px;
+}
+
 .review {
   font-family: 'Roboto', sans-serif;
 }
@@ -593,6 +599,11 @@ a:hover {
 .review-count {
   display: inline;
   vertical-align: top;
+}
+
+.business-address-tag-line {
+  color: black;
+  font-size: 15px;
 }
 
 .search-results-star-rating {
@@ -1015,11 +1026,6 @@ a:hover {
     margin-right: auto;
   }
 
-  .pledge-badge-img {
-    margin-left: auto;
-    margin-right: auto;
-    margin-right: 5px;
-  }
 
   .tags-row {
     margin-top: 10px;
