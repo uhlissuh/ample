@@ -219,7 +219,7 @@
               </li>
             <% } %>
           </ul>
-      <% } else if (reviews.length == 0 && !business.amplifierId){ %>
+      <% } else if (reviews.length == 0 && !business.amplifierId && !business.takenPledge){ %>
         <div class="no-reviews-yet">This establishment has no reviews on Ample yet and has not been Amplified.</div>
       <% } %>
       <% if (business.amplifierId && !business.takenPledge && (reviews.length == 0)) { %>
@@ -231,6 +231,12 @@
           </div>
         </div>
       <% } %>
+      <% if (!business.amplifierId && business.takenPledge && (reviews.length == 0)) { %>
+        <div class="amplified-bottom-text">
+          Though this business has no reviews, they have taken our Inclusivity Pledge! 
+        </div>
+      <% } %>
+
       <% if (business.amplifierId && business.takenPledge && (reviews.length == 0)) { %>
         <div class="row">
           <div class="col-10 col-lg-6 offset-1 offset-lg-3">
