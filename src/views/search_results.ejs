@@ -72,17 +72,21 @@
               <div class="row">
                 <div class="col-9 col-lg-8 search-results-business-info-col">
                   <a href="<%- businessURL -%>"><div class="business-listing-title"><%= business.name %></div></a>
-                  <div class="business-address-tag-line"><%- business.address -%></div>
+                  <a href="<%- businessURL -%>" class="address-link-to-business"><div class="business-address-tag-line"><%- business.address -%></div></a>
                 </div>
                 <div class="col-3 col-lg-4 right-side-badges-col">
                   <% if (business.reviewCount > 0) { %>
-                    <div class="score-grouping">
-                      <div class="star-rating search-results-star-rating" data-value= "<%=business.overallRating %>" data-size="small"></div>
-                      <span class="review-count">(<%= business.reviewCount %>)</span>
-                    </div>
+                    <% if (isMobile) { %>
+                      <img src="/static/star-highlight-small.png" class="indicator search-star" />
+                    <% } else { %>
+                      <img src="/static/star-highlight-large.png" class="indicator search-star" />
+                     <% } %>
+                    <span class="summary-item-search">
+                      <%- business.overallRating -%>
+                    </span>
                   <% } else if (business.takenPledge && business.ownershipConfirmed) { %>
                     <div class="score-grouping">
-                      <img class="badge-img" src="/static/pledgeBadge-smallest.png"/>
+                      <img class="pledge-badge-img" src="/static/pledgeBadge-smallest.png"/>
                     </div>
                   <% } else if (business.amplifierId && (!business.ownershipConfirmed || business.reviewCount > 0)) { %>
                     <div class="score-grouping">

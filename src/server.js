@@ -203,6 +203,8 @@ function (
   })
 
   app.get('/searchforbusinesses', async function(req, res) {
+    const isMobile = req.headers.host.startsWith('mobile.');
+
     let user = null;
     const userId = req.signedCookies['userId'];
     if (userId) {
@@ -238,6 +240,7 @@ function (
         location: location,
         businesses: searchResults,
         user: user,
+        isMobile,
         categories: await database.getAllCategories()
       }
     );

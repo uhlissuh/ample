@@ -432,8 +432,17 @@ html {
   font-family: 'Roboto', sans-serif;
 }
 
-.be-first-words {
-  color: #EB6E79;
+.summary-item-search {
+  float: right;
+  margin-right: 2px;
+  font-size: 30px;
+  vertical-align: center;
+  line-height: 31px;
+}
+
+.search-star {
+  float: right;
+  vertical-align: middle;
 }
 
 .taken-pledge-words {
@@ -774,7 +783,6 @@ a:hover {
 }
 
 .indicator {
-  display: inline;
   vertical-align: middle;
   text-align: center;
 }
@@ -858,9 +866,6 @@ a:hover {
     font-size: 18px;
   }
 
-
-
-
   .add-business-link {
     font-size: 16px;
   }
@@ -870,9 +875,31 @@ a:hover {
   }
 
   .business-listing-title {
-    font-size: 14px;
+    font-size: 15px;
     line-height: .95;
     color: #A9A9A9
+  }
+
+  .summary-item-search {
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .search-results-review-score {
+    font-size: 20px;
+    position: absolute;
+    color: white;
+    top: 7px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .business-search-results-score-container {
+    margin-top: 6px;
+    display: inline-block;
+    float: right;
+    margin-right: 4px;
   }
 
   .business-address-tag-line {
@@ -885,6 +912,8 @@ a:hover {
 
   .right-side-badges-col {
     padding-left: 3px;
+    display: block;
+    text-align: center;
   }
 
   .business-address {
@@ -950,6 +979,16 @@ a:hover {
     padding-right: 1px;
   }
 
+  .business-address-tag-line {
+    color: black;
+    font-size: 12px;
+    margin-top: 3px;
+  }
+
+  .address-link-to-business {
+    line-height: 15px;
+  }
+
   .score-row {
     border-top: .5px solid #d3d3d3;
     margin-top: 10px;
@@ -974,6 +1013,12 @@ a:hover {
   .badge-img {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .pledge-badge-img {
+    margin-left: auto;
+    margin-right: auto;
+    margin-right: 5px;
   }
 
   .tags-row {
