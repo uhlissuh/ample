@@ -82,21 +82,25 @@
 
         <% if (business.ownershipConfirmed && business.takenPledge) { %>
           <div class="<%- className -%> rating-doodad align-self-end">
-            <div class="business-badge">
-              <img class="badge-img" src="/static/pledgeBadge.png"/>
-              <br />
-              <span class="doodad-label">Taken Pledge</span>
-            </div>
+            <a href="/faq#pledge-info">
+              <div class="business-badge">
+                <img class="badge-img" src="/static/pledgeBadge.png"/>
+                <br />
+                <span class="doodad-label">Taken Pledge</span>
+              </div>
+            </a>
           </div>
         <% } %>
 
         <% if (business.amplifierId && reviews.length == 0) { %>
           <div class= "<%- className -%> rating-doodad align-self-end text-center">
-            <div class="business-badge">
-              <img class="badge-img" src="/static/amplifier-small.png"/>
-              <br />
-              <span class="doodad-label">Amplified</span>
-            </div>
+            <a class="amplifier-info-link" href="/faq#amplifier-info">
+              <div class="business-badge">
+                <img class="badge-img" src="/static/amplifier-small.png"/>
+                <br />
+                <span class="doodad-label">Amplified</span>
+              </div>
+            </a>
           </div>
         <% } %>
       </div>
@@ -226,14 +230,14 @@
         <div class="row">
           <div class="col-10 col-lg-6 offset-1 offset-lg-3">
             <div class="amplified-bottom-text">
-              Though this business has not been reviewed, it has been Amplified, which means that an approved Ample superuser has tagged this as a potentially-inclusive business.
+              Though this business has not been reviewed, it has been <a href="/faq#amplifier-info">Amplified</a>, which means that an approved Ample superuser has tagged this as a potentially-inclusive business.
             </div>
           </div>
         </div>
       <% } %>
       <% if (!business.amplifierId && business.takenPledge && (reviews.length == 0)) { %>
         <div class="amplified-bottom-text">
-          Though this business has no reviews, they have taken our Inclusivity Pledge! 
+          Though this business has no reviews, they have taken our <a href="/faq#pledge-info">Inclusivity Pledge!</a>
         </div>
       <% } %>
 
@@ -241,7 +245,7 @@
         <div class="row">
           <div class="col-10 col-lg-6 offset-1 offset-lg-3">
             <div class="amplified-bottom-text">
-              This business has been Amplified, which means that an approved superuser has tagged this as a pontentially-inclusive business,
+              This business has been <a href="/faq#amplifier-info">Amplified</a>, which means that an approved volunteer has tagged this as a pontentially-inclusive business,
               and the owner has taken our Inclusivity Pledge.
             </div>
           </div>

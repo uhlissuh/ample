@@ -33,6 +33,10 @@ html {
   font-size: 40px;
 }
 
+.faq {
+  margin-bottom: 110px;
+}
+
 .collapse-no-animate {
   display: none;
 }
@@ -335,6 +339,11 @@ html {
   display: inline !important;
   list-style-type: none;
   padding-left: 0px;
+}
+
+.FAQ-headline {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .tag-list-item {
