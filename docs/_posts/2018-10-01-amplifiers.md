@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Want to Help Grow Our Database of Inclusive Businesses with Just One Click? Become an Amplifier."
+title: "Grow Our Database of Inclusive Businesses with One Click. Become an Amplifier."
 thumbnail: "assets/img/woman-with-phone-beach.jpg"
 author: El Poché
 excerpt_separator: <!--more-->
