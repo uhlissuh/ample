@@ -45,6 +45,10 @@ html {
   display: block;
 }
 
+.amp-name-row {
+  text-align: center;
+}
+
 .review-count-check-mark {
   font-family: "Times", "Times New Roman", "serif";
   font-weight: 500;
