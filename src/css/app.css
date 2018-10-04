@@ -49,6 +49,10 @@ html {
   text-align: center;
 }
 
+.amplifier-name {
+  margin-right: 6px;
+}
+
 .review-count-check-mark {
   font-family: "Times", "Times New Roman", "serif";
   font-weight: 500;
@@ -833,6 +837,11 @@ a:hover {
 
   .founder-img-second {
     padding-top: 15px;
+  }
+
+  .amplifier-img {
+    margin-top: 10px;
+    margin-bottom: 8px;
   }
 
   .recent-review-card {
