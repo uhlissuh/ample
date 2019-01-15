@@ -272,7 +272,7 @@ describe("server", () => {
 
     it("shows that photo on the business page afterward", async () => {
       const photoURL1 = `http://localhost:${port}/static/alissa.jpg`
-      const photoURL2 = `http://localhost:${port}/static/el.jpg`
+      const photoURL2 = `http://localhost:${port}/static/AB.jpg`
 
       // Can't add a photo if you're not logged in
       let uploadPhotoResponse = await post('businesses/WX-YZ/photos', {
@@ -298,11 +298,12 @@ describe("server", () => {
       uploadPhotoResponse = await post(`businesses/${business.id}/photos`, {
         'photo-url': photoURL2
       });
+      console.log(uploadPhotoResponse);
       assert.equal(uploadPhotoResponse.statusCode, 302);
       assert.equal(uploadPhotoResponse.headers.location, `/businesses/${business.id}`)
       assert.deepEqual(await database.getBusinessPhotosById(business.id), [
         {userId, url: photoURL1, width: 250, height: 250},
-        {userId, url: photoURL2, width: 250, height: 252},
+        {userId, url: photoURL2, width: 250, height: 250},
       ])
     });
 
