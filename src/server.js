@@ -67,23 +67,28 @@ function (
       await cache.set("allBusinessesForMap", allBusinessesForMap, 600);
     }
 
-    const recentReviews = await database.getMostRecentReviews();
+    let reviewsForCards = await cache.get("reviewsForCards");
 
-    let reviewsForCards = []
-    for (let review of recentReviews) {
-      if (review.businessGoogleId) {
-        let googleBusiness = await cache.get(review.businessGoogleId);
-        if (!googleBusiness) {
-          googleBusiness = await googlePlacesClient.getBusinessById(review.businessGoogleId);
-          cache.set(review.businessGoogleId, googleBusiness, 10)
-        } else {
-        }
-        if (googleBusiness.photos) {
-          review["photoURL"] = googlePlacesClient.getPhotoURL(googleBusiness.photos[0].photo_reference, 500, 500);
-          reviewsForCards.push(review);
-          if (reviewsForCards.length == 3) {
-            break;
+    if (!reviewsForCards) {
+      let reviewsForCards = [];
+      const reviews = await database.getMostRecentReviews();
+
+      for (let review of reviews) {
+        if (review.businessGoogleId) {
+          let googleBusiness = await cache.get(review.businessGoogleId);
+          if (!googleBusiness) {
+            googleBusiness = await googlePlacesClient.getBusinessById(review.businessGoogleId);
           }
+
+          if (googleBusiness.photos) {
+            review.photoURL = googlePlacesClient.getPhotoURL(googleBusiness.photos[0].photo_reference, 500, 500);
+            reviewsForCards.push(review);
+          }
+        }
+
+        if (reviewsForCards.length == 3) {
+          await cache.set("reviewsForCards", reviewsForCards, 259200)
+          break;
         }
       }
     }
