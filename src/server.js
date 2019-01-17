@@ -99,7 +99,6 @@ function (
         recentReviews: reviewsForCards ? reviewsForCards : null,
         categories,
         isMobile,
-        abbreviateAddress,
         allBusinessesForMap
       }
     )
