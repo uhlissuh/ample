@@ -570,6 +570,9 @@ a:hover {
   overflow: hidden;
 }
 
+.card-top {
+  height: 40px;
+}
 
 .card-img-top {
   height: 200px;
