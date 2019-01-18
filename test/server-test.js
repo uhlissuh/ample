@@ -102,41 +102,53 @@ describe("server", () => {
 
   describe("search for businesses", () => {
     it("can search based on the user's current location", async () => {
-      const businessGoogleId = GOOGLE_PLACES_SEARCH_RESPONSE.results[0].place_id;
-      const businessId = await database.createBusiness({
-        name: 'something',
-        googleId: businessGoogleId
+      const businessId1 = await database.createBusiness({
+        name: 'Something Shoes',
+        googleId: 'businessGoogleId1',
+        latitude: 45.50,
+        longitude: -122.60
       });
-      await database.createReview(userId, businessId, {
+      const businessId2 = await database.createBusiness({
+        name: 'Something Soap',
+        googleId: 'businessGoogleId2',
+        latitude: 47.50,
+        longitude: -124.60
+      });
+      const businessId3 = await database.createBusiness({
+        name: 'Out There Biz',
+        googleId: 'businessGoogleId3',
+        latitude: 47.50,
+        longitude: -124.60
+      });
+
+      await database.createReview(userId, businessId1, {
         fatRating: 4,
         content: 'good',
         categories: ['Wellness']
       });
+      await database.createReview(userId, businessId2, {
+        fatRating: 5,
+        content: 'amazing',
+        categories: ['Wellness']
+      });
+      await database.createReview(userId, businessId2, {
+        fatRating: 5,
+        content: 'amazing',
+        categories: ['Restaurants']
+      });
 
-      googlePlacesClient.getBusinessesNearCoordinates = async function(term, lat, lng) {
-        assert.equal(lat, 45.5442);
-        assert.equal(lng, -122.6431);
-        assert.equal(term, 'coffee');
-        return GOOGLE_PLACES_SEARCH_RESPONSE.results;
-      };
-
-      googlePlacesClient.getPhotoURL = function() {
-        return 'the-url';
-      }
-
-      const response = await get('searchforbusinesses?location=Current%20Location&term=coffee', {
+      const response = await get('searchforbusinesses?location=Current%20Location&term=wellness', {
         'x-forwarded-for': '71.238.71.20'
       });
 
       const $ = cheerio.load(response.body);
       const linkURLs = $('.search-results-business-info a').map((index, link) => $(link).attr('href')).get();
 
-      // For businesses that exist in our database, we link to them
-      // with their ids. For businesses that aren't in our database,
-      // we link to them with their google ids.
       assert.equal(response.statusCode, 200);
-      assert(linkURLs.includes(`/businesses/${businessId}`));
-      assert(linkURLs.includes(`/businesses/${GOOGLE_PLACES_SEARCH_RESPONSE.results[1].place_id}`));
+      assert(linkURLs.includes(`/businesses/${businessId1}`));
+      assert(linkURLs.includes(`/businesses/${businessId2}`));
+      assert(!linkURLs.includes(`/businesses/${businessId3}`));
+
     });
   });
 
@@ -298,7 +310,6 @@ describe("server", () => {
       uploadPhotoResponse = await post(`businesses/${business.id}/photos`, {
         'photo-url': photoURL2
       });
-      console.log(uploadPhotoResponse);
       assert.equal(uploadPhotoResponse.statusCode, 302);
       assert.equal(uploadPhotoResponse.headers.location, `/businesses/${business.id}`)
       assert.deepEqual(await database.getBusinessPhotosById(business.id), [

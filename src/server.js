@@ -254,7 +254,7 @@ function (
       {
         term: term,
         location: location,
-        businesses: searchResults,
+        businesses: searchResults.businesses,
         user: user,
         isMobile,
         categories: await database.getAllCategories()

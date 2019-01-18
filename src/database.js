@@ -94,15 +94,16 @@ exports.getBusinessesByCategoryandLocation = async function(
 ) {
   const categoryId = getCategoryId(category);
   const businessRows = await db.query(`
-    select distinct
+    select
       businesses.*,
       ST_x(businesses.coordinates) as latitude,
       ST_y(businesses.coordinates) as longitude
     from
       businesses
     where
-      ST_DistanceSphere(businesses.coordinates, ST_MakePoint($1, $2)) <= 50000 and
       $3 = ANY (businesses.category_ids)
+    order by
+      ST_DistanceSphere(businesses.coordinates, ST_MakePoint($1, $2))
   `, [latitude, longitude, categoryId]);
   return businessesFromRows(db, businessRows);
 };
