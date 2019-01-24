@@ -6,27 +6,23 @@ class BusinessSearch {
     this.googlePlacesClient = googlePlacesClient;
   }
 
-  async findBusinesses(term, locationName) {
+  async findBusinesses(term, locationName, page) {
     const {lat, lng} = await this.googlePlacesClient.getCoordinatesForLocationName(locationName);
-    return this.findBusinessesForLocation(term, lat, lng);
+    return this.findBusinessesForLocation(term, lat, lng, page);
   }
 
-  async findBusinessesForLocation(term, lat, lng) {
+  async findBusinessesForLocation(term, lat, lng, page) {
+
     if (database.hasCategory(term)) {
       const businesses = await database.getBusinessesByCategoryandLocation(
         term,
         lat,
-        lng
+        lng,
+        page
       );
-      return {
-        businesses,
-        categoryError: false
-      }
+      return businesses;
     } else {
-      return {
-        businesses: [],
-        categoryError: true
-      }
+      return null;
     }
   }
 

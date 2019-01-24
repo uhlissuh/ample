@@ -137,7 +137,7 @@ describe("server", () => {
         categories: ['Restaurants']
       });
 
-      const response = await get('searchforbusinesses?location=Current%20Location&term=wellness', {
+      const response = await get('searchforbusinesses?location=Current%20Location&term=wellness&page=1', {
         'x-forwarded-for': '71.238.71.20'
       });
 

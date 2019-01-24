@@ -86,8 +86,10 @@ describe("BusinessSearch", () => {
     const search = new BusinessSearch(googlePlacesClient);
     const businesses = (await search.findBusinesses(
       "Beauty",
-      "North Mississippi Ave, Portland, OR"
+      "North Mississippi Ave, Portland, OR",
+      1
     )).businesses;
+
 
     assert.deepEqual(businesses.map(b => b.name), [
       'Stylist 4',

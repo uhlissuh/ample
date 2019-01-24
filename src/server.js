@@ -220,6 +220,9 @@ function (
 
   app.get('/searchforbusinesses', async function(req, res) {
     const isMobile = req.headers.host.startsWith('mobile.');
+    const page = req.query.page
+
+    console.log("server endpoint ", page);
 
     let user = null;
     const userId = req.signedCookies['userId'];
@@ -245,19 +248,20 @@ function (
         lat = 45.5442;
         lng = -122.6431;
       }
-      searchResults = await businessSearch.findBusinessesForLocation(term, lat, lng);
+      searchResults = await businessSearch.findBusinessesForLocation(term, lat, lng, page);
     } else {
-      searchResults = await businessSearch.findBusinesses(term, location);
+      searchResults = await businessSearch.findBusinesses(term, location, page);
     }
 
     res.render('search_results',
       {
-        term: term,
-        location: location,
+        term,
+        location,
         businesses: searchResults.businesses,
-        user: user,
+        user,
         isMobile,
-        categories: await database.getAllCategories()
+        categories: await database.getAllCategories(),
+        page
       }
     );
   });
