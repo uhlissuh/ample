@@ -146,7 +146,9 @@
                 <div class="card-top">
                   <h5 class="card-title"><%- review.businessName -%></h5>
                 </div>
-                <p class="card-text"><%- review.content -%></p>
+                <div class="card-text-container">
+                  <p class="card-text"><%- review.content -%></p>
+                </div>
               </div>
             </a>
           </div>
@@ -214,7 +216,7 @@ function initMap() {
 ample.setUpStarRatings();
 
 for (const card of document.getElementsByClassName('card-text')) {
-  ample.clamp(card, {clamp: 'auto'});
+  ample.clamp(card, {clamp: 3});
 }
 
 const categories = <%- JSON.stringify(categories) %>;

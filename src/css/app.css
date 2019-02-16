@@ -564,8 +564,11 @@ a:hover {
   margin-bottom: 8px;
 }
 
-.card-text {
+.card-text-container {
   height: 75px;
+}
+
+.card-text {
   color: black;
   overflow: hidden;
 }
@@ -849,7 +852,7 @@ a:hover {
     margin-bottom: 15px;
   }
 
-  .card-text {
+  .card-text-container {
     height: 90px;
   }
 
