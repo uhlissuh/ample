@@ -720,6 +720,11 @@ a:hover {
   font-size: 14pt
 }
 
+.next-page {
+  text-decoration: underline;
+  color: #EB6E79;
+  
+}
 
 .facebook-button {
   background-image: url('/static/facebook.png');

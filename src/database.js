@@ -91,10 +91,11 @@ exports.getBusinessesByCategoryandLocation = async function(
   category,
   latitude,
   longitude,
-  page
+  page,
+  limit
 ) {
   const categoryId = getCategoryId(category);
-  const offset = (page - 1) * 20;
+  const offset = (page - 1) * limit;
   const businessRows = await db.query(`
     select
       businesses.*,
@@ -106,8 +107,8 @@ exports.getBusinessesByCategoryandLocation = async function(
       $3 = ANY (businesses.category_ids)
     order by
       ST_DistanceSphere(businesses.coordinates, ST_MakePoint($1, $2))
-    limit 20 offset $4
-  `, [latitude, longitude, categoryId, offset]);
+    limit $5 offset $4
+  `, [latitude, longitude, categoryId, offset, limit]);
 
   const totalBusinessesReturned = await db.query(`
     select
@@ -115,15 +116,14 @@ exports.getBusinessesByCategoryandLocation = async function(
     from
       businesses
     where
-      ST_DistanceSphere(businesses.coordinates, ST_MakePoint($1, $2)) <= 100000 and
+      ST_DistanceSphere(businesses.coordinates, ST_MakePoint($1, $2)) <= 1000000 and
       $3 = ANY (businesses.category_ids)
     `, [latitude, longitude, categoryId]);
 
-  console.log(totalBusinessesReturned);
 
   return {
     businesses: await businessesFromRows(db, businessRows),
-    totalReviews: totalBusinessesReturned
+    totalNumberOfBusinesses: totalBusinessesReturned[0].count
   }
 };
 

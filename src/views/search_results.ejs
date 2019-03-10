@@ -102,6 +102,15 @@
         </li>
       <% } %>
     </ol>
+    <% if (totalPagesPossible >= page + 1) { %>
+    <div class="row">
+      <div class="col-12">
+        <div class="next-page float-right">
+          <a href="/searchforbusinesses?page=<%- page + 1 -%>&term=<%- term -%>&location=<%- location -%>">next page</a>
+        </div>
+      </div>
+    </div>
+    <% } %>
     <div class="row">
       <div class="col-12">
         <div class="add-business-link">Missing the business you were looking for? </div>
@@ -110,9 +119,8 @@
         <div class="add-business-link"><a href="/businesses/new">Add the business here.</a></div>
       </div>
     </div>
-    <div class="row">
 
-    </div>
+
 
   <% } else { %>
     <div class='row alert alert-info'>
