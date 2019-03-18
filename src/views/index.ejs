@@ -225,6 +225,10 @@ for (const card of document.getElementsByClassName('card-text')) {
   ample.clamp(card, {clamp: 'auto'});
 }
 
+for (const cardTitle of document.getElementsByClassName('card-title')) {
+  ample.clamp(cardTitle, {clamp: 'auto'});
+}
+
 const categories = <%- JSON.stringify(categories) %>;
 
 ample.autocomplete('#business-search-term', {
