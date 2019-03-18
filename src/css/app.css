@@ -110,8 +110,14 @@ html {
   font-size: 25px;
 }
 
-.go-button {
+.find-button {
   background-color: #EB6E79;
+  color: white;
+  width: 100%;
+}
+
+.add-review-button {
+  background-color: #F5A164;
   color: white;
   width: 100%;
 }
@@ -723,7 +729,7 @@ a:hover {
 .next-page {
   text-decoration: underline;
   color: #EB6E79;
-  
+
 }
 
 .facebook-button {
@@ -829,7 +835,7 @@ a:hover {
 
 @media screen and (max-width: 767px) {
   .info-area-row {
-    height: 570px;
+    height: 640px;
     background-color: #FFF0ED;
   }
 
@@ -897,7 +903,7 @@ a:hover {
   }
 
   .main-background {
-    height: 350px;
+    height: 375px;
   }
 
   .search-results-title {

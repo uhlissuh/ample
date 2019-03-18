@@ -12,7 +12,7 @@
     <form action="/searchforbusinesses" method="GET">
       <input type="hidden" name="page" value="1" />
       <div class="form-row search-row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-7">
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">Find</div>
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div class="col-10 col-lg-5">
+        <div class="col-12 col-lg-5">
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">Near</div>
@@ -40,8 +40,12 @@
               placeholder="address, city, zip code" />
           </div>
         </div>
-        <div class="col-2 col-lg-1">
-          <input type="submit" value="Go" class="btn go-button"/>
+        <div class="col-6 col-lg-6">
+          <button type="submit" class="btn find-button">Find Reviews <i class="fa fa-search"></i></button>
+
+        </div>
+        <div class="col-6 col-lg-6">
+          <button type="submit" class="btn add-review-button">Add Review <i class="fa fa-plus"></i></button>
         </div>
       </div>
     </form>
@@ -136,8 +140,8 @@
     </div>
     <div class="row">
       <% for (let i = 0; i < 3; i++) { %>
+        <% if (!recentReviews) break; %>
         <% const review = recentReviews[i]; %>
-        <% if (!review) break; %>
 
         <div class="col-md-4">
           <div class="card recent-review-card bg-light mb-3">
