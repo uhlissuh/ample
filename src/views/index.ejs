@@ -9,53 +9,56 @@
 
       </div>
     </div>
-    <form action="/searchforbusinesses" method="GET">
-      <input type="hidden" name="page" value="1" />
-      <div class="form-row search-row">
-        <div class="col-12 col-lg-7">
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <div class="input-group-text">Find</div>
-            </div>
-            <input
-              type="text"
-              class="form-control"
-              id="business-search-term"
-              autocomplete="off"
-              name="term"
-              placeholder="doctors, Sally's Hair Salon, massage" />
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-5">
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <div class="input-group-text">Near</div>
-            </div>
-            <input
-              type="text"
-              class="form-control"
-              name="location"
-              id="business-location"
-              placeholder="address, city, zip code" />
-          </div>
-        </div>
-        <div class="col-6 col-lg-6">
-          <button type="submit" class="btn find-button">Find Reviews <i class="fa fa-search"></i></button>
-
-        </div>
-        <div class="col-6 col-lg-6">
-          <button type="submit" class="btn add-review-button">Add Review <i class="fa fa-plus"></i></button>
-        </div>
-      </div>
-    </form>
     <div class="row">
-      <div class="col-12">
+      <div class="col-12 col-lg-7">
+        <form action="/searchforbusinesses" method="GET">
+          <input type="hidden" name="page" value="1" />
+          <div class="form-row search-row">
+            <div class="col-12">
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Find</div>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="business-search-term"
+                  autocomplete="off"
+                  name="term"
+                  placeholder="doctors, Sally's Hair Salon, massage" />
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Near</div>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="location"
+                  id="business-location"
+                  placeholder="address, city, zip code" />
+              </div>
+            </div>
+            <div class="col-6 col-lg-6">
+              <button type="submit" class="btn find-button">Find Reviews <i class="fa fa-search"></i></button>
+            </div>
+            <div class="col-6 col-lg-6">
+              <button type="submit" class="btn add-review-button">Add Review <i class="fa fa-plus"></i></button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-12 col-lg-5">
         <p class="tag-line">
           Ample is a review app to help people find all sorts of establishments that are friendly to marginalized bodies.
         </p>
       </div>
     </div>
+
+
   </div>
 </div>
 

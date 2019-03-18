@@ -15,7 +15,7 @@
     background: -o-linear-gradient(left, #ffd7ea, #fecc72);
 
 
-    height: 500px;
+    height: 420px;
 }
 
 html {
@@ -96,7 +96,7 @@ html {
 }
 
 .logo-row {
-  padding-top: 120px;
+  padding-top: 70px;
 }
 
 .login-background {
@@ -104,7 +104,6 @@ html {
 }
 
 .tag-line {
-  padding-top: 20px;
   font-family: 'Roboto', sans-serif;
   color: #EB6E79;
   font-size: 25px;
