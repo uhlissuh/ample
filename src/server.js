@@ -259,9 +259,9 @@ function (
       {
         term,
         location,
-        businesses: searchResults.businesses,
-        totalBusinessesReturned: searchResults.totalNumberOfBusinesses,
-        totalPagesPossible: Math.ceil(searchResults.totalNumberOfBusinesses / businessLimit),
+        businesses: searchResults ? searchResults.businesses : null,
+        totalBusinessesReturned: searchResults ? searchResults.totalNumberOfBusinesses : null,
+        totalPagesPossible: searchResults ? Math.ceil(searchResults.totalNumberOfBusinesses / businessLimit) : null,
         user,
         isMobile,
         categories: await database.getAllCategories(),
