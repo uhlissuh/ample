@@ -11,7 +11,7 @@
     </div>
     <div class="row">
       <div class="col-12 col-lg-7">
-        <form action="/searchforbusinesses" method="GET">
+        <form method="GET">
           <input type="hidden" name="page" value="1" />
           <div class="form-row search-row">
             <div class="col-12">
@@ -43,10 +43,10 @@
               </div>
             </div>
             <div class="col-6 col-lg-6">
-              <button type="submit" class="btn find-button">Find Reviews <i class="fa fa-search"></i></button>
+              <button formaction="/searchforbusinesses" type="submit" class="btn find-button">Find Reviews <i class="fa fa-search"></i></button>
             </div>
             <div class="col-6 col-lg-6">
-              <button type="submit" class="btn add-review-button">Add Review <i class="fa fa-plus"></i></button>
+              <button formaction="/findbusinessestoreview" type="submit" class="btn add-review-button">Add Review <i class="fa fa-plus"></i></button>
             </div>
           </div>
         </form>
