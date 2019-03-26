@@ -270,6 +270,18 @@ function (
     );
   });
 
+  app.get('/findbusinessestoreview', async function(req, res) {
+    let user = null;
+    const userId = req.signedCookies['userId'];
+    if (userId) {
+      user = await database.getUserById(req.signedCookies['userId'])
+    }
+
+    const businessSearch = new BusinessSearch(googlePlacesClient);
+
+
+  });
+
   app.get('/businesses/new', async function(req, res) {
     let user = null;
     const userId = req.signedCookies['userId'];
