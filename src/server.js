@@ -287,7 +287,6 @@ function (
     const userId = req.signedCookies['userId'];
     if (userId) {
       user = await database.getUserById(req.signedCookies['userId'])
-
     }
 
     let googleId, existingBusiness;
@@ -315,7 +314,12 @@ function (
       for (review of reviews) {
         const date = (new Date(review.timestamp)).toDateString();
         review.date = date;
+
+        let displayNames = review.user.name.split(' ')
+        let displayName = displayNames[0] + ' ' + displayNames[1].slice(0, 1) + '.';
+        review.user.displayName = displayName;
       }
+
 
       ratingBreakdown = await database.getBusinessRatingBreakdown(existingBusiness.id);
     }
