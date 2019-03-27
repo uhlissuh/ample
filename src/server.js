@@ -316,7 +316,7 @@ function (
         review.date = date;
 
         let displayNames = review.user.name.split(' ')
-        let displayName = displayNames[0] + ' ' + displayNames[1].slice(0, 1) + '.';
+        let displayName = displayNames[0] + ' ' + displayNames[displayNames.length - 1].slice(0, 1) + '.';
         review.user.displayName = displayName;
       }
 
